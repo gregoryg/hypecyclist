@@ -1,0 +1,4 @@
+[submodule "themes/kiss"]
+	path = themes/kiss
+	url = git@github.com:gregoryg/kiss.git
+	branch = gregorygrubbs.com
