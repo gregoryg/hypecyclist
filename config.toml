@@ -1,0 +1,81 @@
+pbaseurl = "https://example.com"
+languageCode = "en"
+title = "Greg Grubbs | Hype Cyclist"
+# subtitle = "Ohai"
+theme = "kiss"
+copyright = "&copy; <a href=\"https://github.com/gregoryg\">Greg Grubbs</a> 2008-2020"
+# disqusShortname = "shortname"
+googleAnalytics = ""
+Paginate = 5 # Number of posts per page
+enableRobotsTXT = true
+
+[markup.highlight]
+codeFences = true
+guessSyntax = false
+hl_Lines = ""
+lineNoStart = 1
+lineNos = false
+lineNumbersInTable = true
+noClasses = true
+style = "emacs"
+tabWidth = 4
+
+
+
+[params.rss] # Adding this tag enables RSS feed
+includeContent = true # Includes whole content in rss
+authorName = "Emir Ribic" # Author full name
+authorEmail = "ribice@gmail.com" # Author email
+
+[params.assets]
+customCSS = ["css/custom.css"]
+
+[params.info]
+adsense = "" # Adsense ID (ID only, without ca-pub-)
+enableSocial = true # Adds OpenGraph and Twitter cards
+phomeTitle = "" # Title for home page
+poweredby = false # Adds powered by hugo and kiss below Copyright
+related = false # Includes related articles at the bottom of the article
+codeCopy = true # Add copy button above code blocks
+taxonomiesCount = true # Add taxonomies count
+
+[params.features]
+disqusOnDemand = false  # Load Disqus comments on click
+
+
+[params.opengraph.facebook]
+admins = [] # array of Facebook IDs
+appID = ""
+pageID = ""
+
+[params.opengraph.twitter]
+page = "" # Twitter Page username. If not set, params.social.twitter will be used.
+
+[params.social]
+twitter = "ribicemir"
+github = "gregoryg"
+# email = "ribice@gmail.com"
+linkedin = "gregorygrubbs"
+# facebook = "ribice"
+instagram = ""
+codepen = ""
+rss = "index.xml" # Add this to show RSS button in social.
+
+[params.sections_right]
+"/posts" = "Blog"
+"/about" = "About"
+[params.social.config]
+# platforms = ["github","facebook","twitter","instagram","email","codepen","linkedin"]
+platforms = ["github","linkedin"]
+[params.matomoAnalytics]
+siteID = 1
+rootURL = "//matomo.example.com/"
+
+[params.fathomAnalytics]
+rootURL = "//fathom.example.com/"
+
+[taxonomies]
+tag ="tags"
+
+[blackfriday]
+hrefTargetBlank = true
