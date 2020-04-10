@@ -2,6 +2,7 @@
 title = "About Greg"
 date = "2020-04-09"
 menu = "main"
+hidden = "true"
 +++
 
 I can generally be found in the midst of the most interesting hype
