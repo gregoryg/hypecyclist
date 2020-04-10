@@ -1,8 +1,8 @@
-#+TITLE: 10-tips-emacs-on-windows
+#+TITLE: 10 Tips for Emacs on Windows
 #+DATE: 2010-05-23T13:12:03-06:00
 #+PUBLISHDATE: 2010-05-23T13:12:03-06:00
 #+DRAFT: nil
-#+TAGS[]: emacs, coding, tools
+#+TAGS[]: emacs coding tools
 #+DESCRIPTION: Short description
 
 
@@ -20,6 +20,8 @@ happy with the results. It was not easy to get to the point of full functionalit
 wanted to share the magic that makes it all work.
 
 # more
+
+(orginal post June 2010 - update on modern Windows to follow)
 
 I decided against using the Cygwin Emacs package for several reasons:
 
