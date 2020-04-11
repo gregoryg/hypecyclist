@@ -21,8 +21,6 @@ wanted to share the magic that makes it all work.
 
 # more
 
-(orginal post June 2010 - update on modern Windows to follow)
-
 I decided against using the Cygwin Emacs package for several reasons:
 
   + Running a windowed/multi-frame/pretty version requires running Cygwin-X, which is
