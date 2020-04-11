@@ -1,0 +1,91 @@
+#+title: It's (relatively) easy to create your own Kubernetes cluster
+#+date: 2020-04-09T14:32:43-0600
+#+publishdate: 2020-04-09T14:32:43-0600
+#+draft: t
+#+tags[]: k8s cloud
+#+description: short post description
+
+#+attr_html: :alt shipyard :title Getting ready to load containers
+[[/images/k-mitch-hodge-Hv0xz-6-Er8-unsplash.jpg]]
+
+On the road to our Kubernetes certifications, many of us have worked through Kelsey
+Hightower's excellent [[https://github.com/kelseyhightower/kubernetes-the-hard-way][Kubernetes the Hard Way]].  There are of course several ways to make
+that process much easier - either by using a vendor distribution or creating a simplistic
+single-node laptop "cluster."  I want to show how you can bring up an enterprise grade
+highly available cluster using =kubeadm=.
+
+# more
+
+* The =kubeadm= way
+Much of the drudgery of "The Hard Way" is generating all the TLS certificates and tying in
+the components with =etcd=.  
+
+Using =kubeadm=, all that work is done for you.  This method is actually more relevant to
+the CKA and CKAD exams, because those environments are themselves constructed using =kubeadm= - the layout of the
+master and worker nodes will be familiar to you if you get familiar with using this tool!
+
+* First things first - getting some nodes
+  I will not go through setting up instances on GCP or another Cloud provider.  You may
+  reference a script I use to do the provisioning in the Resources section below.  I
+  create a set of nodes with no external IP address.  I then use the =gcloud compute ssh=
+  command to connect to those instances when needed.  Alternatively, you may prefer to
+  bring up a small bastion node with an external IP on the same network to make the remote
+  work easier.
+
+  We will create 3 instances to be used as masters - the minimal for a highly available
+  (HA) setup.  Those 3 instances will host both the Kubernetes masters *and* the =etcd=
+  cluster.  In a production environment, you're likely to want the =etcd= cluster to
+  reside on its own separate set of servers.
+
+  We will also bring up 3 instances to be used as the Kubernetes worker nodes.
+
+  Here is the [[https://github.com/gregoryg/kubernetes-the-hard-way/blob/gregoryg/kubeadm-setup/01-provision-gcp.sh][script to provision the instances]].
+* Prepare the machines for kubeadm
+  If you used the above provisioning script, these prerequisites are already included:
+  + network connectivity between all the machines
+  + SSH access between any 2 machines
+  + sudo privileges
+
+  Requirements we will need to do:
+  + Install a container runtime on all the machines
+  + Install the holy trinity of utilities: =kubeadm=, =kubelet= and =kubectl=
+    + =kubectl= is optional - that utility should be on the machine you use to control the
+      cluster - possibly your own workstation or a bastion host
+
+  We're using Ubuntu so we will use =apt= to install these, using the first master as a
+  bastion host
+  #+begin_src bash :tangle bin/whatever.sh
+    # Get on the bastion host
+    gcloud compute ssh gg-controller-0
+    # Get a parallel shell controller on the bastion host
+    sudo apt update
+    sudo apt -y install pdsh
+    # Make lists of the nodes to be used by pdsh
+    gcloud compute instances list --filter="tags.items=k8sgcp AND tags.items=controller" --format="csv(name)[no-heading]" > controller-nodes.txt
+    gcloud compute instances list --filter="tags.items=k8sgcp AND tags.items=worker" --format="csv(name)[no-heading]" > worker-nodes.txt
+    cat controller-nodes.txt worker-nodes.txt >  all-nodes.txt
+    # The loop below has the effect of placing the host keys in ~/.ssh 
+    for i in `cat all-nodes.txt`; do echo $i; ssh -o StrictHostKeyChecking=no $i pwd; done
+    # Now we will use pdsh to install Docker, kubeadm, kubelet and kubectl
+    WCOLL=all-nodes.txt pdsh -R ssh 'sudo apt-get update && sudo apt-get install -y apt-transport-https curl'
+    WCOLL=all-nodes.txt pdsh -R ssh 'curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -'
+    WCOLL=all-nodes.txt pdsh -R ssh 'cat <<EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
+    deb https://apt.kubernetes.io/ kubernetes-xenial main
+    EOF'
+    WCOLL=all-nodes.txt pdsh -R ssh 'sudo apt update && sudo apt install -y docker.io kubelet kubeadm kubectl && sudo apt-mark hold kubelet kubeadm kubectl'
+  #+end_src
+* 
+
+* Resources
+  + [[https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/][Creating Highly Available Clusters with kubeadm]] (k8s.io)
+  + [[https://github.com/gregoryg/kubernetes-the-hard-way][My fork]] of Kubernetes the Hard Way - with the kubeadm scripts
+
+
+#  LocalWords:  publishdate attr html
+
+* TODO Notes on possible topics                                    :noexport:
+
+** TODO Consider using containerd rather than Docker
+   Helps with comparison against Konvoy
+
+** TODO Consider creating a proper load balancer for the cluster

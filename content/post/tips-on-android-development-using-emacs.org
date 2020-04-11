@@ -1,0 +1,137 @@
+#+title: Tips on Android Development Using Emacs
+#+date: 2010-09-11T16:21:01-0600
+#+publishdate: 2020-04-11T16:21:01-0600
+#+draft: nil
+#+tags[]: emacs android coding
+#+description: short post description
+
+# put text for summary prior to 'more' tag
+
+#+attr_html: :alt Inline Non-hyperlinked Image :title Android
+[[/images/android-computer.jpg]]
+
+
+
+For the intrepid Emacs user, here are some tips for doing Android development without
+Eclipse. I am working on a follow-up post with some general Android SDK tips.
+
+# more
+
+* Emacs prerequisites
+  1. android-mode
+
+     This mode gives you the following interactive commands:
+
+     + =M-x android-start-emulator= Start the Android SDK emulator from emacs
+     + =M-x android-start-ddms= Start the Android debugger
+     + =M-x android-logcat= Like syslog for Android
+     + =M-x android-ant= Run any ant task in the current project directory
+  2. android.el
+     This is a file included in the Android SDK. It duplicates some of the functionality of android-mode, but adds M-x android-jdb, which starts the JDB debugger once you have DDMS running.Load it from {SDK dir}/tools/lib
+  3. JDE
+     Optional, but it’s great for java code. Required to use beanshell shortcuts like the import statement command below (Generate and insert import statements)
+  4. Typical emacs setup cruft
+
+     Here’s what I have in my init file for Android:
+     #+begin_src emacs-lisp
+       (add-to-list 'load-path "~/emacs/android-mode")
+       (require 'android-mode)
+       (setq android-mode-sdk-dir "~/work/android/android")
+       (add-hook 'gud-mode-hook
+                 (lambda ()
+                   (add-to-list 'gud-jdb-classpath "/home/gregj/work/android-sdk-linux_86/platforms/android-7/android.jar")
+                   ))
+     #+end_src
+
+* Launch the emulator
+
+Although you can start the emulator from within emacs using android-mode: =M-x
+android-start-emulator=
+
+I prefer to launch from the shell, since this allows me to exit emacs without having to
+restart the emulator, e.g.:
+
+#+begin_src bash
+emulator -avd starter-21 -partition-size 128 >/dev/null &
+#+end_src
+
+* Create a project
+
+Instead of using the New Project wizard in Eclipse, use these steps to create an Android
+project using the shell:
+
+#+begin_src bash
+  cd {project directory}
+  mkdir HelloAndroid
+  cd HelloAndroid
+  android create project --name HelloAndroid --target android-7 --path . --package home.hoochiepep.HelloAndroid --activity HelloAndroid
+#+end_src
+
+Change =–target=, =–package=, and =–activity= parameters as appropriate.
+
+To get a list of valid targets for your SDK, use
+
+#+begin_src bash
+android list
+#+end_src
+
+* Specify the application name
+
+To change the name of the application, edit ={project root}/res/values/strings.xml=:
+#+begin_src xml
+  <string name="app_name">Hello, Android</string>
+#+end_src
+
+* Specify a minimum SDK level
+
+The Eclipse New Project wizard includes a Min SDK Version field. To set this without the
+wizard, add a line to =AndroidManifest.xml= as a child of manifest:
+
+#+begin_src xml
+<uses-sdk android:minSdkVersion="2" />
+#+end_src
+
+* Make an eclipse project ant-ready (do also when moved to a new machine)
+
+Projects you pull from online will have been created using Eclipse, and will not have a
+=build.xml= file for ant.
+
+Another common problem is that the file =local.properties= will be missing. Running an
+update as shown here will fix both problems:
+
+#+begin_src bash
+android update project --path . --target android-7 --subprojects
+#+end_src
+
+* Generate and insert import statements
+
+You will see references to a handy Eclipse command (invoked by Control-Shift-O) which adds
+import statements for referenced classes.
+
+The emacs equivalent is found in =jde-mode=: =M-x jde-import-find-and-import= (C-c C-v
+C-z). Make sure the classpath is set correctly prior to starting jde-mode
+
+* Use the debugger within Emacs
+
+  + Install the app on the emulator using =M-x android-ant-install= (the ‘install’ target uses the debug apk)
+  + Start ddms. There are no cmdline args, so you might as well use =M-x android-start-ddms=
+  + In the emulator, go to Dev Tools -> Development Settings and select the app as the debug app
+  + In the emulator, start the app
+  + Look in the ddms window for the app’s debug port (usu. 8700 if the Dev Settings step
+    was done)
+  + Start jdb by invoking =M-x android-jdb= from android.el.  You can also start jdb
+    directly using the following command line params as a guide
+    #+begin_src bash
+      jdb -sourcepath/home/gregj/work/android/projects/NotepadCodeLab/Notepadv3/src -attach localhost:8700
+    #+end_src
+
+  Set breakpoints in JDB, like so
+
+  #+begin_src bash
+  stop in com.android.demo.notepad3.NoteEdit.onResume
+  #+end_src
+
+If the project directory is set correctly in the jdb command, you will be able to set
+breakpoints by line using jde-mode’s =M-x gud-break= (C-x space).
+
+
