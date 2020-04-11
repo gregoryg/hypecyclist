@@ -2,7 +2,7 @@
 #+DATE: 2010-05-23T13:12:03-06:00
 #+PUBLISHDATE: 2010-05-23T13:12:03-06:00
 #+DRAFT: nil
-#+TAGS[]: emacs coding tools
+#+TAGS[]: emacs coding tools windows
 #+DESCRIPTION: Short description
 
 
