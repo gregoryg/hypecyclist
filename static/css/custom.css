@@ -47,5 +47,5 @@ h1.title {
 }
 
 .content h1 code, .content h2 code, .content h3 code, .content h4 code, .content h5 code, .content h6 code {
-    background-color: inherit;
+    background-color: whitesmoke;
 }
