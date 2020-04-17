@@ -1,0 +1,309 @@
+#+title: Code for Kubernetes Using Kubeadm on GCP
+#+date: 2020-04-10T12:39:16-0600
+#+publishdate: 2020-04-10T12:39:16-0600
+#+draft: t
+#+hidden: t
+#+tags[]: code
+#+description: short post description
+
+# put text for summary prior to 'more' tag
+
+A drill-down into all the scripts used in the blog post
+
+# more
+
+* Clean up comments in generated scripts                           :noexport:
+Org-mode includes the option to include comments in the generated code, but those comments
+include Org-mode properties, which is not useful in the shell script.  So we are going to
+clean those out prior to the shell scripts being written
+#+begin_src emacs-lisp :results none
+  (defun gjg/trim-property-shelf ()
+    "Get rid of all property shelf comments in org babel tangled code"
+    (progn
+      (replace-regexp "^#[[:space:]]*:PROPERTIES:[[:ascii:]]+?:END:$" "" nil (point-min) (point-max))
+      (save-buffer)))
+
+  (add-hook 'org-babel-post-tangle-hook #'gjg/trim-property-shelf)
+#+end_src
+
+* Provisioning Compute Resources
+  :PROPERTIES:
+  :CUSTOM_ID: provisioning-compute-resources
+  :END:
+
+The steps here are similar to what you will find in [[https://github.com/kelseyhightower/kubernetes-the-hard-way][Kubernetes the Hard Way]] on GitHub.
+
+
+** Networking
+   :PROPERTIES:
+   :CUSTOM_ID: networking
+   :END:
+*** Virtual Private Cloud Network
+    :PROPERTIES:
+    :CUSTOM_ID: virtual-private-cloud-network
+    :END:
+
+**** Create the =k8sgcp= custom VPC network and subnet:
+#+begin_src sh :session k-sh :results none :results none :tangle bin/01-provision-gcp.sh :comments org
+  gcloud compute networks create k8sgcp --subnet-mode custom
+  gcloud compute networks subnets create kubernetes \
+    --network k8sgcp \
+    --range 10.240.0.0/24
+#+end_src
+
+**** Create the Cloud NAT and Cloud Router for outbound internet access
+     We are doing this step because the instances we will provision have no external IP
+     addresses.  Setting up Cloud NAT allows those instances to have *outbound* access to
+     the internet so that we will be able to install software easily.
+#+begin_src sh :session k-sh :results none :tangle bin/01-provision-gcp.sh
+gcloud compute routers create k8sgcp-router \
+    --network k8sgcp
+
+gcloud compute routers nats create k8sgcp-nat \
+    --router=k8sgcp-router \
+    --auto-allocate-nat-external-ips \
+    --nat-all-subnet-ip-ranges \
+    --enable-logging
+#+end_src 
+
+*** Firewall Rules
+    :PROPERTIES:
+    :CUSTOM_ID: firewall-rules
+    :END:
+
+**** Create firewall rules
+     We want to allow:
+     + All internal traffic beween nodes
+     + External SSH, ICMP and HTTPS
+#+begin_src sh :session k-sh :results none :tangle bin/01-provision-gcp.sh
+  # Allow internal
+  gcloud compute firewall-rules create k8sgcp-allow-internal \
+         --allow tcp,udp,icmp \
+         --network k8sgcp \
+         --source-ranges 10.240.0.0/24,10.200.0.0/16
+  # Allow external SSH, ICMP, HTTPS
+  gcloud compute firewall-rules create k8sgcp-allow-external \
+         --allow tcp:22,tcp:6443,icmp \
+         --network k8sgcp \
+         --source-ranges 0.0.0.0/0
+#+end_src
+
+#+begin_quote
+  An [[https://cloud.google.com/compute/docs/load-balancing/network/][external load balancer]] will be used to expose the Kubernetes API Servers to remote clients.
+#+end_quote
+
+List the firewall rules in the =k8sgcp= VPC network:
+
+#+begin_src sh :session k-sh :results output replace 
+  gcloud compute firewall-rules list --filter="network:k8sgcp"
+#+end_src
+
+To show all fields of the firewall, please show in JSON format: --format=json
+To show all fields in table format, please see the examples in --help.
+
+*** Kubernetes Public IP Address
+    :PROPERTIES:
+    :CUSTOM_ID: kubernetes-public-ip-address
+    :END:
+
+**** Allocate a static IP address that will be attached to the external load balancer fronting the Kubernetes API Servers:
+
+#+begin_src sh :session k-sh :results none :tangle bin/01-provision-gcp.sh
+  gcloud compute addresses create k8sgcp \
+    --region $(gcloud config get-value compute/region)
+#+end_src
+
+Verify the =k8sgcp= static IP address was created in your default compute region:
+
+#+begin_src sh :session k-sh :results output replace
+  gcloud compute addresses list --filter="name=('k8sgcp')"
+#+end_src
+
+** Compute Instances
+   :PROPERTIES:
+   :CUSTOM_ID: compute-instances
+   :END:
+
+The compute instances in this lab will be provisioned using [[https://www.ubuntu.com/server][Ubuntu Server]] 18.04
+
+*** Kubernetes Controllers
+    :PROPERTIES:
+    :CUSTOM_ID: kubernetes-controllers
+    :END:
+
+**** Create three compute instances which will host the Kubernetes control plane:
+#+begin_src sh :session k-sh :results none :tangle bin/01-provision-gcp.sh
+  CONTROL_INSTANCE_TYPE=n1-standard-2
+  for i in 0 1 2; do
+      echo $i
+      gcloud compute instances create gg-controller-${i} \
+             --async \
+             --no-address \
+             --boot-disk-size 200GB \
+             --can-ip-forward \
+             --image-family ubuntu-1804-lts \
+             --image-project ubuntu-os-cloud \
+             --machine-type ${CONTROL_INSTANCE_TYPE} \
+             --private-network-ip 10.240.0.1${i} \
+             --scopes compute-rw,storage-ro,service-management,service-control,logging-write,monitoring \
+             --subnet kubernetes \
+             --tags k8sgcp,controller \
+             --labels owner=ggrubbs,expiration=48h
+  done
+#+end_src
+
+List the newly created controller instances
+#+begin_src sh :session k-sh :results table replace
+gcloud compute instances list --filter="tags.items=k8sgcp AND tags.items=controller"
+#+end_src
+
+*** Kubernetes Workers
+    :PROPERTIES:
+    :CUSTOM_ID: kubernetes-workers
+    :END:
+
+Each worker instance requires a pod subnet allocation from the Kubernetes cluster CIDR range. The pod subnet allocation will be used to configure container networking in a later exercise. The =pod-cidr= instance metadata will be used to expose pod subnet allocations to compute instances at runtime.
+
+#+begin_quote
+  The Kubernetes cluster CIDR range is defined by the Controller Manager's
+  =--cluster-cidr= flag. In this tutorial the cluster CIDR range will be set to
+  =10.200.0.0/16=, which supports 254 subnets.
+#+end_quote
+
+**** Create ${NUM_WORKERS} compute instances which will host the Kubernetes worker nodes:
+#+begin_src sh :session k-sh :results none :tangle bin/01-provision-gcp.sh
+  WORKER_INSTANCE_TYPE=n1-standard-4
+  NUM_WORKERS=3
+  for i in $(seq 0 $((${NUM_WORKERS} - 1))) ; do
+      echo $i
+      gcloud compute instances create gg-worker-${i} \
+             --async \
+             --no-address \
+             --boot-disk-size 200GB \
+             --can-ip-forward \
+             --image-family ubuntu-1804-lts \
+             --image-project ubuntu-os-cloud \
+             --machine-type ${WORKER_INSTANCE_TYPE} \
+             --metadata pod-cidr=10.200.${i}.0/24 \
+             --private-network-ip 10.240.0.2${i} \
+             --scopes compute-rw,storage-ro,service-management,service-control,logging-write,monitoring \
+             --subnet kubernetes \
+             --tags k8sgcp,worker \
+             --labels owner=ggrubbs,expiration=48h
+  done
+#+end_src
+
+List the created worker instances
+#+begin_src sh :session k-sh :results table replace
+gcloud compute instances list --filter="tags.items=k8sgcp AND tags.items=worker"
+#+end_src
+
+*** ETCD Cluster Instances
+    :PROPERTIES:
+    :CUSTOM_ID: kubernetes-workers
+    :END:
+
+Each worker instance requires a pod subnet allocation from the Kubernetes cluster CIDR range. The pod subnet allocation will be used to configure container networking in a later exercise. The =pod-cidr= instance metadata will be used to expose pod subnet allocations to compute instances at runtime.
+
+#+begin_quote
+  The Kubernetes cluster CIDR range is defined by the Controller Manager's
+  =--cluster-cidr= flag. In this tutorial the cluster CIDR range will be set to
+  =10.200.0.0/16=, which supports 254 subnets.
+#+end_quote
+
+List the created worker instances
+#+begin_src sh :session k-sh :results table replace
+gcloud compute instances list --filter="tags.items=k8sgcp AND tags.items=worker"
+#+end_src
+*** Verification
+    :PROPERTIES:
+    :CUSTOM_ID: verification
+    :END:
+
+List the compute instances in your default compute zone:
+
+#+begin_src sh :session k-sh :results output replace
+  gcloud compute instances list --filter="tags:k8sgcp"
+  gcloud compute instances list --filter="tags.items=k8sgcp AND tags.items=controller" --format="csv(name)[no-heading]" > controller-nodes.txt
+  gcloud compute instances list --filter="tags.items=k8sgcp AND tags.items=worker" --format="csv(name)[no-heading]" >  worker-nodes.txt
+#+end_src
+
+
+** Configuring SSH Access
+   :PROPERTIES:
+   :CUSTOM_ID: configuring-ssh-access
+   :END:
+
+SSH will be used to configure the controller and worker instances. When connecting to compute instances for the first time SSH keys will be generated for you and stored in the project or instance metadata as described in the [[https://cloud.google.com/compute/docs/instances/connecting-to-instance][connecting to instances]] documentation.
+
+Test SSH access to the =gg-controller-0= compute instances:
+
+#+begin_src sh :session k-sh :results none
+  gcloud compute ssh gg-controller-0
+#+end_src
+
+* Cleaning Up
+   :PROPERTIES:
+   :CUSTOM_ID: cleaning-up
+   :END:
+
+ In this lab you will delete the compute resources created during this tutorial.
+
+*** Compute Instances
+    :PROPERTIES:
+    :CUSTOM_ID: compute-instances
+    :END:
+
+**** Delete the controller and worker compute instances:
+
+ #+begin_src sh :session k-sh :results none :tangle bin/99-cleanup-gcp.sh
+   gcloud -q compute instances delete \
+          $(gcloud compute instances list --filter="tags.items=k8sgcp" --format="csv(name)[no-heading]") \
+          --zone $(gcloud config get-value compute/zone)
+ #+end_src
+
+*** Networking
+    :PROPERTIES:
+    :CUSTOM_ID: networking
+    :END:
+
+**** Delete Cloud NAT and Cloud Router
+ #+begin_src sh :session k-sh :results none :tangle bin/99-cleanup-gcp.sh
+   gcloud -q compute routers nats delete k8sgcp-nat --router k8sgcp-router
+   gcloud -q compute routers delete k8sgcp-router
+ #+end_src
+**** Delete the external load balancer network resources:
+
+ #+begin_src sh :session k-sh :results none :tangle bin/99-cleanup-gcp.sh
+   gcloud -q compute forwarding-rules delete kubernetes-forwarding-rule \
+		  --region $(gcloud config get-value compute/region)
+
+   gcloud -q compute target-pools delete kubernetes-target-pool
+
+   gcloud -q compute http-health-checks delete kubernetes
+
+   gcloud -q compute addresses delete k8sgcp
+ #+end_src
+
+**** Delete the =k8sgcp= firewall rules:
+
+ #+begin_src sh :session k-sh :results none :tangle bin/99-cleanup-gcp.sh
+   gcloud -q compute firewall-rules delete \
+     k8sgcp-allow-nginx-service \
+     k8sgcp-allow-internal \
+     k8sgcp-allow-external \
+     k8sgcp-allow-health-check
+ #+end_src
+
+**** Delete the =k8sgcp= network VPC:
+
+ #+begin_src sh :session k-sh :results none :tangle bin/99-cleanup-gcp.sh
+     gcloud -q compute routes delete \
+       kubernetes-route-10-200-0-0-24 \
+       kubernetes-route-10-200-1-0-24 \
+       kubernetes-route-10-200-2-0-24
+
+     gcloud -q compute networks subnets delete kubernetes
+
+     gcloud -q compute networks delete k8sgcp
+ #+end_src
