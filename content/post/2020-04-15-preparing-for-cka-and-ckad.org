@@ -1,0 +1,176 @@
+#+title: Preparing for CKA and CKAD
+#+date: 2020-04-15T12:23:28-0600
+#+publishdate: 2020-04-15T12:23:28-0600
+#+draft: false
+#+tags[]: kubernetes learning
+#+description: short post description
+
+# put text for summary prior to 'more' tag
+
+Some study tips you may not have found elsewhere for the Kubernetes CKA and CKAD exams
+
+# more
+
+
+* Which exam is harder?  BOTH!
+
+** what's easier about CKAD
+   + fewer challenges: 19 in 2 hours
+   + mostly sticks to kubectl land
+   + super relevant to SE work!
+
+** what's harder about CKAD
+   + less time per challenge (19 / 120 minutes == ~6 minutes per)
+
+** what's easier about CKA
+   + More time per challenge (8+ minutes per)
+     + One hour extra time, but only 5 additional challenges (24 in 3 hours)
+
+** what's harder about CKA
+   + Gotta know sysadmin for K8s and Etcd
+     + Have your =etcdctl=, =systemd=, =openssl= basics down pat
+
+
+* Study resources
+*** CKA
+    + [[https://medium.com/platformer-blog/how-i-passed-the-cka-certified-kubernetes-administrator-exam-8943aa24d71d][How I passed the CKA (Certified Kubernetes Administrator) Exam]] by Nilesh Jayanandana
+    + [[https://medium.com/@lubouski/cncf-certified-kubernetes-administrator-exam-tips-tricks-%25EF%25B8%258F-a477984af6b0][CNCF Certified Kubernetes Administrator (CKA) exam tips & tricks]] by Aliaksandr Lubouski
+    + [[https://medium.com/akena-blog/k8s-admin-exam-tips-22961241ba7d][Nail Your Kubernetes Admin Exam on the First Try. Tips & Tricks from a Certified
+	  Administrator.]]
+    + [[https://www.contino.io/insights/the-ultimate-guide-to-passing-the-cka-exam][The Ultimate Guide to Passing the CKA Exam]] - James Strong on Medium
+*** CKAD
+    + [[https://medium.com/@iizotov/exam-notes-ckad-c1c4f9fb9e73][CKAD Exam Notes]] by Igor Izotov
+*** Kubernetes the Hard Way
+**** What it will teach you for CKA
+     + =etcd=
+     + certificate generation
+     + order of bootstrapping nodes
+**** What it will not teach you
+     + Using =kubeadm= (used in the exams and in Konvoy)
+     + examining and fixing certificates
+     + lots of other stuff
+       + The certificate generation was not useful in the exams - instead, you will need =openssl=
+         to examine certificates and either =openssl= or =kubeadm= to refresh
+*** Killer.sh - CKA and CKAD test simulators! (pay)                    :paid:
+    [[https://killer.sh/]]
+
+* Resources that may be used during the exam
+    During the exam, *only* one non-tty tab can be open, and only the =kubernetes.io= or
+    the kubernetes repo on github may be visited
+
+    + Bookmark sections of the docs site beforehand
+    + Get proficient using =kubectl explain=
+    + [[https://kubernetes.io/docs/reference/kubectl/cheatsheet/][kubectl cheat sheet]]
+    + [[https://discuss.kubernetes.io/][Community discussion page]] - great place to search for solutions to problems
+    + [[https://kubernetes.io/docs/reference/kubectl/cheatsheet/][Kubernetes documentation]]
+    + =kubectl explain <resource>.<key>=
+* Hip tips for both tests
+*** Practice a lot with Gate One
+    This is the browser based shell that is used for the exams.
+
+    This is supposedly available to test at http://liftoffsoftware.com/Products/GateOne,
+    but I have had zero success with the site.  This mirrors the experience of many people
+    on the intertubes.
+
+    Fortunately, I found a working container for this.
+
+    On Docker:
+    #+begin_src sh
+docker run  --name=gateone -p 443:8000 -d yovio/gateone 
+    #+end_src
+
+    On K8s:
+#+begin_src sh
+kubectl run gateone --image=yovio/gateone --restart=Never --port=443
+kubectl expose pod gateone --port=8000 --target-port=443
+#+end_src
+
+Use Cloud load balancer or `kubectl port-forward` to access
+
+*** Be /fast/ with =vim=
+    + Move/change/delete by word
+    + Repeat command
+    + Global search/replace
+    + Multiline select and indent
+*** Practice setup of  alias and =vim= settings
+**** =vim= settings in =~/.vimrc=
+#+begin_src conf
+set expandtab
+set tabstop=2
+set shiftwidth=2
+#+end_src
+**** Alias and auto-completion
+     + Test that Bash completion is working with =kubectl=:
+       #+begin_src sh
+kubectl conf<TAB>
+# should expand to kubectl config
+       #+end_src
+
+     + Set your aliases in =~/.bashrc=
+       #+begin_src sh
+alias k='kubectl'
+alias k='kubectl config set-context --current --namespace '
+alias kx='kubectl config get-contexts'
+       #+end_src
+*** Get awesome with imperative kubectl
+    Avoid editing YAML from scratch at all costs.  The `kubectl run` command is being
+    deprecated, but is availabe as of 1.16.x - so use it!
+    #+begin_src sh
+      # Create a pod
+      k run mypod --image=nginx --restart=Never --labels=app=mypod
+      # Create a Deployment - this is the default, so --restart may be omitted
+      k run mydeployment --image=nginx --restart=Always --replicas=3
+      # Create a Job
+      k run myjob --image=nginx --restart=OnFailure
+      # Create a Service
+      k expose deploy mydeployment --port=8080 --target-port=80 --type=NodePort --name myservice
+      # Create a DaemonSet by creating manifest for Deployment, then editing
+    #+end_src
+    + Never create a service with YAML - use =k expose=
+    + Test a service with =k get ep=
+*** Learn some little about JSONPATH and --sort-by
+Remember -o wide k get <manythings> and -o name for k get <anything>
+*** Just prior to the exam
+**** Assign C-w to an extension
+	 This is to prevent accidentally closing the exam window!
+	 chrome://extensions -> Keyboard shortcuts
+
+	 I use the Quick Tabs extension
+**** Install/Enable the exam extension
+	 [[https://chrome.google.com/webstore/detail/innovative-exams-screensh/dkbjhjljfaagngbdhomnlcheiiangfle][Innovative Exams Screensharing]]
+**** Disable all extensions other than the exam and the extension you assigned to C-w
+*** Approach when first logged in
+**** Step 1: Assure =vim= settings are correct in ~/.vimrc
+	 #+begin_example
+	   set tabstop=2
+	   set expandtab
+	   set shiftwidth=2
+	 #+end_example
+**** Step 2: suss environment
+	 #+begin_src bash
+   w
+   cat /etc/os-release
+	 #+end_src
+**** Step 3: install =bash-completion= and =tmux=
+	 On CentOS/Red Hat
+	 #+begin_src bash
+   sudo yum install bash-completion tmux
+   source ~/.bashrc
+	 #+end_src
+
+	 On Debian/Ubuntu
+	 #+begin_src bash
+   sudo apt install bash-completion
+   source /etc/bash_completion
+	 #+end_src
+**** Step 4: aliases and completion
+	 #+begin_src bash
+ alias k='kubectl'
+ alias kn='kubectl config set-context --current --namespace '
+ alias kx='kubectl config get-contexts'
+ ## notes file: add, edit, notes (view)
+ alias a='echo >> ~/.notes.txt '
+ ## save my kubectl explain thangs in fast text files
+ source <(kubectl completion bash)
+ complete -F __start_kubectl k
+	 #+end_src
