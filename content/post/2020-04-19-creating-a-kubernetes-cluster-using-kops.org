@@ -1,0 +1,18 @@
+#+title: Creating a Kubernetes cluster using kops
+#+date: 2020-04-19T09:01:17-0600
+#+publishdate: 2020-04-19T09:01:17-0600
+#+draft: t
+#+tags[]: kubernetes
+#+description: short post description
+
+# #+caption: Ohai
+#+attr_html: :alt Inline Non-hyperlinked Image :title The idyllic past
+[[/images/mikola-makhlai-etw8edKg0KE-unsplash.jpg]]
+
+# put text for summary prior to 'more' tag
+
+Summarized text
+
+# more
+
+Rest of the post!

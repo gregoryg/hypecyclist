@@ -1,0 +1,109 @@
+#+title: Best practices for Cloud access using proxies and Agent Forwarding
+#+date: 2020-04-25T13:36:10-0600
+#+publishdate: 2020-04-25T13:36:10-0600
+#+draft: nil
+#+tags[]: cloud networking tools
+#+description: short post description
+
+# put text for summary prior to 'more' tag
+
+# #+caption: Ohai
+#+attr_html: :alt Inline Non-hyperlinked Image :title The idyllic past
+[[/images/nicholas-swanson-d19by2PLaPc-unsplash.jpg]]
+
+Cloud providers will get angry with you if you deal with network access by popping huge
+holes in the firewall. If you don't get the angry emails, your account administrator is
+getting them. At any rate, the practice of simply popping holes in the firewall for web
+app access is not secure. This guide shows how to make use of a SOCKS proxy for all your
+web-based access to Cloud VMs.
+
+# more
+
+* Step-by-step guide to setting up and using a SOCKS proxy
+
+For worry-free, fire-and-forget proxy usage create and/or steal a =proxy.pac= file, which
+will contain rules for using the proxy for various cloud providers. I use the following
+file for AWS, Google Cloud Platform and Microsoft Azure. My example is semi-fancy because
+it assumes two different proxy ports - this is to allow one proxy to handle a cluster on
+AWS or Azure, and another concurrent proxy to handle a cluster on GCP
+
+Note that my =proxy.pac= does not attempt to match all the possible Class C addresses that
+will be used - that's a losing battle, and they will overlap with each other as well as
+our own internal ranges. So always use the fully qualified host name of the instances used
+by the cloud providers instead.
+
+#+caption: proxy.pac
+#+begin_src js
+  // Allow for two ports; prefer 8157 for EC2, 8158 for Google
+  function FindProxyForURL(url, host) {
+      // match AWS external and internal DNS
+      if (shExpMatch(host, "*ec2.amazonaws.com") || shExpMatch(host,
+                                                               "ip-*.internal")) {
+          // return "SOCKS5 localhost:8157;SOCKS5 localhost:8158";
+          return "SOCKS5 localhost:8157";
+      }
+      // match Google Cloud internal DNS (they do not provide external
+      DNS by default (?) )
+  if (shExpMatch(host, "*.internal")) {
+      // return "SOCKS5 localhost:8158; SOCKS5 localhost:8157";
+      return "SOCKS5 localhost:8158";
+  }
+  // // match AWS and Google Cloud URLs
+  // if (shExpMatch(host, "ec2-master") || shExpMatch(host, "*ec2*.
+  amazonaws.com") || shExpMatch(host, "*.internal")) {
+   // return "SOCKS5 localhost:8157";
+   // }
+   // match Azure compute URLs
+   if (shExpMatch(host, "*.cloudapp.azure.com")) {
+   return "SOCKS5 localhost:8157; DIRECT";
+   }
+   // // Class C address in 10.* range
+   // if (shExpMatch(host, "10.*")) {
+   // return "SOCKS5 localhost:8157; DIRECT";
+   // }
+   // All other requests go direct, not through the proxy
+   return "DIRECT";
+  }
+#+end_src
+
+** Set the =.pac= file to be used automatically in your OS. 
+   You can set up a simple web server like mongoose, or use a file URL
+
+*** Windows
+    + Internet Options > Connections -> LAN Settings -> Automatic configuration file:///path/to/my/proxy.pac
+*** OS X
+    + System Preferences -> interface (e.g., Wifi) -> Advanced -> Proxies; Select Auto Proxy Discovery and Automatic Proxy
+    + Configuration with a file URL as for Windows
+*** Linux
+    + set environment variable =auto_proxy=
+** Choose one of your hosts that has an external IP as a bastion host
+   For example, the NAT gateway host
+*** Use openssh from your workstation to that host
+   The command below initiates a SOCKS proxy and forwards ssh-agent
+   #+begin_src bash
+     ssh -A -D 8157 {user}@{external_ip}
+   #+end_src
+
+   The =-A= option forwards ssh-agent and starts a SOCKS proxy on port 8157 of your
+   workstation. I'm not showing the =-i= option pointing to my key because I always use
+   ssh-agent instead
+
+   Unlike most references on the net, I'm not specifying the =-N= option because I like
+   having an interactive shell and don't mind sharing it with proxy traffic.
+
+** Access your web interfaces using the proxy
+   Now point your browser to the fully qualified *internal* host name of the host you want,
+   and enjoy the benefits of proper proxy use with zero changes to the firewall/security
+   group of your cluster instances
+
+   Example:
+   #+begin_example
+     http://ip-1-2-3-4.us-west-1.compute.internal:7180/
+     http://my-instance-1.c.my-gcp-project.internal:7180/
+   #+end_example
+
+* Related articles
+I made a [[https://www.youtube.com/watch?v=0at39XhCevs&t=804s][detailed video]] about this on YouTube - if you want to skip to any specific part,
+use the Table of Contents that you will find in the video's description.
+
+
