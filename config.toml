@@ -4,7 +4,7 @@ title = "Greg Grubbs | Hype Cyclist"
 # subtitle = "Ohai"
 theme = "kiss"
 copyright = "&copy; <a href=\"https://github.com/gregoryg\">Greg Grubbs</a> 2008-2020"
-disqusShortname = "" # make empty to disable Disqus comments in layout
+disqusShortname = "hypecyclist" # make empty to disable Disqus comments in layout
 googleAnalytics = ""
 Paginate = 5 # Number of posts per page
 enableRobotsTXT = true
@@ -21,9 +21,9 @@ style = "emacs"
 tabWidth = 4
 
 
-[params.comments.commento]
-host = "https://cdn.commento.io"
-js = "/js/commento.js"
+# [params.comments.commento]
+# host = "https://cdn.commento.io"
+# js = "/js/commento.js"
 [params.rss] # Adding this tag enables RSS feed
 includeContent = true # Includes whole content in rss
 authorName = "Greg Grubbs" # Author full name
