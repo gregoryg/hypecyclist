@@ -1,0 +1,240 @@
+#+title: Set up Kubernetes in your Home Lab
+#+date: 2020-06-03T21:05:12-0600
+#+publishdate: 2020-06-03T21:05:12-0600
+#+draft: nil
+#+tags[]: kubernetes diy howto homelab
+#+description: How I set up Kubernetes on my home lab
+
+# #+caption: Typical home lab
+#+attr_html: :alt Inline Non-hyperlinked Image :title Mad scientist playground
+[[/images/dan-meyers-cHR1Q2g1_F4-unsplash.jpg]]
+
+
+
+I recently stood up an Apache Kubernetes cluster in my home lab and am very happy with the
+results.  Here's what I did.
+
+# more
+My homelab is comprised not of Raspberry Pi nodes, but old abandoned laptops.  This gives
+me some surprising power overall.  I have 4 laptops, which I have set up as 1 master and 3
+workers.
+
+The single master has:
+   + 8 GB Ram
+   + 100GB available disk
+   + 4 CPU cores +hyperthreading
+
+The workers have:
+   + 16GB RAM
+   + between 100GB and 500GB available disk
+   + 4 CPU cores +hyperthreading
+
+The available disk is all formatted as =ext4= - as it turns out I was able to use that space for
+my persistent volumes without reformatting or partitioning.
+
+Let's get to the steps you need to follow
+* Choose an OS, Install =kubeadm= and configure as usual
+
+  I chose current [[https://ubuntu.com/download/server][Ubuntu Server LTS (20.04)]] for my setup.
+
+  There are a series of steps to be taken in almost any scenario installing Kubernetes or
+  other cluster compute scenarios.  I am not going to go deeply into these here.  You
+  should set up passwordless =sudo=, and follow the requirements needed for =kubeadm= to
+  work as described in this k8s.io link: 
+  + [[https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/][Installing kubeadm - Kubernetes]]
+
+  One aspect I want to point out is setting the cgroup for use by =kubeadm=.  If you
+  choose to use Docker as your container runtime, you should set it to use the cgroup
+  =systemd= rather than =cgroupfs= as explained [[https://kubernetes.io/docs/setup/production-environment/container-runtimes/#cgroup-drivers][here]].  
+
+      In =/etc/docker/daemon.conf=
+      #+begin_src json
+        {
+          "exec-opts": ["native.cgroupdriver=systemd"],
+          "log-driver": "json-file",
+          "log-opts": {
+            "max-size": "100m"
+          },
+          "storage-driver": "overlay2"
+        }
+      #+end_src
+      Then reload
+      #+begin_src bash
+        sudo systemctl daemon-reload
+        sudo systemctl restart docker
+      #+end_src
+  
+* Set up the master node (/aka/ control plane)
+  The one thing you should keep in mind prior to initializing the master node: decide
+  which pod networking system you will use, and make sure you prepare your =kubeadm init=
+  parameters to suite that system.  
+
+  In my case, I chose Calico with the default Pod CIDR.  
+
+  You can find the requirements here:
+  + [[https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/#pod-network][Creating a single control-plane cluster with kubeadm - Kubernetes]]
+
+  Run =kubeadm init= with POD CIDR set for Calico
+        #+begin_src bash
+          sudo kubeadm init --pod-network-cidr=192.168.0.0/16
+        #+end_src
+  Assure that Kubeadm detected the =systemd= cgroup - you will see it in the command
+  output.
+
+  If everything goes well, you'll get a command listed that you must save in order to join
+  worker nodes to this master.
+
+
+* Install pod networking
+  Until this step is done, =kubectl get nodes= will show all nodes as "not ready"
+
+  I have chosen Calico
+  #+begin_src bash
+          curl https://docs.projectcalico.org/manifests/calico.yaml -O
+          kubectl apply -f calico.yaml
+  #+end_src
+  
+  Additional instructions can be found here:
+  + [[https://docs.projectcalico.org/getting-started/kubernetes/self-managed-onprem/onpremises][Install Calico networking and network policy for on-premises deployments]]
+
+  Give it some time to start up, then test that nodes are ready with =kubectl get nodes=
+
+* Install the worker nodes
+
+  Use the join command given at the end of the master node's =kubeadm init= command
+  output.  
+
+  On each worker node repeat the join command - similar to the below
+  #+begin_src bash
+    sudo kubeadm join <master IP>:6443 --token <token string> \
+        --discovery-token-ca-cert-hash sha256:<long hexadecimal string>
+  #+end_src
+  
+
+* Install Metrics Server
+
+  The very least you need - prior to getting Prometheus or something similar working.
+
+  This will enable =kubectl top nodes/pods=
+
+  #+begin_src bash
+    kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.3.6/components.yaml
+  #+end_src
+
+
+* Install package managers
+  You already have the ability to install any applications you want just using the
+  =kubectl= command.  For complex software applications, I like to additionally have both
+  [[https://helm.sh/][Helm]] and [[https://kudo.dev/][Apache KUDO]].  These manage what is known as the [[https://kubernetes.io/docs/concepts/extend-kubernetes/operator/][Operator Pattern]] in Kubernetes.
+
+** Helm
+   + Follow the instructions to install the Helm client: [[https://helm.sh/docs/intro/install/][Helm | Installing Helm]]
+   + Add the default repository
+     #+begin_src bash
+       helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+     #+end_src
+
+** KUDO
+   + Follow the instructions to install the =kubectl-kudo= client: [[https://kudo.dev/docs/#install-kudo-cli][Getting Started | KUDO]]
+   + Install the server side components
+     #+begin_src bash
+       kubectl kudo init
+     #+end_src
+
+** TODO Investigate [[https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/][Kustomize]]
+   + This is an alternative to KUDO - another declarative approach
+
+* Set up a storage solution
+  You will want to have more flexibility than provided by Kubernetes default storage
+  types like =hostPath= and =local=.  With more than one node, those options are brittle
+  and limiting.
+
+  While you have many [[https://kubernetes.io/docs/concepts/storage/persistent-volumes/#types-of-persistent-volumes][persistent storage options]], I was taken with [[https://rancher.com/][Rancher Labs']] recent
+  contribution to the storage fray - a new OSS project called [[https://rancher.com/products/longhorn][Longhorn]].  I'm delighted
+  with how easy it was to install, as well as its ease of use and nice UI.
+
+  One great thing about it is that it can just use directory paths of already-formatted
+  disk.  So I am easily able to mount partitions and even use directory paths mounted on
+  root if I want - and not have to set up raw partitions.  This is just ideal for a
+  non-production home lab situation.  Longhorn creates replicas of each volume created
+  from a PVC, making it robust in the face of failing nodes and power outages.
+
+  Simple Kubectl way to install
+  #+begin_src bash
+    kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/master/deploy/longhorn.yaml
+  #+end_src
+
+
+  One thing I did to make things simpler is to set the =longhorn= storage class to be
+  the default on my cluster.  Make sure the relevant annotation for the storage class is
+  set to =true=
+  #+begin_src yaml
+      annotations:
+        storageclass.kubernetes.io/is-default-class: "true"
+  #+end_src
+  
+  Now when you or one of your managed packages creates a =PersistentVolumeClaim=, Longhorn
+  will generate the volume from the disk you have allocated for its use - with automatic
+  replication, monitoring and options for backup and restore!
+
+* Implement an Ingress Controller
+  In a home lab environment this is definitely optional.  Proxy with =kubectl proxy= may
+  work well for you, or even several sessions running =kubectl port-forward=.  But I
+  wanted something a little close to the load balancer resources provided by the cloud
+  platforms.
+
+  The obvious choice for bare metal is MetalLB, so that's what put in for accessing
+  applications on the cluster.  This step can easily be delayed until after you decide you
+  have too many applications installed to manage with port forwards.  Once implemented,
+  you just need to switch relevant Kubernetes Service resources type from e.g. =NodeIP= to
+  =Ingress= and you will have both a =NodePort= and a load balancer IP added!
+#  LocalWords:  MetalLB NodeIP NodePort passwordless sudo io runtime systemd cgroupfs src
+
+   + ref [[https://www.definit.co.uk/2019/08/lab-guide-kubernetes-load-balancer-and-ingress-with-metallb-and-contour/][Lab Guide - Kubernetes Load Balancer and Ingress with MetalLB]]
+   + ref [[https://metallb.universe.tf/installation/][MetalLB, bare metal load-balancer for Kubernetes]]
+
+   #+begin_src bash
+     # use new namespace metallb-system
+     kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
+     kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/metallb.yaml
+     # On first install only
+     kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+   #+end_src
+   + Use simple Layer 2 allocation with pool of reserved IPs
+   + Here's the resource pool I implemented
+       #+begin_src yaml
+         apiVersion: v1
+         kind: ConfigMap
+         metadata:
+           namespace: metallb-system
+           name: config
+         data:
+           config: |
+             address-pools:
+             - name: default
+               protocol: layer2
+               addresses:
+               - 192.168.1.230-192.168.1.250
+       #+end_src
+
+* Go crazy
+  After getting all this done, I've installed things I wanted to get running such as [[https://github.com/helm/charts/tree/master/stable/mysql][MySQL
+  via Helm]], [[https://kublr.com/blog/running-spark-with-jupyter-notebook-hdfs-on-kubernetes/][Jupyter+Spark via custom Helm chart]], [[https://justin.palpant.us/folding-home-on-kubernetes/][Folding@Home via kubectl]], [[https://github.com/kudobuilder/operators/tree/master/repository/kafka][Kafka via KUDO]] and
+  other applications.
+
+  Many interesting projects are now filling up my TODO list - but this is a great start.  I hope you found it useful!
+
+* Junkyard                                                         :noexport:
+  
+     + [ ] Pod networking
+     + [ ] a real storage solution - Longhorn
+     + [ ] basic metrics collection - k top nodes/pods
+     + [ ] Applications using Helm and KUDO
+     + [ ] Logs collection - Prometheus
+     + [ ] Monitoring - Grafana
+     + [ ] 
+
+
+
+#  LocalWords:  init yaml repo kudo Kustomize namespace metallb memberlist secretkey IPs
+#  LocalWords:  openssl apiVersion ConfigMap config noexport

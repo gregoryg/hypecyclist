@@ -1,0 +1,188 @@
+#+title: Putting up a Rancher Kubernetes Cluster on Bare Metal
+#+date: 2020-06-19T17:56:14-0600
+#+publishdate: 2020-06-19T17:56:14-0600
+#+draft: t
+#+tags[]: homelab kubernetes
+#+description: short post description
+
+# put text for summary prior to 'more' tag
+When it comes time to set up a multi-node cluster on bare metal servers, it doesn't get
+easier than Rancher's RKE.  Here's a quick guide for standing up your first development
+cluster.
+
+
+# more
+
+* Set up the initial RKE cluster
+** Rancher Labs' RKE
+   + Have a look at the two canonical starter configs from Rancher and adjust as necessary:
+     + [[file:~/projects/emacs/blogs/hypecyclist/content/code/rke-cluster-full-example.yaml-TEMPLATE][Cluster full example config]]
+     + [[file+emacs:../code/rke-cluster-minimal-example.yaml-TEMPLATE][Cluster minimal example config]] (single node)
+     + My stripped-down multi-node cluster non-HA
+   + Once you have the config to your liking, run
+     #+begin_src bash
+       # rke up
+       rke up --config cluster.yaml --ssh-agent-auth
+       KUBECONFIG=kube_config_cluster.yaml kubectl get nodes
+     #+end_src
+
+   + You get to skip setting up Pod Networking for RKE - Canal is already installed and configured
+* Set up Load Balancing
+  On our bare metal cluster, we'll use MetalLB - be sure to check [[https://github.com/metallb/metallb/releases][releases]] to get the
+  right URL
+    #+begin_src bash
+      # use new namespace metallb-system
+      kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
+      kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/metallb.yaml
+      # On first install only
+      kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+    #+end_src
+  Give MetalLB a pool of IP addresses
+  
+    + Here I'm using a pool from the cluster's network
+      #+begin_src yaml :tangle manifests/metallb-pool-cm.yaml
+        apiVersion: v1
+        kind: ConfigMap
+        metadata:
+          namespace: metallb-system
+          name: config
+        data:
+          config: |
+            address-pools:
+            - name: default
+              protocol: layer2
+              addresses:
+              - 172.16.17.230-172.16.17.250
+      #+end_src
+* Install Rancher on the cluster
+    We're going to install a cluster manager ... on the cluster being managed.
+  
+    There are several options for getting a Web UI overview of either a single cluster or
+    multiple clusters.  These will usually offer the ability to display resource usage,
+    view and edit running resources, and create new resources.  Some allow higher level
+    options like setting workloads to run on multiple clusters, deploying secrets and
+    config maps across clusters, etc.
+
+    A great choice for this is [[https://rancher.com/docs/rancher/v2.x/en/][Rancher]] (not [[https://rancher.com/docs/rke/latest/en/][RKE]] or [[https://rancher.com/docs/k3s/latest/en/][K3s]], which are Kubernetes distributions
+    offered by [[https://rancher.com/][Rancher Labs]]).  All you have to do to get started is to follow the guide at
+    [[https://rancher.com/docs/rancher/v2.x/en/quick-start-guide/deployment/quickstart-manual-setup/][Rancher Docs: Manual Quick Start]]
+
+    Rancher gives us a great UI for management of this cluster and any other clusters we
+    may want to manage in the future (RKE or not)
+    #+begin_src bash
+      kubectl create ns cattle-system
+      helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
+      helm install rancher rancher-latest/rancher \
+           --namespace cattle-system \
+           --set hostname=rancher.magichome
+    #+end_src
+
+    I find that the Helm chart =rancher-2.4.4= exposes port 80 but does not expose
+    port 443.  So I needed to expose that before I could run Rancher UI in a browser.
+
+    I edited the =rancher= Service
+    #+begin_src bash
+      kubectl edit svc rancher
+    #+end_src
+
+    And added the following to =spec.ports=
+    #+begin_src yaml
+      - name: https
+        port: 443
+        protocol: TCP
+        targetPort: 443
+    #+end_src
+
+    If you should ever need to reset the Rancher admin user password
+    #+begin_src bash
+      kubectl  exec -n cattle-system \
+               $(kubectl get pods -n cattle-system -o json | jq -r '.items[] | select(.spec.containers[].name=="rancher") | .metadata.name') -- reset-password
+    #+end_src
+
+    After all that hoohaw, I should mention that you can also simply run Rancher from a
+    Docker container - and use that to manage multiple clusters.
+
+    #+begin_src bash
+      # Run Rancher on all network interfaces
+      docker run --name rancher -d --restart=unless-stopped -p 0.0.0.0:80:80 -p 0.0.0.0:443:443 rancher/rancher
+      # Reset password when needed
+      # docker exec -ti <container_id> reset-password
+    #+end_src
+* Set up an ingress controller
+  I used Traefik, installed using the handy Rancher catalog
+
+  + Service Type: NodePort
+  + SSL: True
+  + Force HTTP to HTTPS
+  + Enable Dashbord - domain traefik.magichome
+  + k -n traefik edit svc traefik-dashboard
+    + Change to =LoadBalancer=
+
+    An example of creating an Ingress.  This is to get into the Longhorn UI
+  #+begin_src yaml
+    apiVersion: extensions/v1beta1
+    kind: Ingress
+    metadata:
+      namespace: longhorn-system
+      labels:
+        app: longhorn-frontend
+      name: longhorn-ui
+    spec:
+      rules:
+      - host: longhorn-frontend.example.com
+        http:
+          paths:
+          - backend:
+              serviceName: longhorn-frontend
+              servicePort: http
+  #+end_src
+* Establish a storage solution
+** Longhorn
+   Longhorn is an open source project created by Rancher Labs
+
+   I love this solution because it' so easy to use in my homelab setting: just point it to
+   any unused already-formatted disk on each of your nodes.  Longhorn will manage all that
+   space in a pool, and automatically create replication sets of any persistent volumes
+   you create.
+
+*** Install prerequisite: =open-iscsi=
+
+    #+begin_src bash
+      sudo apt-get -y install open-iscsi
+    #+end_src
+*** Install Longhorn
+   Since we have Rancher installed now, you can use the app catalog feature to do this.
+   Simply create a project - I called mine =Storage=.  Then add a newly created
+   =longhorn-system= namespace to that project.  Then select the Longhorn app from the
+   catalog and install!
+
+   Alternatively you can install using =kubectl=:
+     #+begin_src bash
+       kubectl apply -f  https://raw.githubusercontent.com/longhorn/longhorn/master/deploy/longhorn.yaml
+     #+end_src
+
+   If you want to create easy access to the Longhorn UI, change the =longhorn-frontend=
+   service to either NodePort or LoadBalancer.  If the latter, you will need to implement
+   a load balancer solution such as MetalLB (see below)
+
+** Optionally make one storage class the default
+   Add annotation to the desired StorageClass resource
+    #+begin_src yaml
+      annotations:
+        storageclass.kubernetes.io/is-default-class: "true"
+    #+end_src
+   + Check with =kubectl get sc=
+     #+begin_example
+       NAME                 PROVISIONER          RECLAIMPOLICY   VOLUMEBINDINGMODE   ALLOWVOLUMEEXPANSION   AGE
+       longhorn (default)   driver.longhorn.io   Delete          Immediate           true                   21m
+     #+end_example
+   
+* Tear down your cluster when the time comes - as it does for us all
+   #+begin_src bash
+     rke remove --config cluster.yaml --ssh-agent-auth
+   #+end_src
+** Cleanup after removal of any distribution
+*** Some components may need manual removal
+    #+begin_src bash
+      sudo rm -rf /var/lib/longhorn /etc/cni/net.d/ /etc/kubernetes /data/longhorn/*
+    #+end_src
