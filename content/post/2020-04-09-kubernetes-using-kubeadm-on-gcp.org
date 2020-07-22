@@ -54,7 +54,7 @@ master and worker nodes will be familiar to you if you get familiar with using t
 
   We're using Ubuntu so we will use =apt= to install these, using the first master as a
   bastion host
-  #+begin_src bash :tangle bin/whatever.sh
+  #+begin_src bash :tangle bin/whatever.sh :shebang #!/usr/bin/env bash
     # Get on the bastion host
     gcloud compute ssh gg-controller-0
     # Get a parallel shell controller on the bastion host
