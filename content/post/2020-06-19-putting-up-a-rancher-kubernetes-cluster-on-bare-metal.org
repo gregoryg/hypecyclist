@@ -1,32 +1,40 @@
 #+title: Putting up a Rancher Kubernetes Cluster on Bare Metal
 #+date: 2020-06-19T17:56:14-0600
 #+publishdate: 2020-06-19T17:56:14-0600
-#+draft: t
-#+tags[]: homelab kubernetes
+#+draft: nil
+#+tags[]: homelab kubernetes docker rancher howto
 #+description: short post description
+
+# #+caption: Bare metal
+#+attr_html: :alt Inline Non-hyperlinked Image :title bare metal
+[[/images/ioan-roman-6zwcmtwHr3I-unsplash.jpg]]
 
 # put text for summary prior to 'more' tag
 When it comes time to set up a multi-node cluster on bare metal servers, it doesn't get
-easier than Rancher's RKE.  Here's a quick guide for standing up your first development
+easier than [[https://rancher.com/docs/rke/latest/en/][Rancher's RKE]].  Here's a quick guide for standing up your first development
 cluster.
-
 
 # more
 
+* Set up your servers
+  Do the usual prep for cluster software: same user, same SSH key accepted for that user,
+  passwordless SUDO etc.  Install Docker on the nodes.
+
+* Download the Command Line tool
+  Grab the =rke= CLI for your OS from the [[https://github.com/rancher/rke/releases][releases page]]
+
 * Set up the initial RKE cluster
-** Rancher Labs' RKE
-   + Have a look at the two canonical starter configs from Rancher and adjust as necessary:
-     + [[file:~/projects/emacs/blogs/hypecyclist/content/code/rke-cluster-full-example.yaml-TEMPLATE][Cluster full example config]]
-     + [[file+emacs:../code/rke-cluster-minimal-example.yaml-TEMPLATE][Cluster minimal example config]] (single node)
-     + My stripped-down multi-node cluster non-HA
-   + Once you have the config to your liking, run
+   Have a look at some starter configs and adjust as necessary:
+     + [[https://rancher.com/docs/rke/latest/en/example-yamls/#minimal-cluster-yml-example][Cluster minimal example config]] (single node)
+     + My [[https://raw.githubusercontent.com/gregoryg/hypecyclist/master/content/code/cluster.yaml][simple config]] (multi-node non-HA)
+   Once you have the config to your liking, run
      #+begin_src bash
        # rke up
        rke up --config cluster.yaml --ssh-agent-auth
        KUBECONFIG=kube_config_cluster.yaml kubectl get nodes
      #+end_src
 
-   + You get to skip setting up Pod Networking for RKE - Canal is already installed and configured
+   You get to skip setting up Pod Networking for RKE - Canal is already installed and configured
 * Set up Load Balancing
   On our bare metal cluster, we'll use MetalLB - be sure to check [[https://github.com/metallb/metallb/releases][releases]] to get the
   right URL
@@ -52,7 +60,7 @@ cluster.
             - name: default
               protocol: layer2
               addresses:
-              - 172.16.17.230-172.16.17.250
+              - 172.16.27.230-172.16.27.250
       #+end_src
 * Install Rancher on the cluster
     We're going to install a cluster manager ... on the cluster being managed.
@@ -74,18 +82,13 @@ cluster.
       helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
       helm install rancher rancher-latest/rancher \
            --namespace cattle-system \
-           --set hostname=rancher.magichome
+           --set hostname=rancher.local
     #+end_src
 
     I find that the Helm chart =rancher-2.4.4= exposes port 80 but does not expose
     port 443.  So I needed to expose that before I could run Rancher UI in a browser.
 
-    I edited the =rancher= Service
-    #+begin_src bash
-      kubectl edit svc rancher
-    #+end_src
-
-    And added the following to =spec.ports=
+    I edited the =rancher= Service to expose the SSL port under =spec.ports=
     #+begin_src yaml
       - name: https
         port: 443
@@ -111,11 +114,17 @@ cluster.
 * Set up an ingress controller
   I used Traefik, installed using the handy Rancher catalog
 
-  + Service Type: NodePort
-  + SSL: True
-  + Force HTTP to HTTPS
-  + Enable Dashbord - domain traefik.magichome
-  + k -n traefik edit svc traefik-dashboard
+  Set parameters:
+  #+begin_example
+  Service Type: NodePort
+  SSL: True
+  Force HTTP to HTTPS
+  Enable Dashbord - domain traefik.local
+  #+end_example
+  
+  Once deployed, enable load balancer access to the Traefik UI (or create an Ingress, of course)
+
+  =kubectl -n traefik edit svc traefik-dashboard=
     + Change to =LoadBalancer=
 
     An example of creating an Ingress.  This is to get into the Longhorn UI
@@ -177,12 +186,18 @@ cluster.
        longhorn (default)   driver.longhorn.io   Delete          Immediate           true                   21m
      #+end_example
    
-* Tear down your cluster when the time comes - as it does for us all
+* Tear down your cluster when the time comes
    #+begin_src bash
      rke remove --config cluster.yaml --ssh-agent-auth
    #+end_src
 ** Cleanup after removal of any distribution
-*** Some components may need manual removal
+   Some components may need manual removal
     #+begin_src bash
       sudo rm -rf /var/lib/longhorn /etc/cni/net.d/ /etc/kubernetes /data/longhorn/*
     #+end_src
+
+   Optionally assure that all the Docker containers are retired
+   #+begin_src bash
+     docker stop `docker ps -a -q`
+     docker rm `docker ps -a -q`
+   #+end_src
