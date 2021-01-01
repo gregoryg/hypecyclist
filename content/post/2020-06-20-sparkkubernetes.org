@@ -1,0 +1,164 @@
+#+title: Putting Spark on Kubernetes
+#+date: 2020-06-20T08:51:27-0600
+#+publishdate: 2020-06-20T08:51:27-0600
+#+draft: t
+#+tags[]: nil nil
+#+description: short post description
+
+# put text for summary prior to 'more' tag
+
+Summarized text
+
+# more
+
+Rest of the post!
+
+ref: [[https://towardsdatascience.com/ignite-the-spark-68f3f988f642][Ignite the Spark! - Towards Data Science]]
+
+** Log in to your Docker registry
+   #+begin_src bash
+     docker login
+   #+end_src
+
+** Create namespace
+   #+begin_src bash
+     kubectl create ns spark
+   #+end_src
+
+** Set up RBAC
+   We're doing a service account called =spark= 
+   #+begin_src bash
+     kubectl create serviceaccount spark -n spark
+     kubectl create clusterrolebinding spark-role --clusterrole=edit --serviceaccount=spark:spark --namespace=spark
+   #+end_src
+
+* Build Docker images
+  We will store these in our registry
+  #+begin_src bash :session sh1
+    wget -qO- http://apache.mirrors.hoobly.com/spark/spark-2.4.6/spark-2.4.6-bin-hadoop2.7.tgz | tar -xzf -
+    cd spark-2.4.6-bin-hadoop2.7 && time bin/docker-image-tool.sh build
+  #+end_src
+
+** Create the Driver pod image
+   We will use [[https://hub.docker.com/r/jupyter/pyspark-notebook/][Docker Hub pyspark-notebook]]
+
+** Set up the deployment
+*** Pull source from here                                          :noexport:
+    + https://raw.githubusercontent.com/gregoryg/homelab/master/addons/pyspark-jupyter-notebook/jupyter-notebook-deploy.yaml
+    + https://raw.githubusercontent.com/gregoryg/homelab/master/addons/pyspark-jupyter-notebook/jupyter-notebook-pvc.yaml
+*** Create a persistent volume to hold notebooks and other code
+    #+begin_src yaml
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        finalizers:
+        - kubernetes.io/pvc-protection
+        name: jupyter-notebook-pvc
+        namespace: spark
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 4Gi
+        storageClassName: longhorn
+        volumeMode: Filesystem
+    #+end_src
+*** Create the deployment and service
+    I'm using an image that runs the Jupyter notebook as an unpriviliged user =gregj= with
+    a user ID and group ID of 1042.  This allows me to mount the persistent volume in that
+    group so that my user has read/write access to the mounted volume
+
+   #+begin_src yaml
+     apiVersion: apps/v1
+     kind: Deployment
+     metadata:
+       namespace: spark
+       name: jupyter-notebook-deployment
+       labels:
+         app: jupyter-notebook
+     spec:
+       replicas: 1
+       selector:
+         matchLabels:
+           app: jupyter-notebook
+       template:
+         metadata:
+           labels:
+             app: jupyter-notebook
+         spec:
+           serviceAccountName: spark
+           securityContext:
+             fsGroup: 1042
+           imagePullSecrets:
+           - name: regcred
+           containers:
+           - name: jupyter-notebook
+             image: smeagol:5000/gjg-pyspark-notebook
+             ports:
+               - containerPort: 8888
+             volumeMounts:
+               - mountPath: /home/gregj/data
+                 name: jupyter-notebook-pv
+             workingDir: /home/gregj
+             resources:
+               limits:
+                 memory: 2Gi
+           volumes:
+             - name: jupyter-notebook-pv
+               persistentVolumeClaim:
+                 claimName: jupyter-notebook-pvc
+     ---
+     # Headless service
+     apiVersion: v1
+     kind: Service
+     metadata:
+       namespace: spark
+       name: jupyter-notebook-deployment
+     spec:
+       selector:
+         app: jupyter-notebook
+       ports:
+         - protocol: TCP
+           port: 29413
+       clusterIP: None
+   #+end_src
+
+** Give a network entry to the Jupyter notebook
+   #+begin_src bash
+     kubectl expose deployment jupyter-notebook-deployment \
+       --port=8888 --target-port=8888 \
+       --type=LoadBalancer \
+       --name=jupyter-frontend
+   #+end_src
+
+** Start a Pyspark Jupyter notebook
+   We need to start a SparkContext
+   #+begin_src python
+     import os
+     from pyspark import SparkContext, SparkConf
+     from pyspark.sql import SparkSession, SQLContext
+     from pyspark.sql.types import StructType, StructField, DoubleType, StringType
+
+     # Create Spark config for our Kubernetes based cluster manager
+     sparkConf = SparkConf()
+     sparkConf.setMaster("k8s://https://kubernetes.default.svc.cluster.local:443")
+     sparkConf.setAppName("spark")
+     sparkConf.set("spark.kubernetes.container.image", "smeagol:5000/spark-py")
+     sparkConf.set("spark.kubernetes.namespace", "spark")
+     sparkConf.set("spark.executor.instances", "8")
+     sparkConf.set("spark.executor.cores", "2")
+     sparkConf.set("spark.driver.memory", "512m")
+     sparkConf.set("spark.executor.memory", "512m")
+     sparkConf.set("spark.kubernetes.pyspark.pythonVersion", "3")
+     sparkConf.set("spark.kubernetes.authenticate.driver.serviceAccountName", "spark")
+     sparkConf.set("spark.kubernetes.authenticate.serviceAccountName", "spark")
+     sparkConf.set("spark.driver.port", "29413")
+     sparkConf.set("spark.driver.host", "jupyter-notebook-deployment.spark.svc.cluster.local")
+
+     # Initialize our Spark cluster, this will start executor pods
+     spark = SparkSession.builder.config(conf=sparkConf).getOrCreate()
+     sc = spark.sparkContext
+     sql = SQLContext(sc)
+   #+end_src
+

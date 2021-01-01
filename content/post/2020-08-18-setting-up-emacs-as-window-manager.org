@@ -1,0 +1,23 @@
+#+title: 
+#+date: 2020-08-18T18:23:26-0600
+#+publishdate: 2020-08-18T18:23:26-0600
+#+draft: t
+#+tags[]: nil nil
+#+description: short post description
+
+# put text for summary prior to 'more' tag
+
+Summarized text
+
+# more
+
+Rest of the post!
+
+* Resources                                                        :noexport:
+  + Laptop mode
+  + Moving around buffers
+    + =buffer-expose-mode=
+    + =ace-window=
+    + =windmove=
+    + other stuff
+    + 

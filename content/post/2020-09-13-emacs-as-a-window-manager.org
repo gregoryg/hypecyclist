@@ -1,0 +1,91 @@
+#+title: Emacs as a window manager on Linux - A crazy but great idea
+#+date: 2020-09-13T15:23:54-0600
+#+publishdate: 2020-09-13T15:23:54-0600
+#+draft: t
+#+tags[]: emacs linux
+#+description: EXWM Emacs X Window Manager
+
+# put text for summary prior to 'more' tag
+
+It's crazy as can be, but Emacs as a window manager is great on Linux
+
+# more
+
+* Emacs as X Window Manager
+
+  + Tiling window manager
+
+    They are great for focus, but they are way on the fringe and the standard presumptions
+    of a windowed UI do not apply - no alt-tab for example.  You will be forced to create
+    specific UI and navigation tweaks yourself in whatever language the tiling window
+    manager provides - Haskell for xmonad or Common LISP (??) for Stumpwm.  For an Emacs
+    user, the configuration is done using Emacs Lisp.
+
+** topics
+
+*** Compositor / Transparent windows
+    Now there is never another window behind the one you're working on, so transparent
+    windows are now a cool thing.
+
+    Set up desktop wallpaper, frame transparency (opacity setting)
+
+*** How keys get to the application / buffer
+    + explain =exwm-input-toggle-keyboard=  line/char mode
+      + only relevant in X windows, does not apply to Emacs windows
+    Toggle to =char= mode then try =C-x o= - doesn't work
+
+    Use of the Super key to to window splitting and window movement
+
+**** Window navigation    
+    This is not strictly an EXWM problem, but you will now be interacting with *all* your
+    applications using Emacs.  Moving around in Emacs buffers is the same as ever, but
+    those keys will not work in X application windows.   My solution to this is to use
+    certain Emacs packages along with bindings to the Super key.  In over 20 years of
+    using Emacs I have never used the Super key.  Now I have several bindings that help
+    save me from Emacs pinky - and work equally well in Emacs and X managed windows!
+
+**** X application keys
+    explain the cool simulation keys
+*** The successor to alt-tab
+    buffer-expose or similar 
+*** Opening apps and URLs with Albert
+    Since many MacOS and Windows fat clients don't exist on Linux, you'll be using web
+    versions far more - this is a Linux thing.
+
+    To make your web applications behave like fat client applications you can create
+    =.desktop= files.  On my OpenSUSE installation, I just make local desktop files
+    specific to my user in =~/.local/share/applications/=
+    #+begin_src conf
+      [Desktop Entry]
+      Name=Calendar
+      Comment=Outlook Calendar in Firefox
+      Exec=firefox --new-window https://outlook.office.com/calendar/view/day
+      Icon=/home/gregj/.local/share/pixmaps/Calendar.png
+      Terminal=false
+      Type=Application
+      Categories=Office;Calendar;
+    #+end_src
+
+*** Browser
+    Set up links to open in new windows.  It seems weird - instead of having 52 tabs
+    you'll have 52 separate browser windows.  But because you no longer rely on
+    Windows-style alt-tab, this makes it much easier to find and navigate in Emacs.
+
+    Commonly used 
+*** Automatically name X buffers
+    
+*** System tray or Panel
+    You have no desktop environment, but still have the ability to run panel widgets using
+    the EXWM system tray or bring up a lightweight panel such as =xfce4-panel=
+*** Launching apps
+    EXWM configures a simple Emacs launcher - basically executing an async shell command.
+    I prefer to user Albert, a nice graphical launcher that works well on Linux and
+    MacOS. 
+*** Scripts that may be needed to fill in some DE capabilities
+    Volume, brightness, wallpaper, external monitor
+*** ibuffer
+    + I set up a preview mode because I now have so many browser windows, some with
+      multiple tabs despite my default to open links in new windows
+*** Workspaces
+    Workspaces are implemented as Emacs frames - you can move X buffers to specific workspaces
+
