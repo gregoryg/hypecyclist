@@ -3,7 +3,7 @@ languageCode = "en"
 title = "Greg Grubbs | Hype Cyclist"
 # subtitle = "Ohai"
 theme = "kiss"
-copyright = "&copy; <a href=\"https://github.com/gregoryg\">Greg Grubbs</a> 2008-2020"
+copyright = "&copy; <a href=\"https://github.com/gregoryg\">Greg Grubbs</a> 2008-2021"
 disqusShortname = "hypecyclist" # make empty to disable Disqus comments in layout
 googleAnalytics = ""
 Paginate = 5 # Number of posts per page
