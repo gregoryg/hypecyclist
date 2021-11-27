@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>android on Greg Grubbs | Hype Cyclist</title>
+    <link>https://hypecyclist.org/tags/android/</link>
+    <description>Recent content in android on Greg Grubbs | Hype Cyclist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; &lt;a href=&#34;https://github.com/gregoryg&#34;&gt;Greg Grubbs&lt;/a&gt; 2008-2021</copyright>
+    <lastBuildDate>Sat, 11 Sep 2010 16:21:01 -0600</lastBuildDate><atom:link href="https://hypecyclist.org/tags/android/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Tips on Android Development Using Emacs</title>
+      <link>https://hypecyclist.org/post/tips-on-android-development-using-emacs/</link>
+      <pubDate>Sat, 11 Sep 2010 16:21:01 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/post/tips-on-android-development-using-emacs/</guid>
+      <description>&lt;img src=&#34;https://hypecyclist.org/images/android-computer.jpg&#34; alt=&#34;Inline Non-hyperlinked Image&#34; title=&#34;Android&#34;/&gt;
+&lt;p&gt;
+For the intrepid Emacs user, here are some tips for doing Android development without
+Eclipse. I am working on a follow-up post with some general Android SDK tips.&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

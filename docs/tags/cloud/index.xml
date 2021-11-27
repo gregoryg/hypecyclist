@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>cloud on Greg Grubbs | Hype Cyclist</title>
+    <link>https://hypecyclist.org/tags/cloud/</link>
+    <description>Recent content in cloud on Greg Grubbs | Hype Cyclist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; &lt;a href=&#34;https://github.com/gregoryg&#34;&gt;Greg Grubbs&lt;/a&gt; 2008-2021</copyright>
+    <lastBuildDate>Sat, 25 Apr 2020 13:36:10 -0600</lastBuildDate><atom:link href="https://hypecyclist.org/tags/cloud/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Best practices for Cloud access using proxies and Agent Forwarding</title>
+      <link>https://hypecyclist.org/post/2020-04-25-best-stuff-for-things/</link>
+      <pubDate>Sat, 25 Apr 2020 13:36:10 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/post/2020-04-25-best-stuff-for-things/</guid>
+      <description>&lt;img src=&#34;https://hypecyclist.org/images/nicholas-swanson-d19by2PLaPc-unsplash.jpg&#34; alt=&#34;Inline Non-hyperlinked Image&#34; title=&#34;The idyllic past&#34;/&gt;
+&lt;p&gt;
+Cloud providers will get angry with you if you deal with network access by popping huge
+holes in the firewall. If you don&amp;#39;t get the angry emails, your account administrator is
+getting them. At any rate, the practice of simply popping holes in the firewall for web
+app access is not secure. This guide shows how to make use of a SOCKS proxy for all your
+web-based access to Cloud VMs.&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

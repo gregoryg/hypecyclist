@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Greg Grubbs | Hype Cyclist</title>
+    <link>https://hypecyclist.org/</link>
+    <description>Recent content on Greg Grubbs | Hype Cyclist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; &lt;a href=&#34;https://github.com/gregoryg&#34;&gt;Greg Grubbs&lt;/a&gt; 2008-2021</copyright>
+    <lastBuildDate>Fri, 19 Jun 2020 17:56:14 -0600</lastBuildDate><atom:link href="https://hypecyclist.org/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Putting up a Rancher Kubernetes Cluster on Bare Metal</title>
+      <link>https://hypecyclist.org/post/2020-06-19-putting-up-a-rancher-kubernetes-cluster-on-bare-metal/</link>
+      <pubDate>Fri, 19 Jun 2020 17:56:14 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/post/2020-06-19-putting-up-a-rancher-kubernetes-cluster-on-bare-metal/</guid>
+      <description>&lt;img src=&#34;https://hypecyclist.org/images/ioan-roman-6zwcmtwHr3I-unsplash.jpg&#34; alt=&#34;Inline Non-hyperlinked Image&#34; title=&#34;bare metal&#34;/&gt;
+&lt;p&gt;When it comes time to set up a multi-node cluster on bare metal servers, it doesn&amp;#39;t get
+easier than &lt;a href=&#34;https://rancher.com/docs/rke/latest/en/&#34;&gt;Rancher&amp;#39;s RKE&lt;/a&gt;.  Here&amp;#39;s a quick guide for standing up your first development
+cluster.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Set up Kubernetes in your Home Lab</title>
+      <link>https://hypecyclist.org/post/2020-06-02-homelab/</link>
+      <pubDate>Wed, 03 Jun 2020 21:05:12 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/post/2020-06-02-homelab/</guid>
+      <description>&lt;img src=&#34;https://hypecyclist.org/images/dan-meyers-cHR1Q2g1_F4-unsplash.jpg&#34; alt=&#34;Inline Non-hyperlinked Image&#34; title=&#34;Mad scientist playground&#34;/&gt;
+&lt;p&gt;
+I recently stood up an Apache Kubernetes cluster in my home lab and am very happy with the
+results.  Here&amp;#39;s what I did.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Best practices for Cloud access using proxies and Agent Forwarding</title>
+      <link>https://hypecyclist.org/post/2020-04-25-best-stuff-for-things/</link>
+      <pubDate>Sat, 25 Apr 2020 13:36:10 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/post/2020-04-25-best-stuff-for-things/</guid>
+      <description>&lt;img src=&#34;https://hypecyclist.org/images/nicholas-swanson-d19by2PLaPc-unsplash.jpg&#34; alt=&#34;Inline Non-hyperlinked Image&#34; title=&#34;The idyllic past&#34;/&gt;
+&lt;p&gt;
+Cloud providers will get angry with you if you deal with network access by popping huge
+holes in the firewall. If you don&amp;#39;t get the angry emails, your account administrator is
+getting them. At any rate, the practice of simply popping holes in the firewall for web
+app access is not secure. This guide shows how to make use of a SOCKS proxy for all your
+web-based access to Cloud VMs.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Preparing for CKA and CKAD</title>
+      <link>https://hypecyclist.org/post/2020-04-15-preparing-for-cka-and-ckad/</link>
+      <pubDate>Wed, 15 Apr 2020 12:23:28 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/post/2020-04-15-preparing-for-cka-and-ckad/</guid>
+      <description>&lt;p&gt;
+Some study tips you may not have found elsewhere for the Kubernetes CKA and CKAD exams&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>About Greg</title>
+      <link>https://hypecyclist.org/about/</link>
+      <pubDate>Thu, 09 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://hypecyclist.org/about/</guid>
+      <description>I can generally be found in the midst of the most interesting hype cycle for enterprise software. Currently (2020) that would be Kubernetes! I have a background in data architecture, &amp;ldquo;Big Data&amp;rdquo; and Machine Learning in addition to Devops.</description>
+    </item>
+    
+    <item>
+      <title>Tips on Android Development Using Emacs</title>
+      <link>https://hypecyclist.org/post/tips-on-android-development-using-emacs/</link>
+      <pubDate>Sat, 11 Sep 2010 16:21:01 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/post/tips-on-android-development-using-emacs/</guid>
+      <description>&lt;img src=&#34;https://hypecyclist.org/images/android-computer.jpg&#34; alt=&#34;Inline Non-hyperlinked Image&#34; title=&#34;Android&#34;/&gt;
+&lt;p&gt;
+For the intrepid Emacs user, here are some tips for doing Android development without
+Eclipse. I am working on a follow-up post with some general Android SDK tips.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>10 Tips for Emacs on Windows</title>
+      <link>https://hypecyclist.org/post/10-tips-emacs-on-windows/</link>
+      <pubDate>Sun, 23 May 2010 13:12:03 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/post/10-tips-emacs-on-windows/</guid>
+      <description>&lt;img src=&#34;https://hypecyclist.org/images/windows-freedom.jpg&#34; alt=&#34;Inline Non-hyperlinked Image&#34; title=&#34;The idyllic past&#34;/&gt;
+&lt;p&gt;
+I avoided using Microsoft Windows for almost 15 years, but with my new job at a
+Microsoft-enthralled development shop, those idyllic days have come to an abrupt
+end. Because in the past I could always use my trusty Linux and OS X machines, I never did
+push past the hurdles of using Emacs on Windows. My utter reliance on Org-mode, TRAMP, and
+Ediff (to name a few) made it essential to get Emacs working on Windows if at all
+possible. Now I am using Emacs on Windows XP and Windows 7 on a daily basis, and am quite
+happy with the results. It was not easy to get to the point of full functionality, so I
+wanted to share the magic that makes it all work.&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

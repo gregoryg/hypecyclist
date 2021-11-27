@@ -1,0 +1,606 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-11-09 Tue 07:33 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Preparing for CKA and CKAD</title>
+<meta name="author" content="Gregory Grubbs" />
+<meta name="description" content="short post description" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Preparing for CKA and CKAD</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org2543699">1. Which exam is harder?  BOTH!</a>
+<ul>
+<li><a href="#org9f7a905">1.1. what's easier about CKAD</a></li>
+<li><a href="#org63cef26">1.2. what's harder about CKAD</a></li>
+<li><a href="#org80dae07">1.3. what's easier about CKA</a></li>
+<li><a href="#orgcd4471d">1.4. what's harder about CKA</a></li>
+</ul>
+</li>
+<li><a href="#orgec65e54">2. Study resources</a>
+<ul>
+<li>
+<ul>
+<li><a href="#org669273a">2.0.1. CKA</a></li>
+<li><a href="#org72a0f83">2.0.2. CKAD</a></li>
+<li><a href="#org1509638">2.0.3. Kubernetes the Hard Way</a></li>
+<li><a href="#orgae37bfe">2.0.4. Killer.sh - CKA and CKAD test simulators! (pay)&#xa0;&#xa0;&#xa0;<span class="tag"><span class="paid">paid</span></span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org853df76">3. Resources that may be used during the exam</a></li>
+<li><a href="#orgb63c6bb">4. Hip tips for both tests</a>
+<ul>
+<li>
+<ul>
+<li><a href="#orgba17b98">4.0.1. Practice a lot with Gate One</a></li>
+<li><a href="#org380c5a6">4.0.2. Be <i>fast</i> with <code>vim</code></a></li>
+<li><a href="#orge36f128">4.0.3. Practice setup of  alias and <code>vim</code> settings</a></li>
+<li><a href="#orgda0c150">4.0.4. Get awesome with imperative kubectl</a></li>
+<li><a href="#org00a82e7">4.0.5. Learn some little about JSONPATH and &#x2013;sort-by</a></li>
+<li><a href="#org493af0b">4.0.6. Just prior to the exam</a></li>
+<li><a href="#org68951be">4.0.7. Approach when first logged in</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<p>
+Some study tips you may not have found elsewhere for the Kubernetes CKA and CKAD exams
+</p>
+
+
+<div id="outline-container-org2543699" class="outline-2">
+<h2 id="org2543699"><span class="section-number-2">1.</span> Which exam is harder?  BOTH!</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-org9f7a905" class="outline-3">
+<h3 id="org9f7a905"><span class="section-number-3">1.1.</span> what's easier about CKAD</h3>
+<div class="outline-text-3" id="text-1-1">
+<ul class="org-ul">
+<li>fewer challenges: 19 in 2 hours</li>
+<li>mostly sticks to kubectl land</li>
+<li>super relevant to SE work!</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org63cef26" class="outline-3">
+<h3 id="org63cef26"><span class="section-number-3">1.2.</span> what's harder about CKAD</h3>
+<div class="outline-text-3" id="text-1-2">
+<ul class="org-ul">
+<li>less time per challenge (19 / 120 minutes == ~6 minutes per)</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org80dae07" class="outline-3">
+<h3 id="org80dae07"><span class="section-number-3">1.3.</span> what's easier about CKA</h3>
+<div class="outline-text-3" id="text-1-3">
+<ul class="org-ul">
+<li>More time per challenge (8+ minutes per)
+<ul class="org-ul">
+<li>One hour extra time, but only 5 additional challenges (24 in 3 hours)</li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgcd4471d" class="outline-3">
+<h3 id="orgcd4471d"><span class="section-number-3">1.4.</span> what's harder about CKA</h3>
+<div class="outline-text-3" id="text-1-4">
+<ul class="org-ul">
+<li>Gotta know sysadmin for K8s and Etcd
+<ul class="org-ul">
+<li>Have your <code>etcdctl</code>, <code>systemd</code>, <code>openssl</code> basics down pat</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgec65e54" class="outline-2">
+<h2 id="orgec65e54"><span class="section-number-2">2.</span> Study resources</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-org669273a" class="outline-4">
+<h4 id="org669273a"><span class="section-number-4">2.0.1.</span> CKA</h4>
+<div class="outline-text-4" id="text-2-0-1">
+<ul class="org-ul">
+<li><a href="https://medium.com/platformer-blog/how-i-passed-the-cka-certified-kubernetes-administrator-exam-8943aa24d71d">How I passed the CKA (Certified Kubernetes Administrator) Exam</a> by Nilesh Jayanandana</li>
+<li><a href="https://medium.com/@lubouski/cncf-certified-kubernetes-administrator-exam-tips-tricks-%25EF%25B8%258F-a477984af6b0">CNCF Certified Kubernetes Administrator (CKA) exam tips &amp; tricks</a> by Aliaksandr Lubouski</li>
+<li><a href="https://medium.com/akena-blog/k8s-admin-exam-tips-22961241ba7d">Nail Your Kubernetes Admin Exam on the First Try. Tips &amp; Tricks from a Certified
+Administrator.</a></li>
+<li><a href="https://www.contino.io/insights/the-ultimate-guide-to-passing-the-cka-exam">The Ultimate Guide to Passing the CKA Exam</a> - James Strong on Medium</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org72a0f83" class="outline-4">
+<h4 id="org72a0f83"><span class="section-number-4">2.0.2.</span> CKAD</h4>
+<div class="outline-text-4" id="text-2-0-2">
+<ul class="org-ul">
+<li><a href="https://medium.com/@iizotov/exam-notes-ckad-c1c4f9fb9e73">CKAD Exam Notes</a> by Igor Izotov</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org1509638" class="outline-4">
+<h4 id="org1509638"><span class="section-number-4">2.0.3.</span> Kubernetes the Hard Way</h4>
+<div class="outline-text-4" id="text-2-0-3">
+</div>
+<ol class="org-ol">
+<li><a id="org517139e"></a>What it will teach you for CKA<br />
+<div class="outline-text-5" id="text-2-0-3-1">
+<ul class="org-ul">
+<li><code>etcd</code></li>
+<li>certificate generation</li>
+<li>order of bootstrapping nodes</li>
+</ul>
+</div>
+</li>
+<li><a id="orgc87ced5"></a>What it will not teach you<br />
+<div class="outline-text-5" id="text-2-0-3-2">
+<ul class="org-ul">
+<li>Using <code>kubeadm</code> (used in the exams and in Konvoy)</li>
+<li>examining and fixing certificates</li>
+<li>lots of other stuff
+<ul class="org-ul">
+<li>The certificate generation was not useful in the exams - instead, you will need <code>openssl</code>
+to examine certificates and either <code>openssl</code> or <code>kubeadm</code> to refresh</li>
+</ul></li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div id="outline-container-orgae37bfe" class="outline-4">
+<h4 id="orgae37bfe"><span class="section-number-4">2.0.4.</span> Killer.sh - CKA and CKAD test simulators! (pay)&#xa0;&#xa0;&#xa0;<span class="tag"><span class="paid">paid</span></span></h4>
+<div class="outline-text-4" id="text-2-0-4">
+<p>
+<a href="https://killer.sh/">https://killer.sh/</a>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org853df76" class="outline-2">
+<h2 id="org853df76"><span class="section-number-2">3.</span> Resources that may be used during the exam</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+During the exam, <b>only</b> one non-tty tab can be open, and only the <code>kubernetes.io</code> or
+the kubernetes repo on github may be visited
+</p>
+
+<ul class="org-ul">
+<li>Bookmark sections of the docs site beforehand</li>
+<li>Get proficient using <code>kubectl explain</code></li>
+<li><a href="https://kubernetes.io/docs/reference/kubectl/cheatsheet/">kubectl cheat sheet</a></li>
+<li><a href="https://discuss.kubernetes.io/">Community discussion page</a> - great place to search for solutions to problems</li>
+<li><a href="https://kubernetes.io/docs/reference/kubectl/cheatsheet/">Kubernetes documentation</a></li>
+<li><code>kubectl explain &lt;resource&gt;.&lt;key&gt;</code></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgb63c6bb" class="outline-2">
+<h2 id="orgb63c6bb"><span class="section-number-2">4.</span> Hip tips for both tests</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+<div id="outline-container-orgba17b98" class="outline-4">
+<h4 id="orgba17b98"><span class="section-number-4">4.0.1.</span> Practice a lot with Gate One</h4>
+<div class="outline-text-4" id="text-4-0-1">
+<p>
+This is the browser based shell that is used for the exams.
+</p>
+
+<p>
+This is supposedly available to test at <a href="http://liftoffsoftware.com/Products/GateOne">http://liftoffsoftware.com/Products/GateOne</a>,
+but I have had zero success with the site.  This mirrors the experience of many people
+on the intertubes.
+</p>
+
+<p>
+Fortunately, I found a working container for this.
+</p>
+
+<p>
+On Docker:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">docker run  --name=gateone -p 443:8000 -d yovio/gateone
+</pre>
+</div>
+
+<p>
+On K8s:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">kubectl run gateone --image=yovio/gateone --restart=Never --port=443
+kubectl expose pod gateone --port=8000 --target-port=443
+</pre>
+</div>
+
+<p>
+Use Cloud load balancer or `kubectl port-forward` to access
+</p>
+</div>
+</div>
+
+<div id="outline-container-org380c5a6" class="outline-4">
+<h4 id="org380c5a6"><span class="section-number-4">4.0.2.</span> Be <i>fast</i> with <code>vim</code></h4>
+<div class="outline-text-4" id="text-4-0-2">
+<ul class="org-ul">
+<li>Move/change/delete by word</li>
+<li>Repeat command</li>
+<li>Global search/replace</li>
+<li>Multiline select and indent</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orge36f128" class="outline-4">
+<h4 id="orge36f128"><span class="section-number-4">4.0.3.</span> Practice setup of  alias and <code>vim</code> settings</h4>
+<div class="outline-text-4" id="text-4-0-3">
+</div>
+<ol class="org-ol">
+<li><a id="org5afdb56"></a><code>vim</code> settings in <code>~/.vimrc</code><br />
+<div class="outline-text-5" id="text-4-0-3-1">
+<div class="org-src-container">
+<pre class="src src-conf">set expandtab
+<span style="color: #EF6C00;">set tabstop</span>=2
+<span style="color: #EF6C00;">set shiftwidth</span>=2
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org5e64a26"></a>Alias and auto-completion<br />
+<div class="outline-text-5" id="text-4-0-3-2">
+<ul class="org-ul">
+<li><p>
+Test that Bash completion is working with <code>kubectl</code>:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">kubectl conf&lt;TAB&gt;
+<span style="color: #607d8b;"># </span><span style="color: #607d8b;">should expand to kubectl config</span>
+</pre>
+</div></li>
+
+<li><p>
+Set your aliases in <code>~/.bashrc</code>
+</p>
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #B71C1C;">alias</span> <span style="color: #EF6C00;">k</span>=<span style="color: #689f38;">'kubectl'</span>
+<span style="color: #B71C1C;">alias</span> <span style="color: #EF6C00;">k</span>=<span style="color: #689f38;">'kubectl config set-context --current --namespace '</span>
+<span style="color: #B71C1C;">alias</span> <span style="color: #EF6C00;">kx</span>=<span style="color: #689f38;">'kubectl config get-contexts'</span>
+</pre>
+</div></li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div id="outline-container-orgda0c150" class="outline-4">
+<h4 id="orgda0c150"><span class="section-number-4">4.0.4.</span> Get awesome with imperative kubectl</h4>
+<div class="outline-text-4" id="text-4-0-4">
+<p>
+Avoid editing YAML from scratch at all costs.  The `kubectl run` command is being
+deprecated, but is availabe as of 1.16.x - so use it!
+</p>
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #607d8b;"># </span><span style="color: #607d8b;">Create a pod</span>
+k run mypod --image=nginx --restart=Never --labels=<span style="color: #EF6C00;">app</span>=mypod
+<span style="color: #607d8b;"># </span><span style="color: #607d8b;">Create a Deployment - this is the default, so --restart may be omitted</span>
+k run mydeployment --image=nginx --restart=Always --replicas=3
+<span style="color: #607d8b;"># </span><span style="color: #607d8b;">Create a Job</span>
+k run myjob --image=nginx --restart=OnFailure
+<span style="color: #607d8b;"># </span><span style="color: #607d8b;">Create a Service</span>
+k expose deploy mydeployment --port=8080 --target-port=80 --type=NodePort --name myservice
+<span style="color: #607d8b;"># </span><span style="color: #607d8b;">Create a DaemonSet by creating manifest for Deployment, then editing</span>
+</pre>
+</div>
+<ul class="org-ul">
+<li>Never create a service with YAML - use <code>k expose</code></li>
+<li>Test a service with <code>k get ep</code></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org00a82e7" class="outline-4">
+<h4 id="org00a82e7"><span class="section-number-4">4.0.5.</span> Learn some little about JSONPATH and &#x2013;sort-by</h4>
+<div class="outline-text-4" id="text-4-0-5">
+<p>
+Remember -o wide k get &lt;manythings&gt; and -o name for k get &lt;anything&gt;
+</p>
+</div>
+</div>
+<div id="outline-container-org493af0b" class="outline-4">
+<h4 id="org493af0b"><span class="section-number-4">4.0.6.</span> Just prior to the exam</h4>
+<div class="outline-text-4" id="text-4-0-6">
+</div>
+<ol class="org-ol">
+<li><a id="org21773a5"></a>Assign C-w to an extension<br />
+<div class="outline-text-5" id="text-4-0-6-1">
+<p>
+This is to prevent accidentally closing the exam window!
+chrome://extensions -&gt; Keyboard shortcuts
+</p>
+
+<p>
+I use the Quick Tabs extension
+</p>
+</div>
+</li>
+<li><a id="org9fbb514"></a>Install/Enable the exam extension<br />
+<div class="outline-text-5" id="text-4-0-6-2">
+<p>
+<a href="https://chrome.google.com/webstore/detail/innovative-exams-screensh/dkbjhjljfaagngbdhomnlcheiiangfle">Innovative Exams Screensharing</a>
+</p>
+</div>
+</li>
+<li><a id="org846f25b"></a>Disable all extensions other than the exam and the extension you assigned to C-w<br /></li>
+</ol>
+</div>
+<div id="outline-container-org68951be" class="outline-4">
+<h4 id="org68951be"><span class="section-number-4">4.0.7.</span> Approach when first logged in</h4>
+<div class="outline-text-4" id="text-4-0-7">
+</div>
+<ol class="org-ol">
+<li><a id="org5790a1b"></a>Step 1: Assure <code>vim</code> settings are correct in ~/.vimrc<br />
+<div class="outline-text-5" id="text-4-0-7-1">
+<pre class="example" id="orged35fe4">
+set tabstop=2
+set expandtab
+set shiftwidth=2
+</pre>
+</div>
+</li>
+<li><a id="orgfa3a126"></a>Step 2: suss environment<br />
+<div class="outline-text-5" id="text-4-0-7-2">
+<div class="org-src-container">
+<pre class="src src-bash">w
+cat /etc/os-release
+</pre>
+</div>
+</div>
+</li>
+<li><a id="orgd74edaf"></a>Step 3: install <code>bash-completion</code> and <code>tmux</code><br />
+<div class="outline-text-5" id="text-4-0-7-3">
+<p>
+On CentOS/Red Hat
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">sudo yum install bash-completion tmux
+<span style="color: #B71C1C;">source</span> ~/.bashrc
+</pre>
+</div>
+
+<p>
+On Debian/Ubuntu
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">sudo apt install bash-completion
+<span style="color: #B71C1C;">source</span> /etc/bash_completion
+</pre>
+</div>
+</div>
+</li>
+<li><a id="orgbf791ca"></a>Step 4: aliases and completion<br />
+<div class="outline-text-5" id="text-4-0-7-4">
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #B71C1C;">alias</span> <span style="color: #EF6C00;">k</span>=<span style="color: #689f38;">'kubectl'</span>
+<span style="color: #B71C1C;">alias</span> <span style="color: #EF6C00;">kn</span>=<span style="color: #689f38;">'kubectl config set-context --current --namespace '</span>
+<span style="color: #B71C1C;">alias</span> <span style="color: #EF6C00;">kx</span>=<span style="color: #689f38;">'kubectl config get-contexts'</span>
+<span style="color: #607d8b;">## </span><span style="color: #607d8b;">notes file: add, edit, notes (view)</span>
+<span style="color: #B71C1C;">alias</span> <span style="color: #EF6C00;">a</span>=<span style="color: #689f38;">'echo &gt;&gt; ~/.notes.txt '</span>
+<span style="color: #607d8b;">## </span><span style="color: #607d8b;">save my kubectl explain thangs in fast text files</span>
+<span style="color: #B71C1C;">source</span> &lt;<span style="color: #e91e63;">(</span>kubectl completion bash<span style="color: #e91e63;">)</span>
+<span style="color: #B71C1C;">complete</span> -F __start_kubectl k
+</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Date: 2020-04-15T12:23:28-0600</p>
+<p class="author">Author: Gregory Grubbs</p>
+<p class="date">Created: 2021-11-09 Tue 07:33</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

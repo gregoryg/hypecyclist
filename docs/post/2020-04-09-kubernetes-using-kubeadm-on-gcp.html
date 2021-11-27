@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2020-07-17 Fri 08:54 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>It's (relatively) easy to create your own Kubernetes cluster</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Gregory Grubbs" />
+<meta name="description" content="short post description"
+ />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">It's (relatively) easy to create your own Kubernetes cluster</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgb3f63e1">1. The <code>kubeadm</code> way</a></li>
+<li><a href="#org86288ee">2. First things first - getting some nodes</a></li>
+<li><a href="#org64e6e65">3. Prepare the machines for kubeadm</a></li>
+<li><a href="#org0bb81d5">4. </a></li>
+<li><a href="#orgd7db9d8">5. Resources</a></li>
+</ul>
+</div>
+</div>
+
+<div class="figure">
+<p><img src="file:///images/k-mitch-hodge-Hv0xz-6-Er8-unsplash.jpg" alt="shipyard" title="Getting ready to load containers" />
+</p>
+</div>
+
+<p>
+On the road to our Kubernetes certifications, many of us have worked through Kelsey
+Hightower's excellent <a href="https://github.com/kelseyhightower/kubernetes-the-hard-way">Kubernetes the Hard Way</a>.  There are of course several ways to make
+that process much easier - either by using a vendor distribution or creating a simplistic
+single-node laptop "cluster."  I want to show how you can bring up an enterprise grade
+highly available cluster using <code>kubeadm</code>.
+</p>
+
+<div id="outline-container-orgb3f63e1" class="outline-2">
+<h2 id="orgb3f63e1"><span class="section-number-2">1</span> The <code>kubeadm</code> way</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Much of the drudgery of "The Hard Way" is generating all the TLS certificates and tying in
+the components with <code>etcd</code>.  
+</p>
+
+<p>
+Using <code>kubeadm</code>, all that work is done for you.  This method is actually more relevant to
+the CKA and CKAD exams, because those environments are themselves constructed using <code>kubeadm</code> - the layout of the
+master and worker nodes will be familiar to you if you get familiar with using this tool!
+</p>
+</div>
+</div>
+
+<div id="outline-container-org86288ee" class="outline-2">
+<h2 id="org86288ee"><span class="section-number-2">2</span> First things first - getting some nodes</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+I will not go through setting up instances on GCP or another Cloud provider.  You may
+reference a script I use to do the provisioning in the Resources section below.  I
+create a set of nodes with no external IP address.  I then use the <code>gcloud compute ssh</code>
+command to connect to those instances when needed.  Alternatively, you may prefer to
+bring up a small bastion node with an external IP on the same network to make the remote
+work easier.
+</p>
+
+<p>
+We will create 3 instances to be used as masters - the minimal for a highly available
+(HA) setup.  Those 3 instances will host both the Kubernetes masters <b>and</b> the <code>etcd</code>
+cluster.  In a production environment, you're likely to want the <code>etcd</code> cluster to
+reside on its own separate set of servers.
+</p>
+
+<p>
+We will also bring up 3 instances to be used as the Kubernetes worker nodes.
+</p>
+
+<p>
+Here is the <a href="https://github.com/gregoryg/kubernetes-the-hard-way/blob/gregoryg/kubeadm-setup/01-provision-gcp.sh">script to provision the instances</a>.
+</p>
+</div>
+</div>
+<div id="outline-container-org64e6e65" class="outline-2">
+<h2 id="org64e6e65"><span class="section-number-2">3</span> Prepare the machines for kubeadm</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+If you used the above provisioning script, these prerequisites are already included:
+</p>
+<ul class="org-ul">
+<li>network connectivity between all the machines</li>
+<li>SSH access between any 2 machines</li>
+<li>sudo privileges</li>
+</ul>
+
+<p>
+Requirements we will need to do:
+</p>
+<ul class="org-ul">
+<li>Install a container runtime on all the machines</li>
+<li>Install the holy trinity of utilities: <code>kubeadm</code>, <code>kubelet</code> and <code>kubectl</code>
+<ul class="org-ul">
+<li><code>kubectl</code> is optional - that utility should be on the machine you use to control the
+cluster - possibly your own workstation or a bastion host</li>
+</ul></li>
+</ul>
+
+<p>
+We're using Ubuntu so we will use <code>apt</code> to install these, using the first master as a
+bastion host
+</p>
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #607d8b;"># </span><span style="color: #607d8b;">Get on the bastion host</span>
+gcloud compute ssh gg-controller-0
+<span style="color: #607d8b;"># </span><span style="color: #607d8b;">Get a parallel shell controller on the bastion host</span>
+sudo apt update
+sudo apt -y install pdsh
+<span style="color: #607d8b;"># </span><span style="color: #607d8b;">Make lists of the nodes to be used by pdsh</span>
+gcloud compute instances list --filter=<span style="color: #689f38;">"tags.items=k8sgcp AND tags.items=controller"</span> --format=<span style="color: #689f38;">"csv(name)[no-heading]"</span> &gt; controller-nodes.txt
+gcloud compute instances list --filter=<span style="color: #689f38;">"tags.items=k8sgcp AND tags.items=worker"</span> --format=<span style="color: #689f38;">"csv(name)[no-heading]"</span> &gt; worker-nodes.txt
+cat controller-nodes.txt worker-nodes.txt &gt;  all-nodes.txt
+<span style="color: #607d8b;"># </span><span style="color: #607d8b;">The loop below has the effect of placing the host keys in ~/.ssh </span>
+<span style="color: #00796b; font-weight: bold;">for</span> i<span style="color: #00796b; font-weight: bold;"> in</span> <span style="color: #FFA000; font-style: italic;">`cat all-nodes.txt`</span>; <span style="color: #00796b; font-weight: bold;">do </span><span style="color: #B71C1C;">echo</span> $<span style="color: #EF6C00;">i</span>; ssh -o <span style="color: #EF6C00;">StrictHostKeyChecking</span>=no $<span style="color: #EF6C00;">i</span> pwd; <span style="color: #00796b; font-weight: bold;">done</span>
+<span style="color: #607d8b;"># </span><span style="color: #607d8b;">Now we will use pdsh to install Docker, kubeadm, kubelet and kubectl</span>
+<span style="color: #EF6C00;">WCOLL</span>=all-nodes.txt pdsh -R ssh <span style="color: #689f38;">'sudo apt-get update &amp;&amp; sudo apt-get install -y apt-transport-https curl'</span>
+<span style="color: #EF6C00;">WCOLL</span>=all-nodes.txt pdsh -R ssh <span style="color: #689f38;">'curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -'</span>
+<span style="color: #EF6C00;">WCOLL</span>=all-nodes.txt pdsh -R ssh <span style="color: #689f38;">'cat &lt;&lt;EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list</span>
+<span style="color: #689f38;">deb https://apt.kubernetes.io/ kubernetes-xenial main</span>
+<span style="color: #689f38;">EOF'</span>
+<span style="color: #EF6C00;">WCOLL</span>=all-nodes.txt pdsh -R ssh <span style="color: #689f38;">'sudo apt update &amp;&amp; sudo apt install -y docker.io kubelet kubeadm kubectl &amp;&amp; sudo apt-mark hold kubelet kubeadm kubectl'</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org0bb81d5" class="outline-2">
+<h2 id="org0bb81d5"><span class="section-number-2">4</span> </h2>
+</div>
+
+<div id="outline-container-orgd7db9d8" class="outline-2">
+<h2 id="orgd7db9d8"><span class="section-number-2">5</span> Resources</h2>
+<div class="outline-text-2" id="text-5">
+<ul class="org-ul">
+<li><a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/">Creating Highly Available Clusters with kubeadm</a> (k8s.io)</li>
+<li><a href="https://github.com/gregoryg/kubernetes-the-hard-way">My fork</a> of Kubernetes the Hard Way - with the kubeadm scripts</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Date: 2020-04-09T14:32:43-0600</p>
+<p class="author">Author: Gregory Grubbs</p>
+<p class="date">Created: 2020-07-17 Fri 08:54</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

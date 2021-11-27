@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Greg Grubbs | Hype Cyclist</title>
+    <link>https://hypecyclist.org/tags/</link>
+    <description>Recent content in Tags on Greg Grubbs | Hype Cyclist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; &lt;a href=&#34;https://github.com/gregoryg&#34;&gt;Greg Grubbs&lt;/a&gt; 2008-2021</copyright>
+    <lastBuildDate>Fri, 19 Jun 2020 17:56:14 -0600</lastBuildDate><atom:link href="https://hypecyclist.org/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>docker</title>
+      <link>https://hypecyclist.org/tags/docker/</link>
+      <pubDate>Fri, 19 Jun 2020 17:56:14 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/tags/docker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>homelab</title>
+      <link>https://hypecyclist.org/tags/homelab/</link>
+      <pubDate>Fri, 19 Jun 2020 17:56:14 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/tags/homelab/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>howto</title>
+      <link>https://hypecyclist.org/tags/howto/</link>
+      <pubDate>Fri, 19 Jun 2020 17:56:14 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/tags/howto/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>kubernetes</title>
+      <link>https://hypecyclist.org/tags/kubernetes/</link>
+      <pubDate>Fri, 19 Jun 2020 17:56:14 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/tags/kubernetes/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>rancher</title>
+      <link>https://hypecyclist.org/tags/rancher/</link>
+      <pubDate>Fri, 19 Jun 2020 17:56:14 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/tags/rancher/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>diy</title>
+      <link>https://hypecyclist.org/tags/diy/</link>
+      <pubDate>Wed, 03 Jun 2020 21:05:12 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/tags/diy/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>cloud</title>
+      <link>https://hypecyclist.org/tags/cloud/</link>
+      <pubDate>Sat, 25 Apr 2020 13:36:10 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/tags/cloud/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>networking</title>
+      <link>https://hypecyclist.org/tags/networking/</link>
+      <pubDate>Sat, 25 Apr 2020 13:36:10 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/tags/networking/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>tools</title>
+      <link>https://hypecyclist.org/tags/tools/</link>
+      <pubDate>Sat, 25 Apr 2020 13:36:10 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/tags/tools/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>learning</title>
+      <link>https://hypecyclist.org/tags/learning/</link>
+      <pubDate>Wed, 15 Apr 2020 12:23:28 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/tags/learning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>android</title>
+      <link>https://hypecyclist.org/tags/android/</link>
+      <pubDate>Sat, 11 Sep 2010 16:21:01 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/tags/android/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>coding</title>
+      <link>https://hypecyclist.org/tags/coding/</link>
+      <pubDate>Sat, 11 Sep 2010 16:21:01 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/tags/coding/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>emacs</title>
+      <link>https://hypecyclist.org/tags/emacs/</link>
+      <pubDate>Sat, 11 Sep 2010 16:21:01 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/tags/emacs/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>windows</title>
+      <link>https://hypecyclist.org/tags/windows/</link>
+      <pubDate>Sun, 23 May 2010 13:12:03 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/tags/windows/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
