@@ -8,6 +8,7 @@ disqusShortname = "hypecyclist" # make empty to disable Disqus comments in layou
 googleAnalytics = ""
 Paginate = 5 # Number of posts per page
 enableRobotsTXT = true
+publishDir = "docs" # for GitHub Pages
 
 [markup.highlight]
 codeFences = true
