@@ -63,24 +63,6 @@
     </item>
     
     <item>
-      <title>linux</title>
-      <link>https://hypecyclist.org/tags/linux/</link>
-      <pubDate>Sun, 13 Sep 2020 15:23:54 -0600</pubDate>
-      
-      <guid>https://hypecyclist.org/tags/linux/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>nil</title>
-      <link>https://hypecyclist.org/tags/nil/</link>
-      <pubDate>Tue, 18 Aug 2020 18:23:26 -0600</pubDate>
-      
-      <guid>https://hypecyclist.org/tags/nil/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>docker</title>
       <link>https://hypecyclist.org/tags/docker/</link>
       <pubDate>Fri, 19 Jun 2020 17:56:14 -0600</pubDate>
@@ -171,33 +153,6 @@
     </item>
     
     <item>
-      <title>code</title>
-      <link>https://hypecyclist.org/tags/code/</link>
-      <pubDate>Fri, 10 Apr 2020 12:39:16 -0600</pubDate>
-      
-      <guid>https://hypecyclist.org/tags/code/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>k8s</title>
-      <link>https://hypecyclist.org/tags/k8s/</link>
-      <pubDate>Thu, 09 Apr 2020 14:32:43 -0600</pubDate>
-      
-      <guid>https://hypecyclist.org/tags/k8s/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>windows</title>
-      <link>https://hypecyclist.org/tags/windows/</link>
-      <pubDate>Thu, 09 Apr 2020 11:07:04 -0600</pubDate>
-      
-      <guid>https://hypecyclist.org/tags/windows/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>android</title>
       <link>https://hypecyclist.org/tags/android/</link>
       <pubDate>Sat, 11 Sep 2010 16:21:01 -0600</pubDate>
@@ -212,6 +167,15 @@
       <pubDate>Sat, 11 Sep 2010 16:21:01 -0600</pubDate>
       
       <guid>https://hypecyclist.org/tags/coding/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>windows</title>
+      <link>https://hypecyclist.org/tags/windows/</link>
+      <pubDate>Sun, 23 May 2010 13:12:03 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/tags/windows/</guid>
       <description></description>
     </item>
     

@@ -20,42 +20,9 @@ ASI, human survival, immortality - but my way is down in rabbit holes. So let&am
 code (or just very slightly modify some existing code), and maybe we&amp;#39;ll tackle elephants
 in various rooms another time.&lt;/p&gt;
 &lt;p&gt;
-To jump to the how-to, check out the video
-          &lt;a href=&#34;https://www.youtube.com/watch?v=aAo4O3fef-Y&#34;&gt;Use ChatGPT API to create Knowledge Base articles in Org Mode! - YouTube ≫ www.youtube.com&lt;/a&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Emacs as a window manager on Linux - A crazy but great idea</title>
-      <link>https://hypecyclist.org/post/2020-09-13-emacs-as-a-window-manager/</link>
-      <pubDate>Sun, 13 Sep 2020 15:23:54 -0600</pubDate>
-      
-      <guid>https://hypecyclist.org/post/2020-09-13-emacs-as-a-window-manager/</guid>
-      <description>&lt;p&gt;
-It&amp;#39;s crazy as can be, but Emacs as a window manager is great on Linux&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://hypecyclist.org/post/2020-08-18-setting-up-emacs-as-window-manager/</link>
-      <pubDate>Tue, 18 Aug 2020 18:23:26 -0600</pubDate>
-      
-      <guid>https://hypecyclist.org/post/2020-08-18-setting-up-emacs-as-window-manager/</guid>
-      <description>&lt;nav&gt;
-&lt;ul&gt;
-&lt;/ul&gt;
-&lt;/nav&gt;
+To jump to the how-to, check out the video&lt;/p&gt;
 &lt;p&gt;
-Summarized text&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Putting Spark on Kubernetes</title>
-      <link>https://hypecyclist.org/post/2020-06-20-sparkkubernetes/</link>
-      <pubDate>Sat, 20 Jun 2020 08:51:27 -0600</pubDate>
-      
-      <guid>https://hypecyclist.org/post/2020-06-20-sparkkubernetes/</guid>
-      <description>&lt;p&gt;
-Summarized text&lt;/p&gt;</description>
+          &lt;a href=&#34;https://www.youtube.com/watch?v=aAo4O3fef-Y&#34;&gt;Use ChatGPT API to create Knowledge Base articles in Org Mode! - YouTube ≫ www.youtube.com&lt;/a&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -98,17 +65,6 @@ web-based access to Cloud VMs.&lt;/p&gt;</description>
     </item>
     
     <item>
-      <title>Creating a Kubernetes cluster using kops</title>
-      <link>https://hypecyclist.org/post/2020-04-19-creating-a-kubernetes-cluster-using-kops/</link>
-      <pubDate>Sun, 19 Apr 2020 09:01:17 -0600</pubDate>
-      
-      <guid>https://hypecyclist.org/post/2020-04-19-creating-a-kubernetes-cluster-using-kops/</guid>
-      <description>&lt;img src=&#34;https://hypecyclist.org/images/mikola-makhlai-etw8edKg0KE-unsplash.jpg&#34; alt=&#34;Inline Non-hyperlinked Image&#34; title=&#34;The idyllic past&#34;/&gt;
-&lt;p&gt;
-Summarized text&lt;/p&gt;</description>
-    </item>
-    
-    <item>
       <title>Preparing for CKA and CKAD</title>
       <link>https://hypecyclist.org/post/2020-04-15-preparing-for-cka-and-ckad/</link>
       <pubDate>Wed, 15 Apr 2020 12:23:28 -0600</pubDate>
@@ -116,30 +72,6 @@ Summarized text&lt;/p&gt;</description>
       <guid>https://hypecyclist.org/post/2020-04-15-preparing-for-cka-and-ckad/</guid>
       <description>&lt;p&gt;
 Some study tips you may not have found elsewhere for the Kubernetes CKA and CKAD exams&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>It&#39;s (relatively) easy to create your own Kubernetes cluster</title>
-      <link>https://hypecyclist.org/post/2020-04-09-kubernetes-using-kubeadm-on-gcp/</link>
-      <pubDate>Thu, 09 Apr 2020 14:32:43 -0600</pubDate>
-      
-      <guid>https://hypecyclist.org/post/2020-04-09-kubernetes-using-kubeadm-on-gcp/</guid>
-      <description>&lt;img src=&#34;https://hypecyclist.org/images/k-mitch-hodge-Hv0xz-6-Er8-unsplash.jpg&#34; alt=&#34;shipyard&#34; title=&#34;Getting ready to load containers&#34;/&gt;
-&lt;p&gt;
-On the road to our Kubernetes certifications, many of us have worked through Kelsey
-Hightower&amp;#39;s excellent &lt;a href=&#34;https://github.com/kelseyhightower/kubernetes-the-hard-way&#34;&gt;Kubernetes the Hard Way&lt;/a&gt;.  There are of course several ways to make
-that process much easier - either by using a vendor distribution or creating a simplistic
-single-node laptop &amp;#34;cluster.&amp;#34;  I want to show how you can bring up an enterprise grade
-highly available cluster using &lt;code class=&#34;verbatim&#34;&gt;kubeadm&lt;/code&gt;.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>emacs-on-windows-update-2020</title>
-      <link>https://hypecyclist.org/post/emacs-on-windows-update-2020/</link>
-      <pubDate>Thu, 09 Apr 2020 11:07:04 -0600</pubDate>
-      
-      <guid>https://hypecyclist.org/post/emacs-on-windows-update-2020/</guid>
-      <description>ohai</description>
     </item>
     
     <item>

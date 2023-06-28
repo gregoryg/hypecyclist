@@ -32,21 +32,6 @@
     <loc>https://hypecyclist.org/tags/</loc>
     <lastmod>2023-06-24T18:59:03-06:00</lastmod>
   </url><url>
-    <loc>https://hypecyclist.org/post/2020-09-13-emacs-as-a-window-manager/</loc>
-    <lastmod>2020-09-13T15:23:54-06:00</lastmod>
-  </url><url>
-    <loc>https://hypecyclist.org/tags/linux/</loc>
-    <lastmod>2020-09-13T15:23:54-06:00</lastmod>
-  </url><url>
-    <loc>https://hypecyclist.org/post/2020-08-18-setting-up-emacs-as-window-manager/</loc>
-    <lastmod>2020-08-18T18:23:26-06:00</lastmod>
-  </url><url>
-    <loc>https://hypecyclist.org/tags/nil/</loc>
-    <lastmod>2020-08-18T18:23:26-06:00</lastmod>
-  </url><url>
-    <loc>https://hypecyclist.org/post/2020-06-20-sparkkubernetes/</loc>
-    <lastmod>2020-06-20T08:51:27-06:00</lastmod>
-  </url><url>
     <loc>https://hypecyclist.org/tags/docker/</loc>
     <lastmod>2020-06-19T17:56:14-06:00</lastmod>
   </url><url>
@@ -83,35 +68,11 @@
     <loc>https://hypecyclist.org/tags/tools/</loc>
     <lastmod>2020-04-25T13:36:10-06:00</lastmod>
   </url><url>
-    <loc>https://hypecyclist.org/post/2020-04-19-creating-a-kubernetes-cluster-using-kops/</loc>
-    <lastmod>2020-04-19T09:01:17-06:00</lastmod>
-  </url><url>
     <loc>https://hypecyclist.org/tags/learning/</loc>
     <lastmod>2020-04-15T12:23:28-06:00</lastmod>
   </url><url>
     <loc>https://hypecyclist.org/post/2020-04-15-preparing-for-cka-and-ckad/</loc>
     <lastmod>2020-04-15T12:23:28-06:00</lastmod>
-  </url><url>
-    <loc>https://hypecyclist.org/tags/code/</loc>
-    <lastmod>2020-04-10T12:39:16-06:00</lastmod>
-  </url><url>
-    <loc>https://hypecyclist.org/code/2020-04-10-code-for-kubeadm-on-gcp/</loc>
-    <lastmod>2020-04-10T12:39:16-06:00</lastmod>
-  </url><url>
-    <loc>https://hypecyclist.org/code/</loc>
-    <lastmod>2020-04-10T12:39:16-06:00</lastmod>
-  </url><url>
-    <loc>https://hypecyclist.org/post/2020-04-09-kubernetes-using-kubeadm-on-gcp/</loc>
-    <lastmod>2020-04-09T14:32:43-06:00</lastmod>
-  </url><url>
-    <loc>https://hypecyclist.org/tags/k8s/</loc>
-    <lastmod>2020-04-09T14:32:43-06:00</lastmod>
-  </url><url>
-    <loc>https://hypecyclist.org/post/emacs-on-windows-update-2020/</loc>
-    <lastmod>2020-04-09T11:07:04-06:00</lastmod>
-  </url><url>
-    <loc>https://hypecyclist.org/tags/windows/</loc>
-    <lastmod>2020-04-09T11:07:04-06:00</lastmod>
   </url><url>
     <loc>https://hypecyclist.org/about/</loc>
     <lastmod>2020-04-09T00:00:00+00:00</lastmod>
@@ -126,6 +87,9 @@
     <lastmod>2010-09-11T16:21:01-06:00</lastmod>
   </url><url>
     <loc>https://hypecyclist.org/post/10-tips-emacs-on-windows/</loc>
+    <lastmod>2010-05-23T13:12:03-06:00</lastmod>
+  </url><url>
+    <loc>https://hypecyclist.org/tags/windows/</loc>
     <lastmod>2010-05-23T13:12:03-06:00</lastmod>
   </url>
 </urlset>

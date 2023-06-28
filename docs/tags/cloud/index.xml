@@ -23,20 +23,5 @@ app access is not secure. This guide shows how to make use of a SOCKS proxy for 
 web-based access to Cloud VMs.&lt;/p&gt;</description>
     </item>
     
-    <item>
-      <title>It&#39;s (relatively) easy to create your own Kubernetes cluster</title>
-      <link>https://hypecyclist.org/post/2020-04-09-kubernetes-using-kubeadm-on-gcp/</link>
-      <pubDate>Thu, 09 Apr 2020 14:32:43 -0600</pubDate>
-      
-      <guid>https://hypecyclist.org/post/2020-04-09-kubernetes-using-kubeadm-on-gcp/</guid>
-      <description>&lt;img src=&#34;https://hypecyclist.org/images/k-mitch-hodge-Hv0xz-6-Er8-unsplash.jpg&#34; alt=&#34;shipyard&#34; title=&#34;Getting ready to load containers&#34;/&gt;
-&lt;p&gt;
-On the road to our Kubernetes certifications, many of us have worked through Kelsey
-Hightower&amp;#39;s excellent &lt;a href=&#34;https://github.com/kelseyhightower/kubernetes-the-hard-way&#34;&gt;Kubernetes the Hard Way&lt;/a&gt;.  There are of course several ways to make
-that process much easier - either by using a vendor distribution or creating a simplistic
-single-node laptop &amp;#34;cluster.&amp;#34;  I want to show how you can bring up an enterprise grade
-highly available cluster using &lt;code class=&#34;verbatim&#34;&gt;kubeadm&lt;/code&gt;.&lt;/p&gt;</description>
-    </item>
-    
   </channel>
 </rss>
