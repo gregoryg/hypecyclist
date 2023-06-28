@@ -1,0 +1,58 @@
+#+title: Exploring Generative AI: Integrating ChatGPT with Structured Note-Taking Systems
+#+date: 2023-06-24T18:59:03-0600
+#+publishdate: 2023-06-24T18:59:03-0600
+#+draft: t
+#+tags[]: generativeAI chatGPT LLM Python Emacs OrgMode
+#+description: short post description
+
+# put text for summary prior to 'more' tag
+
+# Long time, no blog.  But now I'm getting a backlog of things I want to talk about - thanks
+# to Generative AI (it writes more and better than me, but so be it).
+
+I have been obsessed with generative AI.  I'd love to talk about the big topics - AGI,
+ASI, human survival, immortality - but my way is down in rabbit holes. So let's write some
+code (or just very slightly modify some existing code), and maybe we'll tackle elephants
+in various rooms another time.
+
+To jump to the how-to, check out the video
+
+          [[https://www.youtube.com/watch?v=aAo4O3fef-Y][Use ChatGPT API to create Knowledge Base articles in Org Mode! - YouTube ≫ www.youtube.com]]
+
+# more
+* Programming in natural language
+
+One of the mind-blowing aspects of coding for LLMs is
+that we will be "programming" primarily in human language.
+
+[[/images/andrej_karpathy_hottest_programming_language.png]]
+
+
+The small amount of Python code is just a little wrapper to do things like set prompt
+strings, pull in the API key, write files and so forth.  Tiny little inconsequential
+things.  Heavy lifting is left to the LLM to understand the source text, generate the
+metadata we asked for, summarize it, search it, update.
+
+
+* Create and search Knowledge Base articles
+
+David Shapiro is a great YouTuber who talks about the big topics but also makes coding
+video when insomnia strikes.  He recently did a video about using ChatGPT to create
+structured knowledge base (KB) articles.  His version writes out YAML files.  We're going
+to do some tweaks to the prompting and metadata to accomplish the same in Org Mode, which
+will then allow us to integrate the articles with a structured note taking system such as
+Org Roam or - in my case - the Denote package by Protesilaos.
+
+* No structure?  No problem!
+
+Our data can be as unstructured and motley as we wish - no need for a relational ERD or a
+schema or an ontology or a dictionary.  The LLM can find the relationships for you.  And
+for that matter, it's happy to generate SQL, SPARQL and other query languages, as well as
+the schemas and ontologies you might want!
+
+So the code we will be using is a tweak on David Shapiro's code.  The repository I'm using
+is a fork of his repo at https://github.com/gregoryg/KB_microservice, branch 'org-gab'.
+
+Happy coding!
+
+#  LocalWords:  publishdate generativeAI chatGPT OrgMode LLMs YouTuber Protesilaos repo
