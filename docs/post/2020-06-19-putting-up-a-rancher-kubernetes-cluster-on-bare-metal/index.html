@@ -127,18 +127,14 @@ Set up the initial RKE cluster
 <div id="outline-text-headline-3" class="outline-text-2">
 <p>Have a look at some starter configs and adjust as necessary:</p>
 <ul>
-<li>
-<p><a href="https://rancher.com/docs/rke/latest/en/example-yamls/#minimal-cluster-yml-example">Cluster minimal example config</a> (single node)</p>
-</li>
-<li>
-<p>My <a href="https://raw.githubusercontent.com/gregoryg/hypecyclist/master/content/code/cluster.yaml">simple config</a> (multi-node non-HA)</p>
-</li>
+<li><a href="https://rancher.com/docs/rke/latest/en/example-yamls/#minimal-cluster-yml-example">Cluster minimal example config</a> (single node)</li>
+<li>My <a href="https://raw.githubusercontent.com/gregoryg/hypecyclist/master/content/code/cluster.yaml">simple config</a> (multi-node non-HA)</li>
 </ul>
 <p>Once you have the config to your liking, run</p>
 <div class="src src-bash">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">  <span style="color:#080;font-style:italic"># rke up</span>
-  rke up --config cluster.yaml --ssh-agent-auth
-  <span style="color:#b8860b">KUBECONFIG</span><span style="color:#666">=</span>kube_config_cluster.yaml kubectl get nodes</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  <span style="color:#080;font-style:italic"># rke up</span>
+</span></span><span style="display:flex;"><span>  rke up --config cluster.yaml --ssh-agent-auth
+</span></span><span style="display:flex;"><span>  <span style="color:#b8860b">KUBECONFIG</span><span style="color:#666">=</span>kube_config_cluster.yaml kubectl get nodes</span></span></code></pre></div>
 </div>
 <p>
    You get to skip setting up Pod Networking for RKE - Canal is already installed and configured</p>
@@ -152,29 +148,29 @@ Set up Load Balancing
 <p>On our bare metal cluster, we&#39;ll use MetalLB - be sure to check <a href="https://github.com/metallb/metallb/releases">releases</a> to get the
   right URL</p>
 <div class="src src-bash">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">  <span style="color:#080;font-style:italic"># use new namespace metallb-system</span>
-  kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
-  kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/metallb.yaml
-  <span style="color:#080;font-style:italic"># On first install only</span>
-  kubectl create secret generic -n metallb-system memberlist --from-literal<span style="color:#666">=</span><span style="color:#b8860b">secretkey</span><span style="color:#666">=</span><span style="color:#b44">&#34;</span><span style="color:#a2f;font-weight:bold">$(</span>openssl rand -base64 128<span style="color:#a2f;font-weight:bold">)</span><span style="color:#b44">&#34;</span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  <span style="color:#080;font-style:italic"># use new namespace metallb-system</span>
+</span></span><span style="display:flex;"><span>  kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
+</span></span><span style="display:flex;"><span>  kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/metallb.yaml
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-style:italic"># On first install only</span>
+</span></span><span style="display:flex;"><span>  kubectl create secret generic -n metallb-system memberlist --from-literal<span style="color:#666">=</span><span style="color:#b8860b">secretkey</span><span style="color:#666">=</span><span style="color:#b44">&#34;</span><span style="color:#a2f;font-weight:bold">$(</span>openssl rand -base64 128<span style="color:#a2f;font-weight:bold">)</span><span style="color:#b44">&#34;</span></span></span></code></pre></div>
 </div>
 <p>Give MetalLB a pool of IP addresses</p>
 <ul>
 <li>
 <p>Here I&#39;m using a pool from the cluster&#39;s network</p>
 <div class="src src-yaml">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>v1<span style="color:#bbb">
-</span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>ConfigMap<span style="color:#bbb">
-</span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">metadata</span>:<span style="color:#bbb">
-</span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">namespace</span>:<span style="color:#bbb"> </span>metallb-system<span style="color:#bbb">
-</span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">name</span>:<span style="color:#bbb"> </span>config<span style="color:#bbb">
-</span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">data</span>:<span style="color:#bbb">
-</span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">config</span>:<span style="color:#bbb"> </span>|<span style="color:#b44;font-style:italic">
-</span><span style="color:#b44;font-style:italic">      address-pools:
-</span><span style="color:#b44;font-style:italic">      - name: default
-</span><span style="color:#b44;font-style:italic">        protocol: layer2
-</span><span style="color:#b44;font-style:italic">        addresses:
-</span><span style="color:#b44;font-style:italic">        - 172.16.27.230-172.16.27.250</span><span style="color:#bbb">      </span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>v1<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>ConfigMap<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">metadata</span>:<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">namespace</span>:<span style="color:#bbb"> </span>metallb-system<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">name</span>:<span style="color:#bbb"> </span>config<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">data</span>:<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">config</span>:<span style="color:#bbb"> </span>|<span style="color:#b44;font-style:italic">
+</span></span></span><span style="display:flex;"><span><span style="color:#b44;font-style:italic">      address-pools:
+</span></span></span><span style="display:flex;"><span><span style="color:#b44;font-style:italic">      - name: default
+</span></span></span><span style="display:flex;"><span><span style="color:#b44;font-style:italic">        protocol: layer2
+</span></span></span><span style="display:flex;"><span><span style="color:#b44;font-style:italic">        addresses:
+</span></span></span><span style="display:flex;"><span><span style="color:#b44;font-style:italic">        - 172.16.27.230-172.16.27.250</span><span style="color:#bbb">      </span></span></span></code></pre></div>
 </div>
 </li>
 </ul>
@@ -200,11 +196,11 @@ Install Rancher on the cluster
     Rancher gives us a great UI for management of this cluster and any other clusters we
     may want to manage in the future (RKE or not)</p>
 <div class="src src-bash">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">  kubectl create ns cattle-system
-  helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
-  helm install rancher rancher-latest/rancher <span style="color:#b62;font-weight:bold">\
-</span><span style="color:#b62;font-weight:bold"></span>       --namespace cattle-system <span style="color:#b62;font-weight:bold">\
-</span><span style="color:#b62;font-weight:bold"></span>       --set <span style="color:#b8860b">hostname</span><span style="color:#666">=</span>rancher.local</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  kubectl create ns cattle-system
+</span></span><span style="display:flex;"><span>  helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
+</span></span><span style="display:flex;"><span>  helm install rancher rancher-latest/rancher <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>       --namespace cattle-system <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>       --set <span style="color:#b8860b">hostname</span><span style="color:#666">=</span>rancher.local</span></span></code></pre></div>
 </div>
 <p>
     I find that the Helm chart <code class="verbatim">rancher-2.4.4</code> exposes port 80 but does not expose
@@ -212,25 +208,25 @@ Install Rancher on the cluster
 <p>
     I edited the <code class="verbatim">rancher</code> Service to expose the SSL port under <code class="verbatim">spec.ports</code></p>
 <div class="src src-yaml">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bbb">  </span>- <span style="color:#008000;font-weight:bold">name</span>:<span style="color:#bbb"> </span>https<span style="color:#bbb">
-</span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">port</span>:<span style="color:#bbb"> </span><span style="color:#666">443</span><span style="color:#bbb">
-</span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">protocol</span>:<span style="color:#bbb"> </span>TCP<span style="color:#bbb">
-</span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">targetPort</span>:<span style="color:#bbb"> </span><span style="color:#666">443</span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bbb">  </span>- <span style="color:#008000;font-weight:bold">name</span>:<span style="color:#bbb"> </span>https<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">port</span>:<span style="color:#bbb"> </span><span style="color:#666">443</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">protocol</span>:<span style="color:#bbb"> </span>TCP<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">targetPort</span>:<span style="color:#bbb"> </span><span style="color:#666">443</span></span></span></code></pre></div>
 </div>
 <p>
     If you should ever need to reset the Rancher admin user password</p>
 <div class="src src-bash">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">  kubectl  <span style="color:#a2f">exec</span> -n cattle-system <span style="color:#b62;font-weight:bold">\
-</span><span style="color:#b62;font-weight:bold"></span>           <span style="color:#a2f;font-weight:bold">$(</span>kubectl get pods -n cattle-system -o json | jq -r <span style="color:#b44">&#39;.items[] | select(.spec.containers[].name==&#34;rancher&#34;) | .metadata.name&#39;</span><span style="color:#a2f;font-weight:bold">)</span> -- reset-password</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  kubectl  <span style="color:#a2f">exec</span> -n cattle-system <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>           <span style="color:#a2f;font-weight:bold">$(</span>kubectl get pods -n cattle-system -o json | jq -r <span style="color:#b44">&#39;.items[] | select(.spec.containers[].name==&#34;rancher&#34;) | .metadata.name&#39;</span><span style="color:#a2f;font-weight:bold">)</span> -- reset-password</span></span></code></pre></div>
 </div>
 <p>
     After all that hoohaw, I should mention that you can also simply run Rancher from a
     Docker container - and use that to manage multiple clusters.</p>
 <div class="src src-bash">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">  <span style="color:#080;font-style:italic"># Run Rancher on all network interfaces</span>
-  docker run --name rancher -d --restart<span style="color:#666">=</span>unless-stopped -p 0.0.0.0:80:80 -p 0.0.0.0:443:443 rancher/rancher
-  <span style="color:#080;font-style:italic"># Reset password when needed</span>
-  <span style="color:#080;font-style:italic"># docker exec -ti &lt;container_id&gt; reset-password</span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  <span style="color:#080;font-style:italic"># Run Rancher on all network interfaces</span>
+</span></span><span style="display:flex;"><span>  docker run --name rancher -d --restart<span style="color:#666">=</span>unless-stopped -p 0.0.0.0:80:80 -p 0.0.0.0:443:443 rancher/rancher
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-style:italic"># Reset password when needed</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-style:italic"># docker exec -ti &lt;container_id&gt; reset-password</span></span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -253,27 +249,25 @@ Enable Dashbord - domain traefik.local
 <p>
   <code class="verbatim">kubectl -n traefik edit svc traefik-dashboard</code></p>
 <ul>
-<li>
-<p>Change to <code class="verbatim">LoadBalancer</code></p>
-</li>
+<li>Change to <code class="verbatim">LoadBalancer</code></li>
 </ul>
 <p>An example of creating an Ingress.  This is to get into the Longhorn UI</p>
 <div class="src src-yaml">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>extensions/v1beta1<span style="color:#bbb">
-</span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>Ingress<span style="color:#bbb">
-</span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">metadata</span>:<span style="color:#bbb">
-</span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">namespace</span>:<span style="color:#bbb"> </span>longhorn-system<span style="color:#bbb">
-</span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">labels</span>:<span style="color:#bbb">
-</span><span style="color:#bbb">      </span><span style="color:#008000;font-weight:bold">app</span>:<span style="color:#bbb"> </span>longhorn-frontend<span style="color:#bbb">
-</span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">name</span>:<span style="color:#bbb"> </span>longhorn-ui<span style="color:#bbb">
-</span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">spec</span>:<span style="color:#bbb">
-</span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">rules</span>:<span style="color:#bbb">
-</span><span style="color:#bbb">    </span>- <span style="color:#008000;font-weight:bold">host</span>:<span style="color:#bbb"> </span>longhorn-frontend.example.com<span style="color:#bbb">
-</span><span style="color:#bbb">      </span><span style="color:#008000;font-weight:bold">http</span>:<span style="color:#bbb">
-</span><span style="color:#bbb">        </span><span style="color:#008000;font-weight:bold">paths</span>:<span style="color:#bbb">
-</span><span style="color:#bbb">        </span>- <span style="color:#008000;font-weight:bold">backend</span>:<span style="color:#bbb">
-</span><span style="color:#bbb">            </span><span style="color:#008000;font-weight:bold">serviceName</span>:<span style="color:#bbb"> </span>longhorn-frontend<span style="color:#bbb">
-</span><span style="color:#bbb">            </span><span style="color:#008000;font-weight:bold">servicePort</span>:<span style="color:#bbb"> </span>http</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>extensions/v1beta1<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>Ingress<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">metadata</span>:<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">namespace</span>:<span style="color:#bbb"> </span>longhorn-system<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">labels</span>:<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">      </span><span style="color:#008000;font-weight:bold">app</span>:<span style="color:#bbb"> </span>longhorn-frontend<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">name</span>:<span style="color:#bbb"> </span>longhorn-ui<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">spec</span>:<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">rules</span>:<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>- <span style="color:#008000;font-weight:bold">host</span>:<span style="color:#bbb"> </span>longhorn-frontend.example.com<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">      </span><span style="color:#008000;font-weight:bold">http</span>:<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#008000;font-weight:bold">paths</span>:<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>- <span style="color:#008000;font-weight:bold">backend</span>:<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span><span style="color:#008000;font-weight:bold">serviceName</span>:<span style="color:#bbb"> </span>longhorn-frontend<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span><span style="color:#008000;font-weight:bold">servicePort</span>:<span style="color:#bbb"> </span>http</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -299,7 +293,7 @@ Install prerequisite: <code class="verbatim">open-iscsi</code>
 </h4>
 <div id="outline-text-headline-9" class="outline-text-4">
 <div class="src src-bash">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">  sudo apt-get -y install open-iscsi</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  sudo apt-get -y install open-iscsi</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -315,7 +309,7 @@ Install Longhorn
 <p>
    Alternatively you can install using <code class="verbatim">kubectl</code>:</p>
 <div class="src src-bash">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">  kubectl apply -f  https://raw.githubusercontent.com/longhorn/longhorn/master/deploy/longhorn.yaml</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  kubectl apply -f  https://raw.githubusercontent.com/longhorn/longhorn/master/deploy/longhorn.yaml</span></span></code></pre></div>
 </div>
 <p>
    If you want to create easy access to the Longhorn UI, change the <code class="verbatim">longhorn-frontend</code>
@@ -332,8 +326,8 @@ Optionally make one storage class the default
 <div id="outline-text-headline-11" class="outline-text-3">
 <p>Add annotation to the desired StorageClass resource</p>
 <div class="src src-yaml">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">annotations</span>:<span style="color:#bbb">
-</span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">storageclass.kubernetes.io/is-default-class</span>:<span style="color:#bbb"> </span><span style="color:#b44">&#34;true&#34;</span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">annotations</span>:<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">storageclass.kubernetes.io/is-default-class</span>:<span style="color:#bbb"> </span><span style="color:#b44">&#34;true&#34;</span></span></span></code></pre></div>
 </div>
 <ul>
 <li>
@@ -354,7 +348,7 @@ Tear down your cluster when the time comes
 </h2>
 <div id="outline-text-headline-12" class="outline-text-2">
 <div class="src src-bash">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">  rke remove --config cluster.yaml --ssh-agent-auth</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  rke remove --config cluster.yaml --ssh-agent-auth</span></span></code></pre></div>
 </div>
 <div id="outline-container-headline-13" class="outline-3">
 <h3 id="headline-13">
@@ -363,13 +357,13 @@ Cleanup after removal of any distribution
 <div id="outline-text-headline-13" class="outline-text-3">
 <p>Some components may need manual removal</p>
 <div class="src src-bash">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">  sudo rm -rf /var/lib/longhorn /etc/cni/net.d/ /etc/kubernetes /data/longhorn/*</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  sudo rm -rf /var/lib/longhorn /etc/cni/net.d/ /etc/kubernetes /data/longhorn/*</span></span></code></pre></div>
 </div>
 <p>
    Optionally assure that all the Docker containers are retired</p>
 <div class="src src-bash">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">  docker stop <span style="color:#b44">`</span>docker ps -a -q<span style="color:#b44">`</span>
-  docker rm <span style="color:#b44">`</span>docker ps -a -q<span style="color:#b44">`</span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  docker stop <span style="color:#b44">`</span>docker ps -a -q<span style="color:#b44">`</span>
+</span></span><span style="display:flex;"><span>  docker rm <span style="color:#b44">`</span>docker ps -a -q<span style="color:#b44">`</span></span></span></code></pre></div>
 </div>
 </div>
 </div>

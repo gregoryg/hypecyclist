@@ -110,22 +110,14 @@ wanted to share the magic that makes it all work.</p>
 <p>
 I decided against using the Cygwin Emacs package for several reasons:</p>
 <ul>
-<li>
-<p>Running a windowed/multi-frame/pretty version requires running Cygwin-X, which is
+<li>Running a windowed/multi-frame/pretty version requires running Cygwin-X, which is
 quite a lot of overhead just to run Emacs. I have had a few interface and display
-problems lately with Cygwin-X also.</p>
-</li>
-<li>
-<p>Cool-though-seldom-used features that work in the native port do not work in the
-Cygwin port: Window opacity control, for example</p>
-</li>
-<li>
-<p>Using the native port means I can always be running the latest released version from
-gnu.org</p>
-</li>
-<li>
-<p>The native port just runs faster</p>
-</li>
+problems lately with Cygwin-X also.</li>
+<li>Cool-though-seldom-used features that work in the native port do not work in the
+Cygwin port: Window opacity control, for example</li>
+<li>Using the native port means I can always be running the latest released version from
+gnu.org</li>
+<li>The native port just runs faster</li>
 </ul>
 <p>On the other hand, Cygwin does play a crucial role in making the native Emacs port work
 properly. I have tried and hated using PuTTY and Plink, and various one-off ports of
@@ -143,24 +135,12 @@ Software download links
 <p>
 Here&#39;s where you will find all the software referenced in the tips:</p>
 <ul>
-<li>
-<p><a href="https://ftp.gnu.org/pub/gnu/emacs/windows/">Emacs for Windows</a></p>
-</li>
-<li>
-<p><a href="http://www.cygwin.com/">Cygwin</a></p>
-</li>
-<li>
-<p><a href="http://gnuwin32.sourceforge.net/">GnuWin32</a> for image libraries</p>
-</li>
-<li>
-<p>ISpell package</p>
-</li>
-<li>
-<p>Maxframe.el</p>
-</li>
-<li>
-<p>GSView</p>
-</li>
+<li><a href="https://ftp.gnu.org/pub/gnu/emacs/windows/">Emacs for Windows</a></li>
+<li><a href="http://www.cygwin.com/">Cygwin</a></li>
+<li><a href="http://gnuwin32.sourceforge.net/">GnuWin32</a> for image libraries</li>
+<li>ISpell package</li>
+<li>Maxframe.el</li>
+<li>GSView</li>
 </ul>
 </div>
 </div>
@@ -170,14 +150,12 @@ Tip #1: General Usage
 </h2>
 <div id="outline-text-headline-2" class="outline-text-2">
 <ul>
-<li>
-<p>Execute <code class="verbatim">runemacs.exe</code> or <code class="verbatim">emacsclientw.exe</code>.</p>
-</li>
+<li>Execute <code class="verbatim">runemacs.exe</code> or <code class="verbatim">emacsclientw.exe</code>.</li>
 <li>
 <p>Add Cygwin <code class="verbatim">/bin</code> to <code class="verbatim">exec-path</code>.</p>
 <div class="src src-bash">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">  <span style="color:#666">(</span><span style="color:#a2f;font-weight:bold">if</span> <span style="color:#666">(</span>file-directory-p <span style="color:#b44">&#34;c:/cygwin/bin&#34;</span><span style="color:#666">)</span>
-      <span style="color:#666">(</span>add-to-list <span style="">&#39;</span>exec-path <span style="color:#b44">&#34;c:/cygwin/bin&#34;</span><span style="color:#666">))</span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  <span style="color:#666">(</span><span style="color:#a2f;font-weight:bold">if</span> <span style="color:#666">(</span>file-directory-p <span style="color:#b44">&#34;c:/cygwin/bin&#34;</span><span style="color:#666">)</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#666">(</span>add-to-list <span style="">&#39;</span>exec-path <span style="color:#b44">&#34;c:/cygwin/bin&#34;</span><span style="color:#666">))</span></span></span></code></pre></div>
 </div>
 </li>
 </ul>
@@ -191,31 +169,25 @@ Tip #2: Make TRAMP work nicely – and without PuTTY
 <p>
 There are people using PuTTY and Plink.exe to get this working, but I like using good old OpenSSH much better: no translation required for the keys I use, and I have it installed anyway in Cygwin.</p>
 <ul>
-<li>
-<p>Install Cygwin, including the OpenSSH package</p>
-</li>
+<li>Install Cygwin, including the OpenSSH package</li>
 <li>
 <p>In your Emacs init, set shell to bash</p>
 <div class="src src-emacs-lisp">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-emacs-lisp" data-lang="emacs-lisp">(<span style="color:#a2f">setq</span> <span style="color:#b8860b">shell-file-name</span> <span style="color:#b44">&#34;bash&#34;</span>)
-(<span style="color:#a2f">setq</span> <span style="color:#b8860b">explicit-shell-file-name</span> <span style="color:#b8860b">shell-file-name</span>)</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-emacs-lisp" data-lang="emacs-lisp"><span style="display:flex;"><span>(<span style="color:#a2f">setq</span> <span style="color:#b8860b">shell-file-name</span> <span style="color:#b44">&#34;bash&#34;</span>)
+</span></span><span style="display:flex;"><span>(<span style="color:#a2f">setq</span> <span style="color:#b8860b">explicit-shell-file-name</span> <span style="color:#b8860b">shell-file-name</span>)</span></span></code></pre></div>
 </div>
 </li>
 <li>
 <p>In Emacs init, set tramp-default-method to &#34;sshx&#34; or &#34;scpx&#34;</p>
 <div class="src src-emacs-lisp">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-emacs-lisp" data-lang="emacs-lisp">(<span style="color:#a2f">cond</span>  ((<span style="color:#00a000">eq</span> <span style="color:#00a000">window-system</span> <span style="color:#b8860b">&#39;w32</span>)
-(<span style="color:#a2f">setq</span> <span style="color:#b8860b">tramp-default-method</span> <span style="color:#b44">&#34;scpx&#34;</span>))
-(<span style="color:#800">t</span>
-(<span style="color:#a2f">setq</span> <span style="color:#b8860b">tramp-default-method</span> <span style="color:#b44">&#34;scpc&#34;</span>)))</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-emacs-lisp" data-lang="emacs-lisp"><span style="display:flex;"><span>(<span style="color:#a2f">cond</span>  ((<span style="color:#00a000">eq</span> <span style="color:#00a000">window-system</span> <span style="color:#b8860b">&#39;w32</span>)
+</span></span><span style="display:flex;"><span>(<span style="color:#a2f">setq</span> <span style="color:#b8860b">tramp-default-method</span> <span style="color:#b44">&#34;scpx&#34;</span>))
+</span></span><span style="display:flex;"><span>(<span style="color:#800">t</span>
+</span></span><span style="display:flex;"><span>(<span style="color:#a2f">setq</span> <span style="color:#b8860b">tramp-default-method</span> <span style="color:#b44">&#34;scpc&#34;</span>)))</span></span></code></pre></div>
 </div>
 </li>
-<li>
-<p>Windows 7 note:   I was unable to get this to work on Win7 until I set the runemacs.exe binary to run in Windows XP (Service Pack 3) compatibility mode.</p>
-</li>
-<li>
-<p>Test: Try <code class="verbatim">M-x shell</code>, then visit a TRAMP site such as <code class="verbatim">/user@site:</code> and try M-x shell from there!</p>
-</li>
+<li>Windows 7 note:   I was unable to get this to work on Win7 until I set the runemacs.exe binary to run in Windows XP (Service Pack 3) compatibility mode.</li>
+<li>Test: Try <code class="verbatim">M-x shell</code>, then visit a TRAMP site such as <code class="verbatim">/user@site:</code> and try M-x shell from there!</li>
 </ul>
 </div>
 </div>
@@ -227,12 +199,8 @@ Tip #3: Use SVN and GIT without tears
 <p>Version control should work out of the box – but SSH problems can interfere sometimes. So
 once you get TRAMP working properly, you should have no problems with VC.</p>
 <ul>
-<li>
-<p>Install subversion and git from Cygwin</p>
-</li>
-<li>
-<p>Use built-in <code class="verbatim">vc-dir</code>, or <code class="verbatim">psvn.el</code> and <code class="verbatim">magit.el</code></p>
-</li>
+<li>Install subversion and git from Cygwin</li>
+<li>Use built-in <code class="verbatim">vc-dir</code>, or <code class="verbatim">psvn.el</code> and <code class="verbatim">magit.el</code></li>
 </ul>
 </div>
 </div>
@@ -249,48 +217,20 @@ images), and copy the DLLs into the bin directory of your Emacs installation (e.
 C:Program Files\emacs23-2\bin). Images will only be displayed after restarting
 Emacs. Here&#39;s a list of DLLs that I now have in my installation:</p>
 <ul>
-<li>
-<p>jpeg62.dll</p>
-</li>
-<li>
-<p>libXpm.dll</p>
-</li>
-<li>
-<p>libjpeg-62.dll</p>
-</li>
-<li>
-<p>libpng-bcc.lib</p>
-</li>
-<li>
-<p>libpng.dll.a</p>
-</li>
-<li>
-<p>libpng.la</p>
-</li>
-<li>
-<p>libpng.lib</p>
-</li>
-<li>
-<p>libpng12-0.dll</p>
-</li>
-<li>
-<p>libpng12.def</p>
-</li>
-<li>
-<p>libpng12.dll</p>
-</li>
-<li>
-<p>libpng12.dll.a</p>
-</li>
-<li>
-<p>libpng12.la</p>
-</li>
-<li>
-<p>libtiff3.dll</p>
-</li>
-<li>
-<p>zlib1.dll (for compression, not images)</p>
-</li>
+<li>jpeg62.dll</li>
+<li>libXpm.dll</li>
+<li>libjpeg-62.dll</li>
+<li>libpng-bcc.lib</li>
+<li>libpng.dll.a</li>
+<li>libpng.la</li>
+<li>libpng.lib</li>
+<li>libpng12-0.dll</li>
+<li>libpng12.def</li>
+<li>libpng12.dll</li>
+<li>libpng12.dll.a</li>
+<li>libpng12.la</li>
+<li>libtiff3.dll</li>
+<li>zlib1.dll (for compression, not images)</li>
 </ul>
 </div>
 </div>
@@ -301,15 +241,9 @@ Tip #5: Use W3M
 <div id="outline-text-headline-6" class="outline-text-2">
 <p>The W3M web browser works fine once you install the w3m binary – and once the image display step above is working, you will be able to display images in the W3M buffers as well.</p>
 <ul>
-<li>
-<p>Install w3m from Cygwin</p>
-</li>
-<li>
-<p>Test image display by hitting T (w3m-toggle-inline-images)</p>
-</li>
-<li>
-<p>Example screenshot: </p>
-</li>
+<li>Install w3m from Cygwin</li>
+<li>Test image display by hitting T (w3m-toggle-inline-images)</li>
+<li>Example screenshot: </li>
 </ul>
 <img src="/images/emacs_pacman_google.jpg" alt="Emacs screenshot with Google Search Page" title="/images/emacs_pacman_google.jpg"/>
 </div>
@@ -321,19 +255,11 @@ Tip #6: Bring back Ediff and Smerge
 <div id="outline-text-headline-7" class="outline-text-2">
 <p>Ediff is yet another thing which doesn&#39;t work as it should. You will get an error complaining about Dos-style versus Unix-style paths. Fixing it is a simple matter of setting an environment variable.</p>
 <ul>
-<li>
-<p>Assure you have Cygwin&#39;s diff package installed</p>
-</li>
-<li>
-<p>Set the Windows environment variable <code class="verbatim">nodosfilewarning=1</code></p>
-</li>
-<li>
-<p>Restart Emacs, and verify that the environment variable is set by executing <code class="verbatim">M-x shell</code>,
-then typing <code class="verbatim">env | grep dos</code>, for example</p>
-</li>
-<li>
-<p><strong>Always, prior to running ediff</strong>, execute <code class="verbatim">M-x shell</code></p>
-</li>
+<li>Assure you have Cygwin&#39;s diff package installed</li>
+<li>Set the Windows environment variable <code class="verbatim">nodosfilewarning=1</code></li>
+<li>Restart Emacs, and verify that the environment variable is set by executing <code class="verbatim">M-x shell</code>,
+then typing <code class="verbatim">env | grep dos</code>, for example</li>
+<li><strong>Always, prior to running ediff</strong>, execute <code class="verbatim">M-x shell</code></li>
 </ul>
 </div>
 </div>
@@ -347,7 +273,7 @@ package for Cygwin linked above. <strong>Note added later</strong>: Aspell is ev
 install aspell and the correct language(s) in Cygwin, then use the following in your emacs
 init:</p>
 <div class="src src-emacs-lisp">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-emacs-lisp" data-lang="emacs-lisp">(<span style="color:#a2f">setq-default</span> <span style="color:#b8860b">ispell-program-name</span> <span style="color:#b44">&#34;aspell&#34;</span>)</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-emacs-lisp" data-lang="emacs-lisp"><span style="display:flex;"><span>(<span style="color:#a2f">setq-default</span> <span style="color:#b8860b">ispell-program-name</span> <span style="color:#b44">&#34;aspell&#34;</span>)</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -369,22 +295,20 @@ Tip #9: Print on PostScript printers
 <div id="outline-text-headline-10" class="outline-text-2">
 <p>And finally, printing. Even this just didn&#39;t work out of the box for me. The solution was to use a nice little utility called GSPrint from the GSView package linked above.</p>
 <ul>
-<li>
-<p>Install Ghostscript in Cygwin</p>
-</li>
+<li>Install Ghostscript in Cygwin</li>
 <li>
 <p>Install GSView</p>
 <div class="src src-emacs-lisp">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-emacs-lisp" data-lang="emacs-lisp">(<span style="color:#a2f">when</span> (<span style="color:#a2f">and</span> (<span style="color:#b8860b">string=</span> (<span style="color:#00a000">window-system</span>) <span style="color:#b44">&#34;w32&#34;</span>) (<span style="color:#00a000">file-exists-p</span> <span style="color:#b44">&#34;c:/Program Files/Ghostgum/gsview/gsprint.exe&#34;</span>))
-(<span style="color:#a2f">progn</span>
-<span style="color:#080;font-style:italic">;;  Windows printer</span>
-(<span style="color:#a2f">setq-default</span> <span style="color:#b8860b">ps-lpr-command</span> (<span style="color:#00a000">expand-file-name</span> <span style="color:#b44">&#34;c:/Program Files/Ghostgum/gsview/gsprint.exe&#34;</span>))
-(<span style="color:#a2f">setq-default</span> <span style="color:#b8860b">ps-printer-name</span> <span style="color:#800">t</span>)
-(<span style="color:#a2f">setq-default</span> <span style="color:#b8860b">ps-printer-name-option</span> <span style="color:#800">nil</span>)
-(<span style="color:#a2f">setq</span> <span style="color:#b8860b">ps-lpr-switches</span> <span style="color:#666">&#39;</span>(<span style="color:#b44">&#34;-query&#34;</span>)) <span style="color:#080;font-style:italic">; show printer dialog</span>
-(<span style="color:#a2f">setq</span> <span style="color:#b8860b">ps-right-header</span> <span style="color:#666">&#39;</span>(<span style="color:#b44">&#34;/pagenumberstring load&#34;</span> <span style="color:#b8860b">ps-time-stamp-mon-dd-yyyy</span>))))
-(<span style="color:#a2f">if</span> (<span style="color:#00a000">eq</span> <span style="color:#00a000">window-system</span> <span style="color:#b8860b">&#39;x</span>)
-(<span style="color:#a2f">setq</span> <span style="color:#b8860b">ps-lpr-command</span> <span style="color:#b44">&#34;gtklp&#34;</span>))</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-emacs-lisp" data-lang="emacs-lisp"><span style="display:flex;"><span>(<span style="color:#a2f">when</span> (<span style="color:#a2f">and</span> (<span style="color:#b8860b">string=</span> (<span style="color:#00a000">window-system</span>) <span style="color:#b44">&#34;w32&#34;</span>) (<span style="color:#00a000">file-exists-p</span> <span style="color:#b44">&#34;c:/Program Files/Ghostgum/gsview/gsprint.exe&#34;</span>))
+</span></span><span style="display:flex;"><span>(<span style="color:#a2f">progn</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-style:italic">;;  Windows printer</span>
+</span></span><span style="display:flex;"><span>(<span style="color:#a2f">setq-default</span> <span style="color:#b8860b">ps-lpr-command</span> (<span style="color:#00a000">expand-file-name</span> <span style="color:#b44">&#34;c:/Program Files/Ghostgum/gsview/gsprint.exe&#34;</span>))
+</span></span><span style="display:flex;"><span>(<span style="color:#a2f">setq-default</span> <span style="color:#b8860b">ps-printer-name</span> <span style="color:#800">t</span>)
+</span></span><span style="display:flex;"><span>(<span style="color:#a2f">setq-default</span> <span style="color:#b8860b">ps-printer-name-option</span> <span style="color:#800">nil</span>)
+</span></span><span style="display:flex;"><span>(<span style="color:#a2f">setq</span> <span style="color:#b8860b">ps-lpr-switches</span> <span style="color:#666">&#39;</span>(<span style="color:#b44">&#34;-query&#34;</span>)) <span style="color:#080;font-style:italic">; show printer dialog</span>
+</span></span><span style="display:flex;"><span>(<span style="color:#a2f">setq</span> <span style="color:#b8860b">ps-right-header</span> <span style="color:#666">&#39;</span>(<span style="color:#b44">&#34;/pagenumberstring load&#34;</span> <span style="color:#b8860b">ps-time-stamp-mon-dd-yyyy</span>))))
+</span></span><span style="display:flex;"><span>(<span style="color:#a2f">if</span> (<span style="color:#00a000">eq</span> <span style="color:#00a000">window-system</span> <span style="color:#b8860b">&#39;x</span>)
+</span></span><span style="display:flex;"><span>(<span style="color:#a2f">setq</span> <span style="color:#b8860b">ps-lpr-command</span> <span style="color:#b44">&#34;gtklp&#34;</span>))</span></span></code></pre></div>
 </div>
 </li>
 </ul>
@@ -404,22 +328,22 @@ Select any font you want
 <p><code class="verbatim">M-x menu-set-font</code> (choose something lovely like Consolas or Inconsolata … or Comic Sans MS)
     Example font selection, cross-OS</p>
 <div class="src src-emacs-lisp">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-emacs-lisp" data-lang="emacs-lisp"><span style="color:#080;font-style:italic">;;* Font selection</span>
-(<span style="color:#a2f">cond</span> ((<span style="color:#a2f">or</span> (<span style="color:#00a000">eq</span> <span style="color:#00a000">window-system</span> <span style="color:#b8860b">&#39;mac</span>) (<span style="color:#00a000">eq</span> <span style="color:#00a000">window-system</span> <span style="color:#b8860b">&#39;ns</span>))
-(<span style="color:#b8860b">set-face-font</span> <span style="color:#b8860b">&#39;default</span> <span style="color:#666">&#39;</span><span style="color:#b44">&#34;-apple-inconsolata-medium-r-normal--16-0-72-72-m-0-iso10646-1&#34;</span>))
-((<span style="color:#00a000">eq</span> <span style="color:#00a000">window-system</span> <span style="color:#b8860b">&#39;w32</span>)
-(<span style="color:#b8860b">set-face-font</span> <span style="color:#b8860b">&#39;default</span> <span style="color:#666">&#39;</span><span style="color:#b44">&#34;-outline-Inconsolata-normal-normal-normal-mono-16-*-*-*-c-*-iso8859-1&#34;</span>))
-((<span style="color:#a2f">and</span> (<span style="color:#00a000">eq</span> <span style="color:#00a000">window-system</span> <span style="color:#b8860b">&#39;x</span>) (<span style="color:#00a000">eq</span> <span style="color:#b8860b">emacs-major-version</span> <span style="color:#666">23</span>))
-(<span style="color:#b8860b">set-face-font</span> <span style="color:#b8860b">&#39;default</span> <span style="color:#666">&#39;</span><span style="color:#b44">&#34;-unknown-Inconsolata-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1&#34;</span>)
-(<span style="color:#b8860b">add-to-list</span> <span style="color:#b8860b">&#39;default-frame-alist</span> <span style="color:#666">&#39;</span>(<span style="color:#b8860b">font</span> <span style="color:#666">.</span> <span style="color:#b44">&#34;-unknown-Inconsolata-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1&#34;</span>))
-)
-((<span style="color:#00a000">eq</span> <span style="color:#00a000">window-system</span> <span style="color:#b8860b">&#39;x</span>)
-(<span style="color:#b8860b">set-face-font</span> <span style="color:#b8860b">&#39;default</span> <span style="color:#666">&#39;</span><span style="color:#b44">&#34;10x20&#34;</span>)))
-
-(<span style="color:#b8860b">add-hook</span> <span style="color:#b8860b">&#39;before-make-frame-hook</span>
-(<span style="color:#a2f">lambda</span> ()
-(<span style="color:#b8860b">set-frame-font</span> <span style="color:#b44">&#34;-unknown-Inconsolata-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1&#34;</span>)
-))</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-emacs-lisp" data-lang="emacs-lisp"><span style="display:flex;"><span><span style="color:#080;font-style:italic">;;* Font selection</span>
+</span></span><span style="display:flex;"><span>(<span style="color:#a2f">cond</span> ((<span style="color:#a2f">or</span> (<span style="color:#00a000">eq</span> <span style="color:#00a000">window-system</span> <span style="color:#b8860b">&#39;mac</span>) (<span style="color:#00a000">eq</span> <span style="color:#00a000">window-system</span> <span style="color:#b8860b">&#39;ns</span>))
+</span></span><span style="display:flex;"><span>(<span style="color:#b8860b">set-face-font</span> <span style="color:#b8860b">&#39;default</span> <span style="color:#666">&#39;</span><span style="color:#b44">&#34;-apple-inconsolata-medium-r-normal--16-0-72-72-m-0-iso10646-1&#34;</span>))
+</span></span><span style="display:flex;"><span>((<span style="color:#00a000">eq</span> <span style="color:#00a000">window-system</span> <span style="color:#b8860b">&#39;w32</span>)
+</span></span><span style="display:flex;"><span>(<span style="color:#b8860b">set-face-font</span> <span style="color:#b8860b">&#39;default</span> <span style="color:#666">&#39;</span><span style="color:#b44">&#34;-outline-Inconsolata-normal-normal-normal-mono-16-*-*-*-c-*-iso8859-1&#34;</span>))
+</span></span><span style="display:flex;"><span>((<span style="color:#a2f">and</span> (<span style="color:#00a000">eq</span> <span style="color:#00a000">window-system</span> <span style="color:#b8860b">&#39;x</span>) (<span style="color:#00a000">eq</span> <span style="color:#b8860b">emacs-major-version</span> <span style="color:#666">23</span>))
+</span></span><span style="display:flex;"><span>(<span style="color:#b8860b">set-face-font</span> <span style="color:#b8860b">&#39;default</span> <span style="color:#666">&#39;</span><span style="color:#b44">&#34;-unknown-Inconsolata-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1&#34;</span>)
+</span></span><span style="display:flex;"><span>(<span style="color:#b8860b">add-to-list</span> <span style="color:#b8860b">&#39;default-frame-alist</span> <span style="color:#666">&#39;</span>(<span style="color:#b8860b">font</span> <span style="color:#666">.</span> <span style="color:#b44">&#34;-unknown-Inconsolata-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1&#34;</span>))
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>((<span style="color:#00a000">eq</span> <span style="color:#00a000">window-system</span> <span style="color:#b8860b">&#39;x</span>)
+</span></span><span style="display:flex;"><span>(<span style="color:#b8860b">set-face-font</span> <span style="color:#b8860b">&#39;default</span> <span style="color:#666">&#39;</span><span style="color:#b44">&#34;10x20&#34;</span>)))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>(<span style="color:#b8860b">add-hook</span> <span style="color:#b8860b">&#39;before-make-frame-hook</span>
+</span></span><span style="display:flex;"><span>(<span style="color:#a2f">lambda</span> ()
+</span></span><span style="display:flex;"><span>(<span style="color:#b8860b">set-frame-font</span> <span style="color:#b44">&#34;-unknown-Inconsolata-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1&#34;</span>)
+</span></span><span style="display:flex;"><span>))</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -429,12 +353,8 @@ Core serious and silly commands that need no modification
 </h4>
 <div id="outline-text-headline-13" class="outline-text-4">
 <ul>
-<li>
-<p><code class="verbatim">M-x grep</code>, <code class="verbatim">M-x grep-find</code>, <code class="verbatim">M-x rgrep</code> and friends (as long as you have the <code class="verbatim">grep</code> and <code class="verbatim">find</code> commands installed!)</p>
-</li>
-<li>
-<p><code class="verbatim">M-x tetris</code>, <code class="verbatim">M-x doctor</code>, <code class="verbatim">M-x yow</code>, <code class="verbatim">M-x butterfly</code></p>
-</li>
+<li><code class="verbatim">M-x grep</code>, <code class="verbatim">M-x grep-find</code>, <code class="verbatim">M-x rgrep</code> and friends (as long as you have the <code class="verbatim">grep</code> and <code class="verbatim">find</code> commands installed!)</li>
+<li><code class="verbatim">M-x tetris</code>, <code class="verbatim">M-x doctor</code>, <code class="verbatim">M-x yow</code>, <code class="verbatim">M-x butterfly</code></li>
 </ul>
 </div>
 </div>
@@ -447,15 +367,15 @@ Frame transparency
     above). But there are occasions, like copying text from a web page into an Emacs
     buffer, where it can come in quite handy.</p>
 <div class="src src-emacs-lisp">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-emacs-lisp" data-lang="emacs-lisp">(<span style="color:#a2f">defun</span> <span style="color:#b8860b">set-transparency</span> (<span style="color:#b8860b">alpha-level</span>)
-(<span style="color:#a2f">interactive</span> <span style="color:#b44">&#34;p&#34;</span>)
-(<span style="color:#00a000">message</span> (<span style="color:#00a000">format</span> <span style="color:#b44">&#34;Alpha level passed in: %s&#34;</span> <span style="color:#b8860b">alpha-level</span>))
-(<span style="color:#a2f">let</span> ((<span style="color:#b8860b">alpha-level</span> (<span style="color:#a2f">if</span> (<span style="color:#b8860b">&amp;lt</span><span style="color:#080;font-style:italic">; alpha-level 2)</span>
-(<span style="color:#b8860b">read-number</span> <span style="color:#b44">&#34;Opacity percentage: &#34;</span> <span style="color:#666">85</span>)
-<span style="color:#b8860b">alpha-level</span>))
-(<span style="color:#b8860b">myalpha</span> (<span style="color:#00a000">frame-parameter</span> <span style="color:#800">nil</span> <span style="color:#b8860b">&#39;alpha</span>)))
-(<span style="color:#b8860b">set-frame-parameter</span> <span style="color:#800">nil</span> <span style="color:#b8860b">&#39;alpha</span> <span style="color:#b8860b">alpha-level</span>))
-(<span style="color:#00a000">message</span> (<span style="color:#00a000">format</span> <span style="color:#b44">&#34;Alpha level is %d&#34;</span> (<span style="color:#00a000">frame-parameter</span> <span style="color:#800">nil</span> <span style="color:#b8860b">&#39;alpha</span>))))</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-emacs-lisp" data-lang="emacs-lisp"><span style="display:flex;"><span>(<span style="color:#a2f">defun</span> <span style="color:#b8860b">set-transparency</span> (<span style="color:#b8860b">alpha-level</span>)
+</span></span><span style="display:flex;"><span>(<span style="color:#a2f">interactive</span> <span style="color:#b44">&#34;p&#34;</span>)
+</span></span><span style="display:flex;"><span>(<span style="color:#00a000">message</span> (<span style="color:#00a000">format</span> <span style="color:#b44">&#34;Alpha level passed in: %s&#34;</span> <span style="color:#b8860b">alpha-level</span>))
+</span></span><span style="display:flex;"><span>(<span style="color:#a2f">let</span> ((<span style="color:#b8860b">alpha-level</span> (<span style="color:#a2f">if</span> (<span style="color:#b8860b">&amp;lt</span><span style="color:#080;font-style:italic">; alpha-level 2)</span>
+</span></span><span style="display:flex;"><span>(<span style="color:#b8860b">read-number</span> <span style="color:#b44">&#34;Opacity percentage: &#34;</span> <span style="color:#666">85</span>)
+</span></span><span style="display:flex;"><span><span style="color:#b8860b">alpha-level</span>))
+</span></span><span style="display:flex;"><span>(<span style="color:#b8860b">myalpha</span> (<span style="color:#00a000">frame-parameter</span> <span style="color:#800">nil</span> <span style="color:#b8860b">&#39;alpha</span>)))
+</span></span><span style="display:flex;"><span>(<span style="color:#b8860b">set-frame-parameter</span> <span style="color:#800">nil</span> <span style="color:#b8860b">&#39;alpha</span> <span style="color:#b8860b">alpha-level</span>))
+</span></span><span style="display:flex;"><span>(<span style="color:#00a000">message</span> (<span style="color:#00a000">format</span> <span style="color:#b44">&#34;Alpha level is %d&#34;</span> (<span style="color:#00a000">frame-parameter</span> <span style="color:#800">nil</span> <span style="color:#b8860b">&#39;alpha</span>))))</span></span></code></pre></div>
 </div>
 </div>
 </div>

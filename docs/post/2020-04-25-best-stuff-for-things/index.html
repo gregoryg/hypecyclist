@@ -120,37 +120,36 @@ our own internal ranges. So always use the fully qualified host name of the inst
 by the cloud providers instead.</p>
 <figure>
 <div class="src src-js">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">  <span style="color:#080;font-style:italic">// Allow for two ports; prefer 8157 for EC2, 8158 for Google
-</span><span style="color:#080;font-style:italic"></span>  <span style="color:#a2f;font-weight:bold">function</span> FindProxyForURL(url, host) {
-      <span style="color:#080;font-style:italic">// match AWS external and internal DNS
-</span><span style="color:#080;font-style:italic"></span>      <span style="color:#a2f;font-weight:bold">if</span> (shExpMatch(host, <span style="color:#b44">&#34;*ec2.amazonaws.com&#34;</span>) <span style="color:#666">||</span> shExpMatch(host,
-                                                               <span style="color:#b44">&#34;ip-*.internal&#34;</span>)) {
-          <span style="color:#080;font-style:italic">// return &#34;SOCKS5 localhost:8157;SOCKS5 localhost:8158&#34;;
-</span><span style="color:#080;font-style:italic"></span>          <span style="color:#a2f;font-weight:bold">return</span> <span style="color:#b44">&#34;SOCKS5 localhost:8157&#34;</span>;
-      }
-      <span style="color:#080;font-style:italic">// match Google Cloud internal DNS (they do not provide external
-</span><span style="color:#080;font-style:italic"></span>      DNS by <span style="color:#a2f;font-weight:bold">default</span> (<span style="color:#666">?</span>) )
-  <span style="color:#a2f;font-weight:bold">if</span> (shExpMatch(host, <span style="color:#b44">&#34;*.internal&#34;</span>)) {
-      <span style="color:#080;font-style:italic">// return &#34;SOCKS5 localhost:8158; SOCKS5 localhost:8157&#34;;
-</span><span style="color:#080;font-style:italic"></span>      <span style="color:#a2f;font-weight:bold">return</span> <span style="color:#b44">&#34;SOCKS5 localhost:8158&#34;</span>;
-  }
-  <span style="color:#080;font-style:italic">// // match AWS and Google Cloud URLs
-</span><span style="color:#080;font-style:italic"></span>  <span style="color:#080;font-style:italic">// if (shExpMatch(host, &#34;ec2-master&#34;) || shExpMatch(host, &#34;*ec2*.
-</span><span style="color:#080;font-style:italic"></span>  amazonaws.com<span style="color:#b44">&#34;) || shExpMatch(host, &#34;</span><span style="color:#666">*</span>.internal<span style="color:#b44">&#34;)) {
-</span><span style="color:#b44">   // return &#34;</span>SOCKS5 localhost<span style="color:#666">:</span><span style="color:#666">8157</span><span style="color:#b44">&#34;;
-</span><span style="color:#b44">   // }
-</span><span style="color:#b44">   // match Azure compute URLs
-</span><span style="color:#b44">   if (shExpMatch(host, &#34;</span><span style="color:#666">*</span>.cloudapp.azure.com<span style="color:#b44">&#34;)) {
-</span><span style="color:#b44">   return &#34;</span>SOCKS5 localhost<span style="color:#666">:</span><span style="color:#666">8157</span>; DIRECT<span style="color:#b44">&#34;;
-</span><span style="color:#b44">   }
-</span><span style="color:#b44">   // // Class C address in 10.* range
-</span><span style="color:#b44">   // if (shExpMatch(host, &#34;</span><span style="color:#666">10.</span><span style="color:#666">*</span><span style="color:#b44">&#34;)) {
-</span><span style="color:#b44">   // return &#34;</span>SOCKS5 localhost<span style="color:#666">:</span><span style="color:#666">8157</span>; DIRECT<span style="color:#b44">&#34;;
-</span><span style="color:#b44">   // }
-</span><span style="color:#b44">   // All other requests go direct, not through the proxy
-</span><span style="color:#b44">   return &#34;</span>DIRECT<span style="">&#34;</span>;
-  }
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span>  <span style="color:#080;font-style:italic">// Allow for two ports; prefer 8157 for EC2, 8158 for Google
+</span></span></span><span style="display:flex;"><span><span style="color:#080;font-style:italic"></span>  <span style="color:#a2f;font-weight:bold">function</span> FindProxyForURL(url, host) {
+</span></span><span style="display:flex;"><span>      <span style="color:#080;font-style:italic">// match AWS external and internal DNS
+</span></span></span><span style="display:flex;"><span><span style="color:#080;font-style:italic"></span>      <span style="color:#a2f;font-weight:bold">if</span> (shExpMatch(host, <span style="color:#b44">&#34;*ec2.amazonaws.com&#34;</span>) <span style="color:#666">||</span> shExpMatch(host,
+</span></span><span style="display:flex;"><span>                                                               <span style="color:#b44">&#34;ip-*.internal&#34;</span>)) {
+</span></span><span style="display:flex;"><span>          <span style="color:#080;font-style:italic">// return &#34;SOCKS5 localhost:8157;SOCKS5 localhost:8158&#34;;
+</span></span></span><span style="display:flex;"><span><span style="color:#080;font-style:italic"></span>          <span style="color:#a2f;font-weight:bold">return</span> <span style="color:#b44">&#34;SOCKS5 localhost:8157&#34;</span>;
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>      <span style="color:#080;font-style:italic">// match Google Cloud internal DNS (they do not provide external
+</span></span></span><span style="display:flex;"><span><span style="color:#080;font-style:italic"></span>      DNS by <span style="color:#a2f;font-weight:bold">default</span> (<span style="color:#666">?</span>) )
+</span></span><span style="display:flex;"><span>  <span style="color:#a2f;font-weight:bold">if</span> (shExpMatch(host, <span style="color:#b44">&#34;*.internal&#34;</span>)) {
+</span></span><span style="display:flex;"><span>      <span style="color:#080;font-style:italic">// return &#34;SOCKS5 localhost:8158; SOCKS5 localhost:8157&#34;;
+</span></span></span><span style="display:flex;"><span><span style="color:#080;font-style:italic"></span>      <span style="color:#a2f;font-weight:bold">return</span> <span style="color:#b44">&#34;SOCKS5 localhost:8158&#34;</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-style:italic">// // match AWS and Google Cloud URLs
+</span></span></span><span style="display:flex;"><span><span style="color:#080;font-style:italic"></span>  <span style="color:#080;font-style:italic">// if (shExpMatch(host, &#34;ec2-master&#34;) || shExpMatch(host, &#34;*ec2*.
+</span></span></span><span style="display:flex;"><span><span style="color:#080;font-style:italic"></span>  amazonaws.com<span style="color:#b44">&#34;) || shExpMatch(host, &#34;</span><span style="color:#666">*</span>.internal<span style="color:#b44">&#34;)) {
+</span></span></span><span style="display:flex;"><span><span style="color:#b44">   // return &#34;</span>SOCKS5 localhost<span style="color:#666">:</span><span style="color:#666">8157</span><span style="color:#b44">&#34;;
+</span></span></span><span style="display:flex;"><span><span style="color:#b44">   // }
+</span></span></span><span style="display:flex;"><span><span style="color:#b44">   // match Azure compute URLs
+</span></span></span><span style="display:flex;"><span><span style="color:#b44">   if (shExpMatch(host, &#34;</span><span style="color:#666">*</span>.cloudapp.azure.com<span style="color:#b44">&#34;)) {
+</span></span></span><span style="display:flex;"><span><span style="color:#b44">   return &#34;</span>SOCKS5 localhost<span style="color:#666">:</span><span style="color:#666">8157</span>; DIRECT<span style="color:#b44">&#34;;
+</span></span></span><span style="display:flex;"><span><span style="color:#b44">   }
+</span></span></span><span style="display:flex;"><span><span style="color:#b44">   // // Class C address in 10.* range
+</span></span></span><span style="display:flex;"><span><span style="color:#b44">   // if (shExpMatch(host, &#34;</span><span style="color:#666">10.</span><span style="color:#666">*</span><span style="color:#b44">&#34;)) {
+</span></span></span><span style="display:flex;"><span><span style="color:#b44">   // return &#34;</span>SOCKS5 localhost<span style="color:#666">:</span><span style="color:#666">8157</span>; DIRECT<span style="color:#b44">&#34;;
+</span></span></span><span style="display:flex;"><span><span style="color:#b44">   // }
+</span></span></span><span style="display:flex;"><span><span style="color:#b44">   // All other requests go direct, not through the proxy
+</span></span></span><span style="display:flex;"><span><span style="color:#b44">   return &#34;</span>DIRECT<span style="">&#34;</span>;
+</span></span><span style="display:flex;"><span>  }</span></span></code></pre></div>
 </div>
 <figcaption>
 proxy.pac
@@ -168,9 +167,7 @@ Windows
 </h4>
 <div id="outline-text-headline-3" class="outline-text-4">
 <ul>
-<li>
-<p>Internet Options &gt; Connections -&gt; LAN Settings -&gt; Automatic configuration <a href="///path/to/my/proxy.pac">///path/to/my/proxy.pac</a></p>
-</li>
+<li>Internet Options &gt; Connections -&gt; LAN Settings -&gt; Automatic configuration <a href="///path/to/my/proxy.pac">///path/to/my/proxy.pac</a></li>
 </ul>
 </div>
 </div>
@@ -180,12 +177,8 @@ OS X
 </h4>
 <div id="outline-text-headline-4" class="outline-text-4">
 <ul>
-<li>
-<p>System Preferences -&gt; interface (e.g., Wifi) -&gt; Advanced -&gt; Proxies; Select Auto Proxy Discovery and Automatic Proxy</p>
-</li>
-<li>
-<p>Configuration with a file URL as for Windows</p>
-</li>
+<li>System Preferences -&gt; interface (e.g., Wifi) -&gt; Advanced -&gt; Proxies; Select Auto Proxy Discovery and Automatic Proxy</li>
+<li>Configuration with a file URL as for Windows</li>
 </ul>
 </div>
 </div>
@@ -195,9 +188,7 @@ Linux
 </h4>
 <div id="outline-text-headline-5" class="outline-text-4">
 <ul>
-<li>
-<p>set environment variable <code class="verbatim">auto_proxy</code></p>
-</li>
+<li>set environment variable <code class="verbatim">auto_proxy</code></li>
 </ul>
 </div>
 </div>
@@ -216,7 +207,7 @@ Use openssh from your workstation to that host
 <div id="outline-text-headline-7" class="outline-text-4">
 <p>The command below initiates a SOCKS proxy and forwards ssh-agent</p>
 <div class="src src-bash">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">  ssh -A -D <span style="color:#666">8157</span> <span style="color:#666">{</span>user<span style="color:#666">}</span>@<span style="color:#666">{</span>external_ip<span style="color:#666">}</span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  ssh -A -D <span style="color:#666">8157</span> <span style="color:#666">{</span>user<span style="color:#666">}</span>@<span style="color:#666">{</span>external_ip<span style="color:#666">}</span></span></span></code></pre></div>
 </div>
 <p>
    The <code class="verbatim">-A</code> option forwards ssh-agent and starts a SOCKS proxy on port 8157 of your

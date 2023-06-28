@@ -108,27 +108,15 @@ workers.</p>
 <p>
 The single master has:</p>
 <ul>
-<li>
-<p>8 GB Ram</p>
-</li>
-<li>
-<p>100GB available disk</p>
-</li>
-<li>
-<p>4 CPU cores +hyperthreading</p>
-</li>
+<li>8 GB Ram</li>
+<li>100GB available disk</li>
+<li>4 CPU cores +hyperthreading</li>
 </ul>
 <p>The workers have:</p>
 <ul>
-<li>
-<p>16GB RAM</p>
-</li>
-<li>
-<p>between 100GB and 500GB available disk</p>
-</li>
-<li>
-<p>4 CPU cores +hyperthreading</p>
-</li>
+<li>16GB RAM</li>
+<li>between 100GB and 500GB available disk</li>
+<li>4 CPU cores +hyperthreading</li>
 </ul>
 <p>The available disk is all formatted as <code class="verbatim">ext4</code> - as it turns out I was able to use that space for
 my persistent volumes without reformatting or partitioning.</p>
@@ -147,9 +135,7 @@ Choose an OS, Install <code class="verbatim">kubeadm</code> and configure as usu
   should set up passwordless <code class="verbatim">sudo</code>, and follow the requirements needed for <code class="verbatim">kubeadm</code> to
   work as described in this k8s.io link: </p>
 <ul>
-<li>
-<p><a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/">Installing kubeadm - Kubernetes</a></p>
-</li>
+<li><a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/">Installing kubeadm - Kubernetes</a></li>
 </ul>
 <p>One aspect I want to point out is setting the cgroup for use by <code class="verbatim">kubeadm</code>.  If you
   choose to use Docker as your container runtime, you should set it to use the cgroup
@@ -157,19 +143,19 @@ Choose an OS, Install <code class="verbatim">kubeadm</code> and configure as usu
 <p>
       In <code class="verbatim">/etc/docker/daemon.conf</code></p>
 <div class="src src-json">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">  {
-    <span style="color:#008000;font-weight:bold">&#34;exec-opts&#34;</span>: [<span style="color:#b44">&#34;native.cgroupdriver=systemd&#34;</span>],
-    <span style="color:#008000;font-weight:bold">&#34;log-driver&#34;</span>: <span style="color:#b44">&#34;json-file&#34;</span>,
-    <span style="color:#008000;font-weight:bold">&#34;log-opts&#34;</span>: {
-      <span style="color:#008000;font-weight:bold">&#34;max-size&#34;</span>: <span style="color:#b44">&#34;100m&#34;</span>
-    },
-    <span style="color:#008000;font-weight:bold">&#34;storage-driver&#34;</span>: <span style="color:#b44">&#34;overlay2&#34;</span>
-  }</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    <span style="color:#008000;font-weight:bold">&#34;exec-opts&#34;</span>: [<span style="color:#b44">&#34;native.cgroupdriver=systemd&#34;</span>],
+</span></span><span style="display:flex;"><span>    <span style="color:#008000;font-weight:bold">&#34;log-driver&#34;</span>: <span style="color:#b44">&#34;json-file&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#008000;font-weight:bold">&#34;log-opts&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#008000;font-weight:bold">&#34;max-size&#34;</span>: <span style="color:#b44">&#34;100m&#34;</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#008000;font-weight:bold">&#34;storage-driver&#34;</span>: <span style="color:#b44">&#34;overlay2&#34;</span>
+</span></span><span style="display:flex;"><span>  }</span></span></code></pre></div>
 </div>
 <p>Then reload</p>
 <div class="src src-bash">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">  sudo systemctl daemon-reload
-  sudo systemctl restart docker</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  sudo systemctl daemon-reload
+</span></span><span style="display:flex;"><span>  sudo systemctl restart docker</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -186,13 +172,11 @@ Set up the master node (<em>aka</em> control plane)
 <p>
   You can find the requirements here:</p>
 <ul>
-<li>
-<p><a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/#pod-network">Creating a single control-plane cluster with kubeadm - Kubernetes</a></p>
-</li>
+<li><a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/#pod-network">Creating a single control-plane cluster with kubeadm - Kubernetes</a></li>
 </ul>
 <p>Run <code class="verbatim">kubeadm init</code> with POD CIDR set for Calico</p>
 <div class="src src-bash">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">  sudo kubeadm init --pod-network-cidr<span style="color:#666">=</span>192.168.0.0/16</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  sudo kubeadm init --pod-network-cidr<span style="color:#666">=</span>192.168.0.0/16</span></span></code></pre></div>
 </div>
 <p>Assure that Kubeadm detected the <code class="verbatim">systemd</code> cgroup - you will see it in the command
   output.</p>
@@ -210,15 +194,13 @@ Install pod networking
 <p>
   I have chosen Calico</p>
 <div class="src src-bash">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">        curl https://docs.projectcalico.org/manifests/calico.yaml -O
-        kubectl apply -f calico.yaml</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>        curl https://docs.projectcalico.org/manifests/calico.yaml -O
+</span></span><span style="display:flex;"><span>        kubectl apply -f calico.yaml</span></span></code></pre></div>
 </div>
 <p>
   Additional instructions can be found here:</p>
 <ul>
-<li>
-<p><a href="https://docs.projectcalico.org/getting-started/kubernetes/self-managed-onprem/onpremises">Install Calico networking and network policy for on-premises deployments</a></p>
-</li>
+<li><a href="https://docs.projectcalico.org/getting-started/kubernetes/self-managed-onprem/onpremises">Install Calico networking and network policy for on-premises deployments</a></li>
 </ul>
 <p>Give it some time to start up, then test that nodes are ready with <code class="verbatim">kubectl get nodes</code></p>
 </div>
@@ -234,8 +216,8 @@ Install the worker nodes
 <p>
   On each worker node repeat the join command - similar to the below</p>
 <div class="src src-bash">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">  sudo kubeadm join &lt;master IP&gt;:6443 --token &lt;token string&gt; <span style="color:#b62;font-weight:bold">\
-</span><span style="color:#b62;font-weight:bold"></span>      --discovery-token-ca-cert-hash sha256:&lt;long hexadecimal string&gt;</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  sudo kubeadm join &lt;master IP&gt;:6443 --token &lt;token string&gt; <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>      --discovery-token-ca-cert-hash sha256:&lt;long hexadecimal string&gt;</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -249,7 +231,7 @@ Install Metrics Server
 <p>
   This will enable <code class="verbatim">kubectl top nodes/pods</code></p>
 <div class="src src-bash">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">  kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.3.6/components.yaml</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.3.6/components.yaml</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -267,13 +249,11 @@ Helm
 </h3>
 <div id="outline-text-headline-7" class="outline-text-3">
 <ul>
-<li>
-<p>Follow the instructions to install the Helm client: <a href="https://helm.sh/docs/intro/install/">Helm | Installing Helm</a></p>
-</li>
+<li>Follow the instructions to install the Helm client: <a href="https://helm.sh/docs/intro/install/">Helm | Installing Helm</a></li>
 <li>
 <p>Add the default repository</p>
 <div class="src src-bash">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">  helm repo add stable https://kubernetes-charts.storage.googleapis.com/</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  helm repo add stable https://kubernetes-charts.storage.googleapis.com/</span></span></code></pre></div>
 </div>
 </li>
 </ul>
@@ -285,13 +265,11 @@ KUDO
 </h3>
 <div id="outline-text-headline-8" class="outline-text-3">
 <ul>
-<li>
-<p>Follow the instructions to install the <code class="verbatim">kubectl-kudo</code> client: <a href="https://kudo.dev/docs/#install-kudo-cli">Getting Started | KUDO</a></p>
-</li>
+<li>Follow the instructions to install the <code class="verbatim">kubectl-kudo</code> client: <a href="https://kudo.dev/docs/#install-kudo-cli">Getting Started | KUDO</a></li>
 <li>
 <p>Install the server side components</p>
 <div class="src src-bash">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">  kubectl kudo init</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  kubectl kudo init</span></span></code></pre></div>
 </div>
 </li>
 </ul>
@@ -304,9 +282,7 @@ Investigate <a href="https://kubernetes.io/docs/tasks/manage-kubernetes-objects/
 </h3>
 <div id="outline-text-headline-9" class="outline-text-3">
 <ul>
-<li>
-<p>This is an alternative to KUDO - another declarative approach</p>
-</li>
+<li>This is an alternative to KUDO - another declarative approach</li>
 </ul>
 </div>
 </div>
@@ -333,15 +309,15 @@ Set up a storage solution
 <p>
   Simple Kubectl way to install</p>
 <div class="src src-bash">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">  kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/master/deploy/longhorn.yaml</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/master/deploy/longhorn.yaml</span></span></code></pre></div>
 </div>
 <p>
   One thing I did to make things simpler is to set the <code class="verbatim">longhorn</code> storage class to be
   the default on my cluster.  Make sure the relevant annotation for the storage class is
   set to <code class="verbatim">true</code></p>
 <div class="src src-yaml">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">annotations</span>:<span style="color:#bbb">
-</span><span style="color:#bbb">      </span><span style="color:#008000;font-weight:bold">storageclass.kubernetes.io/is-default-class</span>:<span style="color:#bbb"> </span><span style="color:#b44">&#34;true&#34;</span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">annotations</span>:<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">      </span><span style="color:#008000;font-weight:bold">storageclass.kubernetes.io/is-default-class</span>:<span style="color:#bbb"> </span><span style="color:#b44">&#34;true&#34;</span></span></span></code></pre></div>
 </div>
 <p>
   Now when you or one of your managed packages creates a <code class="verbatim">PersistentVolumeClaim</code>, Longhorn
@@ -365,39 +341,33 @@ Implement an Ingress Controller
   you just need to switch relevant Kubernetes Service resources type from e.g. <code class="verbatim">NodeIP</code> to
   <code class="verbatim">Ingress</code> and you will have both a <code class="verbatim">NodePort</code> and a load balancer IP added!</p>
 <ul>
-<li>
-<p>ref <a href="https://www.definit.co.uk/2019/08/lab-guide-kubernetes-load-balancer-and-ingress-with-metallb-and-contour/">Lab Guide - Kubernetes Load Balancer and Ingress with MetalLB</a></p>
-</li>
-<li>
-<p>ref <a href="https://metallb.universe.tf/installation/">MetalLB, bare metal load-balancer for Kubernetes</a></p>
-</li>
+<li>ref <a href="https://www.definit.co.uk/2019/08/lab-guide-kubernetes-load-balancer-and-ingress-with-metallb-and-contour/">Lab Guide - Kubernetes Load Balancer and Ingress with MetalLB</a></li>
+<li>ref <a href="https://metallb.universe.tf/installation/">MetalLB, bare metal load-balancer for Kubernetes</a></li>
 </ul>
 <div class="src src-bash">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">  <span style="color:#080;font-style:italic"># use new namespace metallb-system</span>
-  kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
-  kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/metallb.yaml
-  <span style="color:#080;font-style:italic"># On first install only</span>
-  kubectl create secret generic -n metallb-system memberlist --from-literal<span style="color:#666">=</span><span style="color:#b8860b">secretkey</span><span style="color:#666">=</span><span style="color:#b44">&#34;</span><span style="color:#a2f;font-weight:bold">$(</span>openssl rand -base64 128<span style="color:#a2f;font-weight:bold">)</span><span style="color:#b44">&#34;</span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  <span style="color:#080;font-style:italic"># use new namespace metallb-system</span>
+</span></span><span style="display:flex;"><span>  kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
+</span></span><span style="display:flex;"><span>  kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/metallb.yaml
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-style:italic"># On first install only</span>
+</span></span><span style="display:flex;"><span>  kubectl create secret generic -n metallb-system memberlist --from-literal<span style="color:#666">=</span><span style="color:#b8860b">secretkey</span><span style="color:#666">=</span><span style="color:#b44">&#34;</span><span style="color:#a2f;font-weight:bold">$(</span>openssl rand -base64 128<span style="color:#a2f;font-weight:bold">)</span><span style="color:#b44">&#34;</span></span></span></code></pre></div>
 </div>
 <ul>
-<li>
-<p>Use simple Layer 2 allocation with pool of reserved IPs</p>
-</li>
+<li>Use simple Layer 2 allocation with pool of reserved IPs</li>
 <li>
 <p>Here&#39;s the resource pool I implemented</p>
 <div class="src src-yaml">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>v1<span style="color:#bbb">
-</span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>ConfigMap<span style="color:#bbb">
-</span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">metadata</span>:<span style="color:#bbb">
-</span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">namespace</span>:<span style="color:#bbb"> </span>metallb-system<span style="color:#bbb">
-</span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">name</span>:<span style="color:#bbb"> </span>config<span style="color:#bbb">
-</span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">data</span>:<span style="color:#bbb">
-</span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">config</span>:<span style="color:#bbb"> </span>|<span style="color:#b44;font-style:italic">
-</span><span style="color:#b44;font-style:italic">      address-pools:
-</span><span style="color:#b44;font-style:italic">      - name: default
-</span><span style="color:#b44;font-style:italic">        protocol: layer2
-</span><span style="color:#b44;font-style:italic">        addresses:
-</span><span style="color:#b44;font-style:italic">        - 192.168.1.230-192.168.1.250</span><span style="color:#bbb">      </span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>v1<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>ConfigMap<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">metadata</span>:<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">namespace</span>:<span style="color:#bbb"> </span>metallb-system<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">name</span>:<span style="color:#bbb"> </span>config<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">data</span>:<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">config</span>:<span style="color:#bbb"> </span>|<span style="color:#b44;font-style:italic">
+</span></span></span><span style="display:flex;"><span><span style="color:#b44;font-style:italic">      address-pools:
+</span></span></span><span style="display:flex;"><span><span style="color:#b44;font-style:italic">      - name: default
+</span></span></span><span style="display:flex;"><span><span style="color:#b44;font-style:italic">        protocol: layer2
+</span></span></span><span style="display:flex;"><span><span style="color:#b44;font-style:italic">        addresses:
+</span></span></span><span style="display:flex;"><span><span style="color:#b44;font-style:italic">        - 192.168.1.230-192.168.1.250</span><span style="color:#bbb">      </span></span></span></code></pre></div>
 </div>
 </li>
 </ul>

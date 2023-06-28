@@ -110,40 +110,28 @@ Emacs prerequisites
 <p>
 This mode gives you the following interactive commands:</p>
 <ul>
-<li>
-<p><code class="verbatim">M-x android-start-emulator</code> Start the Android SDK emulator from emacs</p>
-</li>
-<li>
-<p><code class="verbatim">M-x android-start-ddms</code> Start the Android debugger</p>
-</li>
-<li>
-<p><code class="verbatim">M-x android-logcat</code> Like syslog for Android</p>
-</li>
-<li>
-<p><code class="verbatim">M-x android-ant</code> Run any ant task in the current project directory</p>
-</li>
+<li><code class="verbatim">M-x android-start-emulator</code> Start the Android SDK emulator from emacs</li>
+<li><code class="verbatim">M-x android-start-ddms</code> Start the Android debugger</li>
+<li><code class="verbatim">M-x android-logcat</code> Like syslog for Android</li>
+<li><code class="verbatim">M-x android-ant</code> Run any ant task in the current project directory</li>
 </ul>
 </li>
-<li>
-<p>android.el
-This is a file included in the Android SDK. It duplicates some of the functionality of android-mode, but adds M-x android-jdb, which starts the JDB debugger once you have DDMS running.Load it from {SDK dir}/tools/lib</p>
-</li>
-<li>
-<p>JDE
-Optional, but it’s great for java code. Required to use beanshell shortcuts like the import statement command below (Generate and insert import statements)</p>
-</li>
+<li>android.el
+This is a file included in the Android SDK. It duplicates some of the functionality of android-mode, but adds M-x android-jdb, which starts the JDB debugger once you have DDMS running.Load it from {SDK dir}/tools/lib</li>
+<li>JDE
+Optional, but it’s great for java code. Required to use beanshell shortcuts like the import statement command below (Generate and insert import statements)</li>
 <li>
 <p>Typical emacs setup cruft</p>
 <p>
 Here’s what I have in my init file for Android:</p>
 <div class="src src-emacs-lisp">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-emacs-lisp" data-lang="emacs-lisp">  (<span style="color:#b8860b">add-to-list</span> <span style="color:#b8860b">&#39;load-path</span> <span style="color:#b44">&#34;~/emacs/android-mode&#34;</span>)
-  (<span style="color:#a2f">require</span> <span style="color:#b8860b">&#39;android-mode</span>)
-  (<span style="color:#a2f">setq</span> <span style="color:#b8860b">android-mode-sdk-dir</span> <span style="color:#b44">&#34;~/work/android/android&#34;</span>)
-  (<span style="color:#b8860b">add-hook</span> <span style="color:#b8860b">&#39;gud-mode-hook</span>
-            (<span style="color:#a2f">lambda</span> ()
-              (<span style="color:#b8860b">add-to-list</span> <span style="color:#b8860b">&#39;gud-jdb-classpath</span> <span style="color:#b44">&#34;/home/gregj/work/android-sdk-linux_86/platforms/android-7/android.jar&#34;</span>)
-              ))</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-emacs-lisp" data-lang="emacs-lisp"><span style="display:flex;"><span>  (<span style="color:#b8860b">add-to-list</span> <span style="color:#b8860b">&#39;load-path</span> <span style="color:#b44">&#34;~/emacs/android-mode&#34;</span>)
+</span></span><span style="display:flex;"><span>  (<span style="color:#a2f">require</span> <span style="color:#b8860b">&#39;android-mode</span>)
+</span></span><span style="display:flex;"><span>  (<span style="color:#a2f">setq</span> <span style="color:#b8860b">android-mode-sdk-dir</span> <span style="color:#b44">&#34;~/work/android/android&#34;</span>)
+</span></span><span style="display:flex;"><span>  (<span style="color:#b8860b">add-hook</span> <span style="color:#b8860b">&#39;gud-mode-hook</span>
+</span></span><span style="display:flex;"><span>            (<span style="color:#a2f">lambda</span> ()
+</span></span><span style="display:flex;"><span>              (<span style="color:#b8860b">add-to-list</span> <span style="color:#b8860b">&#39;gud-jdb-classpath</span> <span style="color:#b44">&#34;/home/gregj/work/android-sdk-linux_86/platforms/android-7/android.jar&#34;</span>)
+</span></span><span style="display:flex;"><span>              ))</span></span></code></pre></div>
 </div>
 </li>
 </ol>
@@ -161,7 +149,7 @@ android-start-emulator</code></p>
 I prefer to launch from the shell, since this allows me to exit emacs without having to
 restart the emulator, e.g.:</p>
 <div class="src src-bash">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">emulator -avd starter-21 -partition-size <span style="color:#666">128</span> &gt;/dev/null &amp;</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>emulator -avd starter-21 -partition-size <span style="color:#666">128</span> &gt;/dev/null &amp;</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -174,17 +162,17 @@ Create a project
 Instead of using the New Project wizard in Eclipse, use these steps to create an Android
 project using the shell:</p>
 <div class="src src-bash">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">  <span style="color:#a2f">cd</span> <span style="color:#666">{</span>project directory<span style="color:#666">}</span>
-  mkdir HelloAndroid
-  <span style="color:#a2f">cd</span> HelloAndroid
-  android create project --name HelloAndroid --target android-7 --path . --package home.hoochiepep.HelloAndroid --activity HelloAndroid</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  <span style="color:#a2f">cd</span> <span style="color:#666">{</span>project directory<span style="color:#666">}</span>
+</span></span><span style="display:flex;"><span>  mkdir HelloAndroid
+</span></span><span style="display:flex;"><span>  <span style="color:#a2f">cd</span> HelloAndroid
+</span></span><span style="display:flex;"><span>  android create project --name HelloAndroid --target android-7 --path . --package home.hoochiepep.HelloAndroid --activity HelloAndroid</span></span></code></pre></div>
 </div>
 <p>
 Change <code class="verbatim">–target</code>, <code class="verbatim">–package</code>, and <code class="verbatim">–activity</code> parameters as appropriate.</p>
 <p>
 To get a list of valid targets for your SDK, use</p>
 <div class="src src-bash">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">android list</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>android list</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -196,7 +184,7 @@ Specify the application name
 <p>
 To change the name of the application, edit <code class="verbatim">{project root}/res/values/strings.xml</code>:</p>
 <div class="src src-xml">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">  <span style="color:#008000;font-weight:bold">&lt;string</span> <span style="color:#b44">name=</span><span style="color:#b44">&#34;app_name&#34;</span><span style="color:#008000;font-weight:bold">&gt;</span>Hello, Android<span style="color:#008000;font-weight:bold">&lt;/string&gt;</span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span>  <span style="color:#008000;font-weight:bold">&lt;string</span> <span style="color:#b44">name=</span><span style="color:#b44">&#34;app_name&#34;</span><span style="color:#008000;font-weight:bold">&gt;</span>Hello, Android<span style="color:#008000;font-weight:bold">&lt;/string&gt;</span></span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -209,7 +197,7 @@ Specify a minimum SDK level
 The Eclipse New Project wizard includes a Min SDK Version field. To set this without the
 wizard, add a line to <code class="verbatim">AndroidManifest.xml</code> as a child of manifest:</p>
 <div class="src src-xml">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#008000;font-weight:bold">&lt;uses-sdk</span> <span style="color:#b44">android:minSdkVersion=</span><span style="color:#b44">&#34;2&#34;</span> <span style="color:#008000;font-weight:bold">/&gt;</span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#008000;font-weight:bold">&lt;uses-sdk</span> <span style="color:#b44">android:minSdkVersion=</span><span style="color:#b44">&#34;2&#34;</span> <span style="color:#008000;font-weight:bold">/&gt;</span></span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -225,7 +213,7 @@ Projects you pull from online will have been created using Eclipse, and will not
 Another common problem is that the file <code class="verbatim">local.properties</code> will be missing. Running an
 update as shown here will fix both problems:</p>
 <div class="src src-bash">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">android update project --path . --target android-7 --subprojects</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>android update project --path . --target android-7 --subprojects</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -248,33 +236,23 @@ Use the debugger within Emacs
 </h2>
 <div id="outline-text-headline-8" class="outline-text-2">
 <ul>
-<li>
-<p>Install the app on the emulator using <code class="verbatim">M-x android-ant-install</code> (the ‘install’ target uses the debug apk)</p>
-</li>
-<li>
-<p>Start ddms. There are no cmdline args, so you might as well use <code class="verbatim">M-x android-start-ddms</code></p>
-</li>
-<li>
-<p>In the emulator, go to Dev Tools -&gt; Development Settings and select the app as the debug app</p>
-</li>
-<li>
-<p>In the emulator, start the app</p>
-</li>
-<li>
-<p>Look in the ddms window for the app’s debug port (usu. 8700 if the Dev Settings step
-was done)</p>
-</li>
+<li>Install the app on the emulator using <code class="verbatim">M-x android-ant-install</code> (the ‘install’ target uses the debug apk)</li>
+<li>Start ddms. There are no cmdline args, so you might as well use <code class="verbatim">M-x android-start-ddms</code></li>
+<li>In the emulator, go to Dev Tools -&gt; Development Settings and select the app as the debug app</li>
+<li>In the emulator, start the app</li>
+<li>Look in the ddms window for the app’s debug port (usu. 8700 if the Dev Settings step
+was done)</li>
 <li>
 <p>Start jdb by invoking <code class="verbatim">M-x android-jdb</code> from android.el.  You can also start jdb
 directly using the following command line params as a guide</p>
 <div class="src src-bash">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">  jdb -sourcepath/home/gregj/work/android/projects/NotepadCodeLab/Notepadv3/src -attach localhost:8700</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  jdb -sourcepath/home/gregj/work/android/projects/NotepadCodeLab/Notepadv3/src -attach localhost:8700</span></span></code></pre></div>
 </div>
 </li>
 </ul>
 <p>Set breakpoints in JDB, like so</p>
 <div class="src src-bash">
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">stop in com.android.demo.notepad3.NoteEdit.onResume</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>stop in com.android.demo.notepad3.NoteEdit.onResume</span></span></code></pre></div>
 </div>
 <p>
 If the project directory is set correctly in the jdb command, you will be able to set

@@ -7,7 +7,42 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; &lt;a href=&#34;https://github.com/gregoryg&#34;&gt;Greg Grubbs&lt;/a&gt; 2008-2021</copyright>
-    <lastBuildDate>Sat, 11 Sep 2010 16:21:01 -0600</lastBuildDate><atom:link href="https://hypecyclist.org/tags/emacs/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 24 Jun 2023 18:59:03 -0600</lastBuildDate><atom:link href="https://hypecyclist.org/tags/emacs/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Exploring Generative AI: Integrating ChatGPT with Structured Note-Taking Systems</title>
+      <link>https://hypecyclist.org/post/2023-06-24-exploring-generative-ai-integrating-chatgpt-with-structured-notetaking-systems/</link>
+      <pubDate>Sat, 24 Jun 2023 18:59:03 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/post/2023-06-24-exploring-generative-ai-integrating-chatgpt-with-structured-notetaking-systems/</guid>
+      <description>&lt;p&gt;
+I have been obsessed with generative AI.  I&amp;#39;d love to talk about the big topics - AGI,
+ASI, human survival, immortality - but my way is down in rabbit holes. So let&amp;#39;s write some
+code (or just very slightly modify some existing code), and maybe we&amp;#39;ll tackle elephants
+in various rooms another time.&lt;/p&gt;
+&lt;p&gt;
+To jump to the how-to, check out the video
+          &lt;a href=&#34;https://www.youtube.com/watch?v=aAo4O3fef-Y&#34;&gt;Use ChatGPT API to create Knowledge Base articles in Org Mode! - YouTube ≫ www.youtube.com&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Emacs as a window manager on Linux - A crazy but great idea</title>
+      <link>https://hypecyclist.org/post/2020-09-13-emacs-as-a-window-manager/</link>
+      <pubDate>Sun, 13 Sep 2020 15:23:54 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/post/2020-09-13-emacs-as-a-window-manager/</guid>
+      <description>&lt;p&gt;
+It&amp;#39;s crazy as can be, but Emacs as a window manager is great on Linux&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>emacs-on-windows-update-2020</title>
+      <link>https://hypecyclist.org/post/emacs-on-windows-update-2020/</link>
+      <pubDate>Thu, 09 Apr 2020 11:07:04 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/post/emacs-on-windows-update-2020/</guid>
+      <description>ohai</description>
+    </item>
+    
     <item>
       <title>Tips on Android Development Using Emacs</title>
       <link>https://hypecyclist.org/post/tips-on-android-development-using-emacs/</link>
