@@ -1,7 +1,7 @@
 #+title: Exploring Generative AI: Integrating ChatGPT with Structured Note-Taking Systems
 #+date: 2023-06-24T18:59:03-0600
 #+publishdate: 2023-06-24T18:59:03-0600
-#+draft: t
+#+draft: nil
 #+tags[]: generativeAI chatGPT LLM Python Emacs OrgMode
 #+description: short post description
 
