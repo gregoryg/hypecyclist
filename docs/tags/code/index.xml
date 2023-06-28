@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>code on Greg Grubbs | Hype Cyclist</title>
+    <link>https://hypecyclist.org/tags/code/</link>
+    <description>Recent content in code on Greg Grubbs | Hype Cyclist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; &lt;a href=&#34;https://github.com/gregoryg&#34;&gt;Greg Grubbs&lt;/a&gt; 2008-2021</copyright>
+    <lastBuildDate>Fri, 10 Apr 2020 12:39:16 -0600</lastBuildDate><atom:link href="https://hypecyclist.org/tags/code/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Code for Kubernetes Using Kubeadm on GCP</title>
+      <link>https://hypecyclist.org/code/2020-04-10-code-for-kubeadm-on-gcp/</link>
+      <pubDate>Fri, 10 Apr 2020 12:39:16 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/code/2020-04-10-code-for-kubeadm-on-gcp/</guid>
+      <description>&lt;p&gt;
+A drill-down into all the scripts used in the blog post&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

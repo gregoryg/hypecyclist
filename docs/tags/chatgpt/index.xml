@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>chatGPT on Greg Grubbs | Hype Cyclist</title>
+    <link>https://hypecyclist.org/tags/chatgpt/</link>
+    <description>Recent content in chatGPT on Greg Grubbs | Hype Cyclist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; &lt;a href=&#34;https://github.com/gregoryg&#34;&gt;Greg Grubbs&lt;/a&gt; 2008-2021</copyright>
+    <lastBuildDate>Sat, 24 Jun 2023 18:59:03 -0600</lastBuildDate><atom:link href="https://hypecyclist.org/tags/chatgpt/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Exploring Generative AI: Integrating ChatGPT with Structured Note-Taking Systems</title>
+      <link>https://hypecyclist.org/post/2023-06-24-exploring-generative-ai-integrating-chatgpt-with-structured-notetaking-systems/</link>
+      <pubDate>Sat, 24 Jun 2023 18:59:03 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/post/2023-06-24-exploring-generative-ai-integrating-chatgpt-with-structured-notetaking-systems/</guid>
+      <description>&lt;p&gt;
+I have been obsessed with generative AI.  I&amp;#39;d love to talk about the big topics - AGI,
+ASI, human survival, immortality - but my way is down in rabbit holes. So let&amp;#39;s write some
+code (or just very slightly modify some existing code), and maybe we&amp;#39;ll tackle elephants
+in various rooms another time.&lt;/p&gt;
+&lt;p&gt;
+To jump to the how-to, check out the video&lt;/p&gt;
+&lt;p&gt;
+          &lt;a href=&#34;https://www.youtube.com/watch?v=aAo4O3fef-Y&#34;&gt;Use ChatGPT API to create Knowledge Base articles in Org Mode! - YouTube ≫ www.youtube.com&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>It&#39;s (relatively) easy to create your own Kubernetes cluster | Greg Grubbs | Hype Cyclist</title>
+
+<meta property='og:title' content='It&#39;s (relatively) easy to create your own Kubernetes cluster - Greg Grubbs | Hype Cyclist'>
+<meta property='og:description' content='short post description'>
+<meta property='og:url' content='https://hypecyclist.org/post/2020-04-09-kubernetes-using-kubeadm-on-gcp/'>
+<meta property='og:site_name' content='Greg Grubbs | Hype Cyclist'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='k8s'><meta property='article:tag' content='cloud'><meta property='article:published_time' content='2020-04-09T14:32:43-06:00'/><meta property='article:modified_time' content='2020-04-09T14:32:43-06:00'/><meta name='twitter:card' content='summary'><meta name='twitter:site' content='@gregoryg'><meta name='twitter:creator' content='@gregoryg'>
+
+
+<link href="https://hypecyclist.org/index.xml" rel="alternate" type="application/rss+xml" title="Greg Grubbs | Hype Cyclist" />
+
+<link rel="stylesheet" href="/css/style.css"/><link rel='stylesheet' href='https://hypecyclist.org/css/custom.css'><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="canonical" href="https://hypecyclist.org/post/2020-04-09-kubernetes-using-kubeadm-on-gcp/">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+</head>
+ 
+<body>
+
+<section class="section">
+  <div class="container">
+    <nav id="nav-main" class="nav">
+      <div id="nav-name" class="nav-left">
+        <a id="nav-anchor" class="nav-item" href="https://hypecyclist.org">
+          <h1 id="nav-heading" class="title is-4">Greg Grubbs | Hype Cyclist</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <nav id="nav-items" class="nav-item level is-mobile"><a class="level-item" aria-label="github" href='https://github.com/gregoryg'
+            target='_blank' rel='noopener'>
+            <span class="icon">
+              <i class><svg viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+    
+    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+    
+  </svg></i>
+            </span>
+          </a><a class="level-item" aria-label="linkedin" href='https://linkedin.com/in/gregorygrubbs'
+            target='_blank' rel='noopener'>
+            <span class="icon">
+              <i class><svg viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+    
+    <path stroke-width="1.8" d="m5.839218,4.101561c0,1.211972 -0.974141,2.194011 -2.176459,2.194011s-2.176459,-0.982039 -2.176459,-2.194011c0,-1.211094 0.974141,-2.194011 2.176459,-2.194011s2.176459,0.982917 2.176459,2.194011zm0.017552,3.94922l-4.388022,0l0,14.04167l4.388022,0l0,-14.04167zm7.005038,0l-4.359939,0l0,14.04167l4.360816,0l0,-7.370999c0,-4.098413 5.291077,-4.433657 5.291077,0l0,7.370999l4.377491,0l0,-8.89101c0,-6.915523 -7.829986,-6.66365 -9.669445,-3.259423l0,-1.891237z"/>
+    
+  </svg></i>
+            </span>
+          </a></nav>
+      </div>
+    </nav>
+
+    <nav class="nav">
+      
+
+      
+      <div class="nav-right"><a class="nav-item" href="/about">
+          <h2 class="title is-5">About</h2>
+        </a><a class="nav-item" href="/post">
+          <h2 class="title is-5">Blog</h2>
+        </a></div>
+      
+    </nav>
+
+  </div>
+  <script src="/js/navicon-shift.js"></script>
+</section>
+<section class="section">
+  <div class="container">
+    <div class="subtitle tags is-6 is-pulled-right">
+      
+      
+<a class="subtitle is-6" href="/tags/k8s/">#k8s</a>
+
+
+
+  
+  | <a class="subtitle is-6" href="/tags/cloud/">#cloud</a>
+  
+
+
+      
+    </div>
+    <h2 class="subtitle is-6">April 9, 2020</h2>
+    <h1 class="title">It&#39;s (relatively) easy to create your own Kubernetes cluster</h1>
+    
+    <div class="content">
+      <img src="/images/k-mitch-hodge-Hv0xz-6-Er8-unsplash.jpg" alt="shipyard" title="Getting ready to load containers"/>
+<p>
+On the road to our Kubernetes certifications, many of us have worked through Kelsey
+Hightower&#39;s excellent <a href="https://github.com/kelseyhightower/kubernetes-the-hard-way">Kubernetes the Hard Way</a>.  There are of course several ways to make
+that process much easier - either by using a vendor distribution or creating a simplistic
+single-node laptop &#34;cluster.&#34;  I want to show how you can bring up an enterprise grade
+highly available cluster using <code class="verbatim">kubeadm</code>.</p>
+<div id="outline-container-headline-1" class="outline-2">
+<h2 id="headline-1">
+The <code class="verbatim">kubeadm</code> way
+</h2>
+<div id="outline-text-headline-1" class="outline-text-2">
+<p>Much of the drudgery of &#34;The Hard Way&#34; is generating all the TLS certificates and tying in
+the components with <code class="verbatim">etcd</code>.  </p>
+<p>
+Using <code class="verbatim">kubeadm</code>, all that work is done for you.  This method is actually more relevant to
+the CKA and CKAD exams, because those environments are themselves constructed using <code class="verbatim">kubeadm</code> - the layout of the
+master and worker nodes will be familiar to you if you get familiar with using this tool!</p>
+</div>
+</div>
+<div id="outline-container-headline-2" class="outline-2">
+<h2 id="headline-2">
+First things first - getting some nodes
+</h2>
+<div id="outline-text-headline-2" class="outline-text-2">
+<p>I will not go through setting up instances on GCP or another Cloud provider.  You may
+  reference a script I use to do the provisioning in the Resources section below.  I
+  create a set of nodes with no external IP address.  I then use the <code class="verbatim">gcloud compute ssh</code>
+  command to connect to those instances when needed.  Alternatively, you may prefer to
+  bring up a small bastion node with an external IP on the same network to make the remote
+  work easier.</p>
+<p>
+  We will create 3 instances to be used as masters - the minimal for a highly available
+  (HA) setup.  Those 3 instances will host both the Kubernetes masters <strong>and</strong> the <code class="verbatim">etcd</code>
+  cluster.  In a production environment, you&#39;re likely to want the <code class="verbatim">etcd</code> cluster to
+  reside on its own separate set of servers.</p>
+<p>
+  We will also bring up 3 instances to be used as the Kubernetes worker nodes.</p>
+<p>
+  Here is the <a href="https://github.com/gregoryg/kubernetes-the-hard-way/blob/gregoryg/kubeadm-setup/01-provision-gcp.sh">script to provision the instances</a>.</p>
+</div>
+</div>
+<div id="outline-container-headline-3" class="outline-2">
+<h2 id="headline-3">
+Prepare the machines for kubeadm
+</h2>
+<div id="outline-text-headline-3" class="outline-text-2">
+<p>If you used the above provisioning script, these prerequisites are already included:</p>
+<ul>
+<li>network connectivity between all the machines</li>
+<li>SSH access between any 2 machines</li>
+<li>sudo privileges</li>
+</ul>
+<p>Requirements we will need to do:</p>
+<ul>
+<li>Install a container runtime on all the machines</li>
+<li>
+<p>Install the holy trinity of utilities: <code class="verbatim">kubeadm</code>, <code class="verbatim">kubelet</code> and <code class="verbatim">kubectl</code></p>
+<ul>
+<li><code class="verbatim">kubectl</code> is optional - that utility should be on the machine you use to control the
+cluster - possibly your own workstation or a bastion host</li>
+</ul>
+</li>
+</ul>
+<p>We&#39;re using Ubuntu so we will use <code class="verbatim">apt</code> to install these, using the first master as a
+  bastion host</p>
+<div class="src src-bash">
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  <span style="color:#080;font-style:italic"># Get on the bastion host</span>
+</span></span><span style="display:flex;"><span>  gcloud compute ssh gg-controller-0
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-style:italic"># Get a parallel shell controller on the bastion host</span>
+</span></span><span style="display:flex;"><span>  sudo apt update
+</span></span><span style="display:flex;"><span>  sudo apt -y install pdsh
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-style:italic"># Make lists of the nodes to be used by pdsh</span>
+</span></span><span style="display:flex;"><span>  gcloud compute instances list --filter<span style="color:#666">=</span><span style="color:#b44">&#34;tags.items=k8sgcp AND tags.items=controller&#34;</span> --format<span style="color:#666">=</span><span style="color:#b44">&#34;csv(name)[no-heading]&#34;</span> &gt; controller-nodes.txt
+</span></span><span style="display:flex;"><span>  gcloud compute instances list --filter<span style="color:#666">=</span><span style="color:#b44">&#34;tags.items=k8sgcp AND tags.items=worker&#34;</span> --format<span style="color:#666">=</span><span style="color:#b44">&#34;csv(name)[no-heading]&#34;</span> &gt; worker-nodes.txt
+</span></span><span style="display:flex;"><span>  cat controller-nodes.txt worker-nodes.txt &gt;  all-nodes.txt
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-style:italic"># The loop below has the effect of placing the host keys in ~/.ssh </span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a2f;font-weight:bold">for</span> i in <span style="color:#b44">`</span>cat all-nodes.txt<span style="color:#b44">`</span>; <span style="color:#a2f;font-weight:bold">do</span> <span style="color:#a2f">echo</span> <span style="color:#b8860b">$i</span>; ssh -o <span style="color:#b8860b">StrictHostKeyChecking</span><span style="color:#666">=</span>no <span style="color:#b8860b">$i</span> pwd; <span style="color:#a2f;font-weight:bold">done</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-style:italic"># Now we will use pdsh to install Docker, kubeadm, kubelet and kubectl</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#b8860b">WCOLL</span><span style="color:#666">=</span>all-nodes.txt pdsh -R ssh <span style="color:#b44">&#39;sudo apt-get update &amp;&amp; sudo apt-get install -y apt-transport-https curl&#39;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#b8860b">WCOLL</span><span style="color:#666">=</span>all-nodes.txt pdsh -R ssh <span style="color:#b44">&#39;curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -&#39;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#b8860b">WCOLL</span><span style="color:#666">=</span>all-nodes.txt pdsh -R ssh <span style="color:#b44">&#39;cat &lt;&lt;EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
+</span></span></span><span style="display:flex;"><span><span style="color:#b44">  deb https://apt.kubernetes.io/ kubernetes-xenial main
+</span></span></span><span style="display:flex;"><span><span style="color:#b44">  EOF&#39;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#b8860b">WCOLL</span><span style="color:#666">=</span>all-nodes.txt pdsh -R ssh <span style="color:#b44">&#39;sudo apt update &amp;&amp; sudo apt install -y docker.io kubelet kubeadm kubectl &amp;&amp; sudo apt-mark hold kubelet kubeadm kubectl&#39;</span></span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="outline-container-headline-4" class="outline-2">
+<h2 id="headline-4">
+
+</h2>
+</div>
+<div id="outline-container-headline-5" class="outline-2">
+<h2 id="headline-5">
+Resources
+</h2>
+<div id="outline-text-headline-5" class="outline-text-2">
+<ul>
+<li><a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/">Creating Highly Available Clusters with kubeadm</a> (k8s.io)</li>
+<li><a href="https://github.com/gregoryg/kubernetes-the-hard-way">My fork</a> of Kubernetes the Hard Way - with the kubeadm scripts</li>
+</ul>
+</div>
+</div>
+      
+    </div>
+    
+  </div>
+</section>
+
+    <script src="/js/copycode.js"></script>
+
+
+<section class="section">
+  <div class="container">
+    <aside><div id="disqus_thread"></div></aside>
+  
+    <script type="text/javascript">
+      var disqus_shortname = 'hypecyclist';
+      function disqus() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+  
+      disqus();
+  
+
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+
+
+<section class="section">
+  <div class="container has-text-centered">
+    <p>&copy; <a href="https://github.com/gregoryg">Greg Grubbs</a> 2008-2021</p>
+    
+      <p id="powered-by">Powered by <a href="https://gohugo.io/">Hugo</a> &amp; <a href="https://github.com/ribice/kiss">Kiss</a>.</p>
+    
+  </div>
+</section>
+
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="\/\/matomo.example.com\/";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', '1']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<noscript>
+  <img src="//matomo.example.com/piwik.php?idsite=1&amp;rec=1" style="border:0" alt="" />
+</noscript>
+
+<script>
+    (function(f, a, t, h, o, m){
+        a[h]=a[h]||function(){
+            (a[h].q=a[h].q||[]).push(arguments)
+        };
+        o=f.createElement('script'),
+        m=f.getElementsByTagName('script')[0];
+        o.async=1; o.src=t; o.id='fathom-script';
+        m.parentNode.insertBefore(o,m)
+    })(document, window, '\/\/fathom.example.com\/tracker.js', 'fathom');
+    fathom('trackPageview');
+</script>
+</body>
+</html>
+

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>linux on Greg Grubbs | Hype Cyclist</title>
+    <link>https://hypecyclist.org/tags/linux/</link>
+    <description>Recent content in linux on Greg Grubbs | Hype Cyclist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; &lt;a href=&#34;https://github.com/gregoryg&#34;&gt;Greg Grubbs&lt;/a&gt; 2008-2021</copyright>
+    <lastBuildDate>Sun, 13 Sep 2020 15:23:54 -0600</lastBuildDate><atom:link href="https://hypecyclist.org/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Emacs as a window manager on Linux - A crazy but great idea</title>
+      <link>https://hypecyclist.org/post/2020-09-13-emacs-as-a-window-manager/</link>
+      <pubDate>Sun, 13 Sep 2020 15:23:54 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/post/2020-09-13-emacs-as-a-window-manager/</guid>
+      <description>&lt;p&gt;
+It&amp;#39;s crazy as can be, but Emacs as a window manager is great on Linux&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

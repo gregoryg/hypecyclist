@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>Code for Kubernetes Using Kubeadm on GCP | Greg Grubbs | Hype Cyclist</title>
+
+<meta property='og:title' content='Code for Kubernetes Using Kubeadm on GCP - Greg Grubbs | Hype Cyclist'>
+<meta property='og:description' content='short post description'>
+<meta property='og:url' content='https://hypecyclist.org/code/2020-04-10-code-for-kubeadm-on-gcp/'>
+<meta property='og:site_name' content='Greg Grubbs | Hype Cyclist'>
+<meta property='og:type' content='article'><meta property='article:section' content='Code'><meta property='article:tag' content='code'><meta property='article:published_time' content='2020-04-10T12:39:16-06:00'/><meta property='article:modified_time' content='2020-04-10T12:39:16-06:00'/><meta name='twitter:card' content='summary'><meta name='twitter:site' content='@gregoryg'><meta name='twitter:creator' content='@gregoryg'>
+
+
+<link href="https://hypecyclist.org/index.xml" rel="alternate" type="application/rss+xml" title="Greg Grubbs | Hype Cyclist" />
+
+<link rel="stylesheet" href="/css/style.css"/><link rel='stylesheet' href='https://hypecyclist.org/css/custom.css'><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="canonical" href="https://hypecyclist.org/code/2020-04-10-code-for-kubeadm-on-gcp/">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+</head>
+ 
+<body>
+
+<section class="section">
+  <div class="container">
+    <nav id="nav-main" class="nav">
+      <div id="nav-name" class="nav-left">
+        <a id="nav-anchor" class="nav-item" href="https://hypecyclist.org">
+          <h1 id="nav-heading" class="title is-4">Greg Grubbs | Hype Cyclist</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <nav id="nav-items" class="nav-item level is-mobile"><a class="level-item" aria-label="github" href='https://github.com/gregoryg'
+            target='_blank' rel='noopener'>
+            <span class="icon">
+              <i class><svg viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+    
+    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+    
+  </svg></i>
+            </span>
+          </a><a class="level-item" aria-label="linkedin" href='https://linkedin.com/in/gregorygrubbs'
+            target='_blank' rel='noopener'>
+            <span class="icon">
+              <i class><svg viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+    
+    <path stroke-width="1.8" d="m5.839218,4.101561c0,1.211972 -0.974141,2.194011 -2.176459,2.194011s-2.176459,-0.982039 -2.176459,-2.194011c0,-1.211094 0.974141,-2.194011 2.176459,-2.194011s2.176459,0.982917 2.176459,2.194011zm0.017552,3.94922l-4.388022,0l0,14.04167l4.388022,0l0,-14.04167zm7.005038,0l-4.359939,0l0,14.04167l4.360816,0l0,-7.370999c0,-4.098413 5.291077,-4.433657 5.291077,0l0,7.370999l4.377491,0l0,-8.89101c0,-6.915523 -7.829986,-6.66365 -9.669445,-3.259423l0,-1.891237z"/>
+    
+  </svg></i>
+            </span>
+          </a></nav>
+      </div>
+    </nav>
+
+    <nav class="nav">
+      
+
+      
+      <div class="nav-right"><a class="nav-item" href="/about">
+          <h2 class="title is-5">About</h2>
+        </a><a class="nav-item" href="/post">
+          <h2 class="title is-5">Blog</h2>
+        </a></div>
+      
+    </nav>
+
+  </div>
+  <script src="/js/navicon-shift.js"></script>
+</section>
+<section class="section">
+  <div class="container">
+    <div class="subtitle tags is-6 is-pulled-right">
+      
+      
+<a class="subtitle is-6" href="/tags/code/">#code</a>
+
+
+
+
+      
+    </div>
+    <h2 class="subtitle is-6">April 10, 2020</h2>
+    <h1 class="title">Code for Kubernetes Using Kubeadm on GCP</h1>
+    
+    <div class="content">
+      <p>
+A drill-down into all the scripts used in the blog post</p>
+<div id="outline-container-provisioning-compute-resources" class="outline-2">
+<h2 id="provisioning-compute-resources">
+Provisioning Compute Resources
+</h2>
+<div id="outline-text-provisioning-compute-resources" class="outline-text-2">
+<p>
+The steps here are similar to what you will find in <a href="https://github.com/kelseyhightower/kubernetes-the-hard-way">Kubernetes the Hard Way</a> on GitHub.</p>
+<div id="outline-container-networking" class="outline-3">
+<h3 id="networking">
+Networking
+</h3>
+<div id="outline-text-networking" class="outline-text-3">
+<div id="outline-container-virtual-private-cloud-network" class="outline-4">
+<h4 id="virtual-private-cloud-network">
+Virtual Private Cloud Network
+</h4>
+<div id="outline-text-virtual-private-cloud-network" class="outline-text-4">
+<div id="outline-container-headline-5" class="outline-5">
+<h5 id="headline-5">
+Create the <code class="verbatim">k8sgcp</code> custom VPC network and subnet:
+</h5>
+<div id="outline-text-headline-5" class="outline-text-5">
+<div class="src src-sh">
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>  gcloud compute networks create k8sgcp --subnet-mode custom
+</span></span><span style="display:flex;"><span>  gcloud compute networks subnets create kubernetes <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>    --network k8sgcp <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>    --range 10.240.0.0/24</span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="outline-container-headline-6" class="outline-5">
+<h5 id="headline-6">
+Create the Cloud NAT and Cloud Router for outbound internet access
+</h5>
+<div id="outline-text-headline-6" class="outline-text-5">
+<p>We are doing this step because the instances we will provision have no external IP
+     addresses.  Setting up Cloud NAT allows those instances to have <strong>outbound</strong> access to
+     the internet so that we will be able to install software easily.</p>
+<div class="src src-sh">
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>gcloud compute routers create k8sgcp-router <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>    --network k8sgcp
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>gcloud compute routers nats create k8sgcp-nat <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>    --router<span style="color:#666">=</span>k8sgcp-router <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>    --auto-allocate-nat-external-ips <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>    --nat-all-subnet-ip-ranges <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>    --enable-logging</span></span></code></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-firewall-rules" class="outline-4">
+<h4 id="firewall-rules">
+Firewall Rules
+</h4>
+<div id="outline-text-firewall-rules" class="outline-text-4">
+<div id="outline-container-headline-8" class="outline-5">
+<h5 id="headline-8">
+Create firewall rules
+</h5>
+<div id="outline-text-headline-8" class="outline-text-5">
+<p>We want to allow:</p>
+<ul>
+<li>All internal traffic beween nodes</li>
+<li>External SSH, ICMP and HTTPS</li>
+</ul>
+<div class="src src-sh">
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>  <span style="color:#080;font-style:italic"># Allow internal</span>
+</span></span><span style="display:flex;"><span>  gcloud compute firewall-rules create k8sgcp-allow-internal <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>         --allow tcp,udp,icmp <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>         --network k8sgcp <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>         --source-ranges 10.240.0.0/24,10.200.0.0/16
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-style:italic"># Allow external SSH, ICMP, HTTPS</span>
+</span></span><span style="display:flex;"><span>  gcloud compute firewall-rules create k8sgcp-allow-external <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>         --allow tcp:22,tcp:6443,icmp <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>         --network k8sgcp <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>         --source-ranges 0.0.0.0/0</span></span></code></pre></div>
+</div>
+<blockquote>
+<p>An <a href="https://cloud.google.com/compute/docs/load-balancing/network/">external load balancer</a> will be used to expose the Kubernetes API Servers to remote clients.</p>
+</blockquote>
+<p>
+List the firewall rules in the <code class="verbatim">k8sgcp</code> VPC network:</p>
+<div class="src src-sh">
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>  gcloud compute firewall-rules list --filter<span style="color:#666">=</span><span style="color:#b44">&#34;network:k8sgcp&#34;</span></span></span></code></pre></div>
+</div>
+<p>
+To show all fields of the firewall, please show in JSON format: –format=json
+To show all fields in table format, please see the examples in –help.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-kubernetes-public-ip-address" class="outline-4">
+<h4 id="kubernetes-public-ip-address">
+Kubernetes Public IP Address
+</h4>
+<div id="outline-text-kubernetes-public-ip-address" class="outline-text-4">
+<div id="outline-container-headline-10" class="outline-5">
+<h5 id="headline-10">
+Allocate a static IP address that will be attached to the external load balancer fronting the Kubernetes API Servers:
+</h5>
+<div id="outline-text-headline-10" class="outline-text-5">
+<div class="src src-sh">
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>  gcloud compute addresses create k8sgcp <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>    --region <span style="color:#a2f;font-weight:bold">$(</span>gcloud config get-value compute/region<span style="color:#a2f;font-weight:bold">)</span></span></span></code></pre></div>
+</div>
+<p>
+Verify the <code class="verbatim">k8sgcp</code> static IP address was created in your default compute region:</p>
+<div class="src src-sh">
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>  gcloud compute addresses list --filter<span style="color:#666">=</span><span style="color:#b44">&#34;name=(&#39;k8sgcp&#39;)&#34;</span></span></span></code></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-compute-instances" class="outline-3">
+<h3 id="compute-instances">
+Compute Instances
+</h3>
+<div id="outline-text-compute-instances" class="outline-text-3">
+<p>
+The compute instances in this lab will be provisioned using <a href="https://www.ubuntu.com/server">Ubuntu Server</a> 18.04</p>
+<div id="outline-container-kubernetes-controllers" class="outline-4">
+<h4 id="kubernetes-controllers">
+Kubernetes Controllers
+</h4>
+<div id="outline-text-kubernetes-controllers" class="outline-text-4">
+<div id="outline-container-headline-13" class="outline-5">
+<h5 id="headline-13">
+Create three compute instances which will host the Kubernetes control plane:
+</h5>
+<div id="outline-text-headline-13" class="outline-text-5">
+<div class="src src-sh">
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>  <span style="color:#b8860b">CONTROL_INSTANCE_TYPE</span><span style="color:#666">=</span>n1-standard-2
+</span></span><span style="display:flex;"><span>  <span style="color:#a2f;font-weight:bold">for</span> i in <span style="color:#666">0</span> <span style="color:#666">1</span> 2; <span style="color:#a2f;font-weight:bold">do</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#a2f">echo</span> <span style="color:#b8860b">$i</span>
+</span></span><span style="display:flex;"><span>      gcloud compute instances create gg-controller-<span style="color:#b68;font-weight:bold">${</span><span style="color:#b8860b">i</span><span style="color:#b68;font-weight:bold">}</span> <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             --async <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             --no-address <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             --boot-disk-size 200GB <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             --can-ip-forward <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             --image-family ubuntu-1804-lts <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             --image-project ubuntu-os-cloud <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             --machine-type <span style="color:#b68;font-weight:bold">${</span><span style="color:#b8860b">CONTROL_INSTANCE_TYPE</span><span style="color:#b68;font-weight:bold">}</span> <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             --private-network-ip 10.240.0.1<span style="color:#b68;font-weight:bold">${</span><span style="color:#b8860b">i</span><span style="color:#b68;font-weight:bold">}</span> <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             --scopes compute-rw,storage-ro,service-management,service-control,logging-write,monitoring <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             --subnet kubernetes <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             --tags k8sgcp,controller <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             --labels <span style="color:#b8860b">owner</span><span style="color:#666">=</span>ggrubbs,expiration<span style="color:#666">=</span>48h
+</span></span><span style="display:flex;"><span>  <span style="color:#a2f;font-weight:bold">done</span></span></span></code></pre></div>
+</div>
+<p>
+List the newly created controller instances</p>
+<div class="src src-sh">
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>gcloud compute instances list --filter<span style="color:#666">=</span><span style="color:#b44">&#34;tags.items=k8sgcp AND tags.items=controller&#34;</span></span></span></code></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-kubernetes-workers" class="outline-4">
+<h4 id="kubernetes-workers">
+Kubernetes Workers
+</h4>
+<div id="outline-text-kubernetes-workers" class="outline-text-4">
+<p>
+Each worker instance requires a pod subnet allocation from the Kubernetes cluster CIDR range. The pod subnet allocation will be used to configure container networking in a later exercise. The <code class="verbatim">pod-cidr</code> instance metadata will be used to expose pod subnet allocations to compute instances at runtime.</p>
+<blockquote>
+<p>The Kubernetes cluster CIDR range is defined by the Controller Manager&#39;s
+  <code class="verbatim">--cluster-cidr</code> flag. In this tutorial the cluster CIDR range will be set to
+  <code class="verbatim">10.200.0.0/16</code>, which supports 254 subnets.</p>
+</blockquote>
+<div id="outline-container-headline-15" class="outline-5">
+<h5 id="headline-15">
+Create ${NUM_WORKERS} compute instances which will host the Kubernetes worker nodes:
+</h5>
+<div id="outline-text-headline-15" class="outline-text-5">
+<div class="src src-sh">
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>  <span style="color:#b8860b">WORKER_INSTANCE_TYPE</span><span style="color:#666">=</span>n1-standard-4
+</span></span><span style="display:flex;"><span>  <span style="color:#b8860b">NUM_WORKERS</span><span style="color:#666">=</span><span style="color:#666">3</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a2f;font-weight:bold">for</span> i in <span style="color:#a2f;font-weight:bold">$(</span>seq <span style="color:#666">0</span> <span style="color:#a2f;font-weight:bold">$((</span><span style="color:#b68;font-weight:bold">${</span><span style="color:#b8860b">NUM_WORKERS</span><span style="color:#b68;font-weight:bold">}</span> <span style="color:#666">-</span> <span style="color:#666">1</span><span style="color:#a2f;font-weight:bold">)))</span> ; <span style="color:#a2f;font-weight:bold">do</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#a2f">echo</span> <span style="color:#b8860b">$i</span>
+</span></span><span style="display:flex;"><span>      gcloud compute instances create gg-worker-<span style="color:#b68;font-weight:bold">${</span><span style="color:#b8860b">i</span><span style="color:#b68;font-weight:bold">}</span> <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             --async <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             --no-address <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             --boot-disk-size 200GB <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             --can-ip-forward <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             --image-family ubuntu-1804-lts <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             --image-project ubuntu-os-cloud <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             --machine-type <span style="color:#b68;font-weight:bold">${</span><span style="color:#b8860b">WORKER_INSTANCE_TYPE</span><span style="color:#b68;font-weight:bold">}</span> <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             --metadata pod-cidr<span style="color:#666">=</span>10.200.<span style="color:#b68;font-weight:bold">${</span><span style="color:#b8860b">i</span><span style="color:#b68;font-weight:bold">}</span>.0/24 <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             --private-network-ip 10.240.0.2<span style="color:#b68;font-weight:bold">${</span><span style="color:#b8860b">i</span><span style="color:#b68;font-weight:bold">}</span> <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             --scopes compute-rw,storage-ro,service-management,service-control,logging-write,monitoring <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             --subnet kubernetes <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             --tags k8sgcp,worker <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>             --labels <span style="color:#b8860b">owner</span><span style="color:#666">=</span>ggrubbs,expiration<span style="color:#666">=</span>48h
+</span></span><span style="display:flex;"><span>  <span style="color:#a2f;font-weight:bold">done</span></span></span></code></pre></div>
+</div>
+<p>
+List the created worker instances</p>
+<div class="src src-sh">
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>gcloud compute instances list --filter<span style="color:#666">=</span><span style="color:#b44">&#34;tags.items=k8sgcp AND tags.items=worker&#34;</span></span></span></code></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-kubernetes-workers" class="outline-4">
+<h4 id="kubernetes-workers">
+ETCD Cluster Instances
+</h4>
+<div id="outline-text-kubernetes-workers" class="outline-text-4">
+<p>
+Each worker instance requires a pod subnet allocation from the Kubernetes cluster CIDR range. The pod subnet allocation will be used to configure container networking in a later exercise. The <code class="verbatim">pod-cidr</code> instance metadata will be used to expose pod subnet allocations to compute instances at runtime.</p>
+<blockquote>
+<p>The Kubernetes cluster CIDR range is defined by the Controller Manager&#39;s
+  <code class="verbatim">--cluster-cidr</code> flag. In this tutorial the cluster CIDR range will be set to
+  <code class="verbatim">10.200.0.0/16</code>, which supports 254 subnets.</p>
+</blockquote>
+<p>
+List the created worker instances</p>
+<div class="src src-sh">
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>gcloud compute instances list --filter<span style="color:#666">=</span><span style="color:#b44">&#34;tags.items=k8sgcp AND tags.items=worker&#34;</span></span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="outline-container-verification" class="outline-4">
+<h4 id="verification">
+Verification
+</h4>
+<div id="outline-text-verification" class="outline-text-4">
+<p>
+List the compute instances in your default compute zone:</p>
+<div class="src src-sh">
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>  gcloud compute instances list --filter<span style="color:#666">=</span><span style="color:#b44">&#34;tags:k8sgcp&#34;</span>
+</span></span><span style="display:flex;"><span>  gcloud compute instances list --filter<span style="color:#666">=</span><span style="color:#b44">&#34;tags.items=k8sgcp AND tags.items=controller&#34;</span> --format<span style="color:#666">=</span><span style="color:#b44">&#34;csv(name)[no-heading]&#34;</span> &gt; controller-nodes.txt
+</span></span><span style="display:flex;"><span>  gcloud compute instances list --filter<span style="color:#666">=</span><span style="color:#b44">&#34;tags.items=k8sgcp AND tags.items=worker&#34;</span> --format<span style="color:#666">=</span><span style="color:#b44">&#34;csv(name)[no-heading]&#34;</span> &gt;  worker-nodes.txt</span></span></code></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-configuring-ssh-access" class="outline-3">
+<h3 id="configuring-ssh-access">
+Configuring SSH Access
+</h3>
+<div id="outline-text-configuring-ssh-access" class="outline-text-3">
+<p>
+SSH will be used to configure the controller and worker instances. When connecting to compute instances for the first time SSH keys will be generated for you and stored in the project or instance metadata as described in the <a href="https://cloud.google.com/compute/docs/instances/connecting-to-instance">connecting to instances</a> documentation.</p>
+<p>
+Test SSH access to the <code class="verbatim">gg-controller-0</code> compute instances:</p>
+<div class="src src-sh">
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>  gcloud compute ssh gg-controller-0</span></span></code></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-cleaning-up" class="outline-2">
+<h2 id="cleaning-up">
+Cleaning Up
+</h2>
+<div id="outline-text-cleaning-up" class="outline-text-2">
+<p>
+ In this lab you will delete the compute resources created during this tutorial.</p>
+<div id="outline-container-compute-instances" class="outline-4">
+<h4 id="compute-instances">
+Compute Instances
+</h4>
+<div id="outline-text-compute-instances" class="outline-text-4">
+<div id="outline-container-headline-21" class="outline-5">
+<h5 id="headline-21">
+Delete the controller and worker compute instances:
+</h5>
+<div id="outline-text-headline-21" class="outline-text-5">
+<div class="src src-sh">
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>  gcloud -q compute instances delete <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>         <span style="color:#a2f;font-weight:bold">$(</span>gcloud compute instances list --filter<span style="color:#666">=</span><span style="color:#b44">&#34;tags.items=k8sgcp&#34;</span> --format<span style="color:#666">=</span><span style="color:#b44">&#34;csv(name)[no-heading]&#34;</span><span style="color:#a2f;font-weight:bold">)</span> <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>         --zone <span style="color:#a2f;font-weight:bold">$(</span>gcloud config get-value compute/zone<span style="color:#a2f;font-weight:bold">)</span></span></span></code></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-networking" class="outline-4">
+<h4 id="networking">
+Networking
+</h4>
+<div id="outline-text-networking" class="outline-text-4">
+<div id="outline-container-headline-23" class="outline-5">
+<h5 id="headline-23">
+Delete Cloud NAT and Cloud Router
+</h5>
+<div id="outline-text-headline-23" class="outline-text-5">
+<div class="src src-sh">
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>  gcloud -q compute routers nats delete k8sgcp-nat --router k8sgcp-router
+</span></span><span style="display:flex;"><span>  gcloud -q compute routers delete k8sgcp-router</span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="outline-container-headline-24" class="outline-5">
+<h5 id="headline-24">
+Delete the external load balancer network resources:
+</h5>
+<div id="outline-text-headline-24" class="outline-text-5">
+<div class="src src-sh">
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>  gcloud -q compute forwarding-rules delete kubernetes-forwarding-rule <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>	  --region <span style="color:#a2f;font-weight:bold">$(</span>gcloud config get-value compute/region<span style="color:#a2f;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  gcloud -q compute target-pools delete kubernetes-target-pool
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  gcloud -q compute http-health-checks delete kubernetes
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  gcloud -q compute addresses delete k8sgcp</span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="outline-container-headline-25" class="outline-5">
+<h5 id="headline-25">
+Delete the <code class="verbatim">k8sgcp</code> firewall rules:
+</h5>
+<div id="outline-text-headline-25" class="outline-text-5">
+<div class="src src-sh">
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>  gcloud -q compute firewall-rules delete <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>    k8sgcp-allow-nginx-service <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>    k8sgcp-allow-internal <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>    k8sgcp-allow-external <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>    k8sgcp-allow-health-check</span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="outline-container-headline-26" class="outline-5">
+<h5 id="headline-26">
+Delete the <code class="verbatim">k8sgcp</code> network VPC:
+</h5>
+<div id="outline-text-headline-26" class="outline-text-5">
+<div class="src src-sh">
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>    gcloud -q compute routes delete <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>      kubernetes-route-10-200-0-0-24 <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>      kubernetes-route-10-200-1-0-24 <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>      kubernetes-route-10-200-2-0-24
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    gcloud -q compute networks subnets delete kubernetes
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    gcloud -q compute networks delete k8sgcp</span></span></code></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+      
+    </div>
+    
+  </div>
+</section>
+
+    <script src="/js/copycode.js"></script>
+
+
+<section class="section">
+  <div class="container">
+    <aside><div id="disqus_thread"></div></aside>
+  
+    <script type="text/javascript">
+      var disqus_shortname = 'hypecyclist';
+      function disqus() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+  
+      disqus();
+  
+
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+
+
+<section class="section">
+  <div class="container has-text-centered">
+    <p>&copy; <a href="https://github.com/gregoryg">Greg Grubbs</a> 2008-2021</p>
+    
+      <p id="powered-by">Powered by <a href="https://gohugo.io/">Hugo</a> &amp; <a href="https://github.com/ribice/kiss">Kiss</a>.</p>
+    
+  </div>
+</section>
+
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="\/\/matomo.example.com\/";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', '1']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<noscript>
+  <img src="//matomo.example.com/piwik.php?idsite=1&amp;rec=1" style="border:0" alt="" />
+</noscript>
+
+<script>
+    (function(f, a, t, h, o, m){
+        a[h]=a[h]||function(){
+            (a[h].q=a[h].q||[]).push(arguments)
+        };
+        o=f.createElement('script'),
+        m=f.getElementsByTagName('script')[0];
+        o.async=1; o.src=t; o.id='fathom-script';
+        m.parentNode.insertBefore(o,m)
+    })(document, window, '\/\/fathom.example.com\/tracker.js', 'fathom');
+    fathom('trackPageview');
+</script>
+</body>
+</html>
+

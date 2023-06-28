@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>nil on Greg Grubbs | Hype Cyclist</title>
+    <link>https://hypecyclist.org/tags/nil/</link>
+    <description>Recent content in nil on Greg Grubbs | Hype Cyclist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; &lt;a href=&#34;https://github.com/gregoryg&#34;&gt;Greg Grubbs&lt;/a&gt; 2008-2021</copyright>
+    <lastBuildDate>Tue, 18 Aug 2020 18:23:26 -0600</lastBuildDate><atom:link href="https://hypecyclist.org/tags/nil/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title></title>
+      <link>https://hypecyclist.org/post/2020-08-18-setting-up-emacs-as-window-manager/</link>
+      <pubDate>Tue, 18 Aug 2020 18:23:26 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/post/2020-08-18-setting-up-emacs-as-window-manager/</guid>
+      <description>&lt;nav&gt;
+&lt;ul&gt;
+&lt;/ul&gt;
+&lt;/nav&gt;
+&lt;p&gt;
+Summarized text&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Putting Spark on Kubernetes</title>
+      <link>https://hypecyclist.org/post/2020-06-20-sparkkubernetes/</link>
+      <pubDate>Sat, 20 Jun 2020 08:51:27 -0600</pubDate>
+      
+      <guid>https://hypecyclist.org/post/2020-06-20-sparkkubernetes/</guid>
+      <description>&lt;p&gt;
+Summarized text&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
