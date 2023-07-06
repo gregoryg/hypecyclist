@@ -1387,6 +1387,7 @@ a.box:active {
   color: #b52323;
   font-weight: 300;
   margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .content blockquote {
