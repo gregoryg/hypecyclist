@@ -1,0 +1,107 @@
+#+title: Enhance your knowledge management with Org Mode and ChatGPT
+#+date: 2023-07-04T22:22:28-0600
+#+publishdate: 2023-07-04T22:22:28-0600
+#+draft: nil
+#+tags[]: emacs orgmode ai llm generativeai
+#+description: The best most flexible LLM API package for Emacs with Org Mode
+
+# put text for summary prior to 'more' tag
+
+I am dedicated to tracking every research project, every reading list, agendas and every
+set of tasks and life goals in plain text that can be searched, indexed and archived
+flexibly.  For me, the way to do that is to leverage Org Mode.
+
+Integration with generative AI such as ChatGPT has been missing from that work flow so far.
+
+
+# more
+* The canonical package?
+  I started sporadically hacking on my own package with the idea of capturing
+  collaborative conversations with LLMs and evolving those into knowledge base articles,
+  projects, and literate programming.  Fortunately, I discovered [[https://github.com/karthink][@karthink]]'s [[https://github.com/karthink/gptel][gptel]] package
+  and quickly realized that he has far surpassed what I had started.
+
+  This post is all about going through geeky features and details.  I'll follow it up in
+  another post with the "why" and "how"!
+
+  I'll start with my most valued features in this package, then give some ideas about
+  using gptel for various workflows.
+
+* Features
+
+  Features, roughly in descending order of importance (YMMV)
+
+** Radical dedication to plain text
+
+   This means true plain text with no special out-of-band metadata.
+
+   The idea is you can open and edit *any* text in Emacs, and simply send a region to an
+   AI model from any buffer.
+
+   You can use the response to start a chat, or simply add or modify text in your
+   document.  You can open a saved file from a previous chat session, then invoke
+   =gptel-mode= - which will determine the context and allow you to pick up the
+   conversation where you left off.
+
+
+** Community
+   Very active GitHub and a thoughtful and responsive developer
+
+
+** Somewhat structured, not structured?  It's all good
+
+   Utilize Org Mode buffers, Markdown mode or other-mode buffers if you prefer
+
+** Hooks and filters
+
+   Massage responses from the AI to give whatever structure you prefer
+
+   Even though you *can* keep everything in plain text-mode, you have the option
+   to use Org Mode which gives all the advantages of executable source code, export to
+   many formats, task assignment and more.  Markdown is another option, any coding mode
+   based on =prog-mode= is another!
+
+   LLMs are very adept at producing Markdown code, somewhat less perfect with Org Mode.
+   So I prompt the model for output in Markdown, then allow gptel to transform that to
+   Org Mode.  The included dependency-free Emacs Lisp function to do that is really basic,
+   so I wrote my own function that calls Pandoc on the response.
+
+** Secure hassle-free API key handling
+   It makes me crazy(er) to see all the code in coding tutorials that expect people to
+   place API tokens and other credentials in text in the code.  Less experienced
+   developers and even experienced developers can accidentally push those credentials to
+   public repositories.
+
+   The Emacs =auth-source= package - a built-in feature for secure credential management -
+   is an option with gptel, which makes the key storage secure (it can be encrypted) and
+   places it outside any directory likely to be checked into GitHub!
+
+** Easy access to your favorite prompts as "directives"
+   Use customize, you can maintain a group of keyed system prompts, and change them on the
+   fly in a chat session using the transient-mode interface
+** Transient interface
+
+   This is the parameter selection UI that Magit uses - it's nice to have this, especially
+   since when you want to tweak one setting such as token limit, you may want to also
+   change temperature, model and other things as well
+
+   That said, I'm not the biggest fan of Transient as a general-purpose UX.  For switching system prompts (directives) for example, I prefer using
+   =completing-read=, so I simply added a function to do just that
+** Streaming support
+   While it can be nice to see the text streaming as you do in the ChatGPT Web UI, this is
+   not something I'm using at the moment due to my need to massage the response:
+   transating to org-mode, adding headings and indenting the outline structure in a
+   post-response hook.
+** Choice of APIs and API parameters - aspirational
+   The idea for the future is to support more than OpenAI's models.
+* Recap
+  In short, for me this package is the holy grail (I refuse to capitalize that).  It's
+  only for text-base generative AI, only for OpenAI APIs for now, but it takes the right
+  approach for flexibility and a pure, dependcy-free approach.
+
+  My next article will be about using Org Mode and the Denote package for managing
+  knowledge capture, research projects, knowledge base articles, reading lists, tasks and
+  scheduling.  I'll share the code for making it fit my workflow, in hopes of inspiring yours.
+
+  If you enjoyed this article, please follow me here on Medium.  I plan to write much
+  more, and it's about to get geeky!

@@ -2,34 +2,40 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://hypecyclist.org/tags/chatgpt/</loc>
-    <lastmod>2023-06-24T18:59:03-06:00</lastmod>
+    <loc>https://hypecyclist.org/tags/ai/</loc>
+    <lastmod>2023-07-04T22:22:28-06:00</lastmod>
   </url><url>
     <loc>https://hypecyclist.org/tags/emacs/</loc>
+    <lastmod>2023-07-04T22:22:28-06:00</lastmod>
+  </url><url>
+    <loc>https://hypecyclist.org/post/2023-07-04-enhance-your-knowledge-management-with-org-mode-and-chatgpt/</loc>
+    <lastmod>2023-07-04T22:22:28-06:00</lastmod>
+  </url><url>
+    <loc>https://hypecyclist.org/tags/generativeai/</loc>
+    <lastmod>2023-07-04T22:22:28-06:00</lastmod>
+  </url><url>
+    <loc>https://hypecyclist.org/</loc>
+    <lastmod>2023-07-04T22:22:28-06:00</lastmod>
+  </url><url>
+    <loc>https://hypecyclist.org/tags/llm/</loc>
+    <lastmod>2023-07-04T22:22:28-06:00</lastmod>
+  </url><url>
+    <loc>https://hypecyclist.org/tags/orgmode/</loc>
+    <lastmod>2023-07-04T22:22:28-06:00</lastmod>
+  </url><url>
+    <loc>https://hypecyclist.org/post/</loc>
+    <lastmod>2023-07-04T22:22:28-06:00</lastmod>
+  </url><url>
+    <loc>https://hypecyclist.org/tags/</loc>
+    <lastmod>2023-07-04T22:22:28-06:00</lastmod>
+  </url><url>
+    <loc>https://hypecyclist.org/tags/chatgpt/</loc>
     <lastmod>2023-06-24T18:59:03-06:00</lastmod>
   </url><url>
     <loc>https://hypecyclist.org/post/2023-06-24-exploring-generative-ai-integrating-chatgpt-with-structured-notetaking-systems/</loc>
     <lastmod>2023-06-24T18:59:03-06:00</lastmod>
   </url><url>
-    <loc>https://hypecyclist.org/tags/generativeai/</loc>
-    <lastmod>2023-06-24T18:59:03-06:00</lastmod>
-  </url><url>
-    <loc>https://hypecyclist.org/</loc>
-    <lastmod>2023-06-24T18:59:03-06:00</lastmod>
-  </url><url>
-    <loc>https://hypecyclist.org/tags/llm/</loc>
-    <lastmod>2023-06-24T18:59:03-06:00</lastmod>
-  </url><url>
-    <loc>https://hypecyclist.org/tags/orgmode/</loc>
-    <lastmod>2023-06-24T18:59:03-06:00</lastmod>
-  </url><url>
-    <loc>https://hypecyclist.org/post/</loc>
-    <lastmod>2023-06-24T18:59:03-06:00</lastmod>
-  </url><url>
     <loc>https://hypecyclist.org/tags/python/</loc>
-    <lastmod>2023-06-24T18:59:03-06:00</lastmod>
-  </url><url>
-    <loc>https://hypecyclist.org/tags/</loc>
     <lastmod>2023-06-24T18:59:03-06:00</lastmod>
   </url><url>
     <loc>https://hypecyclist.org/tags/docker/</loc>
