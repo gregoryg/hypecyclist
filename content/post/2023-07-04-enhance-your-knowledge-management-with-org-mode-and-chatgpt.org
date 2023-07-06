@@ -103,5 +103,5 @@ Integration with generative AI such as ChatGPT has been missing from that work f
   knowledge capture, research projects, knowledge base articles, reading lists, tasks and
   scheduling.  I'll share the code for making it fit my workflow, in hopes of inspiring yours.
 
-  If you enjoyed this article, please follow me here on Medium.  I plan to write much
-  more, and it's about to get geeky!
+  # If you enjoyed this article, please follow me here on Medium.  I plan to write much
+  # more, and it's about to get geeky!
