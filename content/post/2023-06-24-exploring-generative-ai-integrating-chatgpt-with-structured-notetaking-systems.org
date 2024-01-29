@@ -55,4 +55,10 @@ is a fork of his repo at https://github.com/gregoryg/KB_microservice, branch 'or
 
 Happy coding!
 
+* More writing to come!
+
+  If you enjoyed this article, please follow me here on Medium.  I plan to write much
+  more, and it's about to get (more) geeky!
+
+
 #  LocalWords:  publishdate generativeAI chatGPT OrgMode LLMs YouTuber Protesilaos repo
