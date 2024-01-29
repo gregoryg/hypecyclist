@@ -3,7 +3,7 @@ languageCode = "en"
 title = "Greg Grubbs | Hype Cyclist"
 # subtitle = "Ohai"
 theme = "kiss"
-copyright = "&copy; <a href=\"https://github.com/gregoryg\">Greg Grubbs</a> 2008-2021"
+copyright = "&copy; <a href=\"https://github.com/gregoryg\">Greg Grubbs</a> 2008-2024"
 disqusShortname = "hypecyclist" # make empty to disable Disqus comments in layout
 googleAnalytics = ""
 Paginate = 5 # Number of posts per page
@@ -28,7 +28,7 @@ tabWidth = 4
 [params.rss] # Adding this tag enables RSS feed
 includeContent = true # Includes whole content in rss
 authorName = "Greg Grubbs" # Author full name
-authorEmail = "greg@dynapse.net" # Author email
+authorEmail = "gregory.grubbs@gmail.com" # Author email
 
 [params.assets]
 customCSS = ["css/custom.css"]
@@ -58,7 +58,7 @@ page = "" # Twitter Page username. If not set, params.social.twitter will be use
 twitter = "gregoryg"
 github = "gregoryg"
 youtube = "gortsleigh/videos"
-# email = "greg@dynapse.net"
+# email = "gregory.grubbs@gmail.com"
 linkedin = "gregorygrubbs"
 # facebook = "ohnonotever"
 instagram = ""
